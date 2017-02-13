@@ -1,0 +1,44 @@
+
+<section class="main register-section2" ng-controller="RegisterController">
+    <div class="container">
+        <div class="text-center"><h1>Register</h1></div>
+        <form method="post" class="q-form" id="register" name="register">
+            <div class="form-group">
+                <label class="control-label" for="username">Nume </label>
+                <input class="form-control" type="text" id="nume" name="nume" ng-model="fields.nume" required>
+                <span  ng-show="register.nume.$touched && register.nume.$invalid" class="help-block">Completati numele</span>
+            </div>
+            <div class="form-group">
+                <label  class="control-label" for="email">Prenume </label>
+                <input  class="form-control" type="text" id="prenume" name="prenume" ng-model="fields.prenume" required>
+                <span  ng-show="register.prenume.$touched && register.prenume.$invalid" class="help-block">Completati prenumele</span>
+            </div>
+            
+            <div class="form-group">
+                <label  class="control-label" for="username">Username</label>
+                <input  class="form-control" type="text" id="username" name="username" ng-model="fields.username" required>
+                <span  ng-show="register.username.$touched && register.username.$invalid" class="help-block">Completati usernameul</span>
+            </div>
+            
+             <div class="form-group">
+                <label  class="control-label" for="username">Password</label>
+                <input  class="form-control" type="password" id="password" name="password" ng-model="fields.password" required>
+                <span  ng-show="register.password.$touched && register.password.$invalid" class="help-block">Completati parola</span>
+            </div>
+			
+			 <div class="form-group">
+                <label  class="control-label" for="email">Email</label>
+                <input  class="form-control" type="email" id="email" name="email" ng-model="fields.email" required>
+                <span  ng-show="register.email.$touched && register.email.$invalid" class="help-block">Completati emailul</span>
+            </div>
+            
+		   <div class="form-group center-block">
+                <button class="btn btn-default" type="submit" name="submit" ng-click="addMember()">Register</button>
+            </div>		
+          
+            </div>
+           
+
+        </form>
+    </div>
+</section>

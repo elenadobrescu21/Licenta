@@ -1,0 +1,20 @@
+	<div ng-cloak class="container">
+  	<div class="row">
+        <div class="col-md-12" ng-controller="HomeController">
+            <h1>Welcome</h1>
+            <div ng-switch="isAuthenticated">
+                <div class="alert alert-success" ng-switch-when="true">
+                    You are logged in as user.
+                </div>
+ 
+                <div class="alert alert-warning" ng-switch-when="false">
+                  <h3> You can log in <a class="alert-link" href="#">here</a> </h3>
+                </div>
+                <div class="alert alert-warning" ng-switch-when="false">
+                    You don't have an account yet? <a class="alert-link" ui-sref="register">Register a new account</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+  	</div>
