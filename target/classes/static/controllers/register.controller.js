@@ -9,6 +9,8 @@ angular.module("app").controller("RegisterController", function($scope, $http, $
 			  email: '',
 			  authorities:''
 			};
+	$scope.hasError = false;
+	$scope.errorMessage = "";
 
   $scope.addMember= function() {
 	    var newMember = {};
@@ -21,22 +23,30 @@ angular.module("app").controller("RegisterController", function($scope, $http, $
 	    
 	    console.log(newMember);
 	    
-	    $http.post("http://localhost:8080/user", newMember).success(function(data) {
-	    	console.log(data);
-			$state.go('default');
+	    $http.post("http://localhost:8080/user", newMember).success(function(data, status, headers, config) {
+	    	console.log(status);
+	    	if(data.message == "Username deja existent") {
+	    		$scope.hasError = true;
+	    		$scope.errorMessage = data.message;	
+	    		console.log("Avem eroare: " + $scope.hasError);
+	    		console.log($scope.errorMessage);
+	    	} else
+	    		if(data.message == "Email deja in uz") {
+	    			$scope.hasError = true;
+	    			$scope.errorMessage = data.message;
+	    			console.log("Avem eroare: " + $scope.hasError);
+		    		console.log($scope.errorMessage);
+	    		} else {
+	    			$state.go('default');
+	    			console.log("Userul a fost creat");
+	    		}
+	    				
 	    }).error(function(error) {
-	        // error
+	        $scope.hasError = true;
+	        console.log("Avem eroare: " + $scope.hasError);
 	        console.log(JSON.stringify("User couldn't be created " + error));
 	    });
 	   
-	    /*
-	    $http.post('http://localhost:8080/user', newMember).then(
-			function successCallback(response) {
-			  console.log(response);
-			  $state.go('default');
-	    }, function errorCallback(response){
-	      console.log("User counldn't be created");
-	    }); */
 
 	  }
 	

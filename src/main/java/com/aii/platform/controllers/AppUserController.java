@@ -31,20 +31,22 @@ public class AppUserController {
 		return new ResponseEntity((List)appUserRepository.findAll(), new HttpHeaders(), HttpStatus.OK);
 	  
 	}
-	
-	@RequestMapping(value="/{username}", method=RequestMethod.GET)
-	public ResponseEntity getUserByUsername(@PathVariable("username") String username) {
 		
-	return new ResponseEntity<AppUser>(appUserRepository.findOneByUsername(username), new HttpHeaders(), HttpStatus.OK);
-		
-	}
-	
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE) 
 	public ResponseEntity addNewUser(@RequestBody AppUser user) {
 		String userUsername = user.getUsername();
 		String userEmail = user.getEmail();
-		appUserRepository.save(user);
-		return new ResponseEntity<Response>(new Response("User has been created"), new HttpHeaders(), HttpStatus.OK);
+		if(appUserRepository.findByUsername(userUsername) != null) {
+			return new ResponseEntity<Response>(new Response("Username deja existent"), new HttpHeaders(), HttpStatus.IM_USED);
+		} else
+			if(appUserRepository.findByEmail(userEmail)!= null) {
+				return new ResponseEntity<Response>(new Response("Email deja in uz"), new HttpHeaders(), HttpStatus.IM_USED);
+			} else {
+				appUserRepository.save(user);
+				return new ResponseEntity<Response>(new Response("User has been created"), new HttpHeaders(), HttpStatus.OK);
+				
+			}
+		
 		
 	}
 	

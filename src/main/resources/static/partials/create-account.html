@@ -1,5 +1,6 @@
 
 <section class="main register-section2" ng-controller="RegisterController">
+
     <div class="container">
         <div class="text-center"><h1>Register</h1></div>
         <form method="post" class="q-form" id="register" name="register">
@@ -32,12 +33,16 @@
                 <span  ng-show="register.email.$touched && register.email.$invalid" class="help-block">Completati emailul</span>
             </div>
             
-		   <div class="form-group center-block">
-                <button class="btn btn-default" type="submit" name="submit" ng-click="addMember()">Register</button>
-            </div>		
-          
+            <div class="alert alert-danger form-group center-block" ng-show="hasError">
+            <h4> {{errorMessage}}</h4>
             </div>
-           
+          
+		   <div class="form-group center-block">
+                <button class="btn btn-default" name="submit" ng-click="addMember()">Register</button>
+            </div>	
+           	
+            </div>
+          
 
         </form>
     </div>
