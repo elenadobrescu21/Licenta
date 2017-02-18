@@ -16,5 +16,19 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $location
         url: "/register",
         templateUrl: "partials/create-account.html"
     })
+    
+    .state('login', {
+        url: "/login",
+        templateUrl: "partials/login.html"
+    })
+    
+    .state('users', {
+        url: "/users",
+        templateUrl: "partials/user-management.html"
+    })
+    
+   $httpProvider.interceptors.push('AuthInterceptor');
+   $locationProvider.html5Mode(true);
+    
          
 });

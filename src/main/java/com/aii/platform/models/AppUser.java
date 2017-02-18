@@ -16,23 +16,23 @@ public class AppUser {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name="nume")
+	@Column(name="nume", nullable=false)
 	@NotNull
 	private String nume;
 	
-	@Column(name="prenume")
+	@Column(name="prenume", nullable=false)
 	@NotNull
 	private String prenume;
 	
-	@Column(name="username", unique=true)
+	@Column(name="username", unique=true, nullable=false)
 	@NotNull
 	private String username;
 	
-	@Column(name="password")
+	@Column(name="password", nullable=false)
 	@NotNull
 	private String password;
 	
-	@Column(name="email", unique=true)
+	@Column(name="email", unique=true, nullable=false)
 	@NotNull
 	private String email;
 	

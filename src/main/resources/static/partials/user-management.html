@@ -1,0 +1,28 @@
+<section class="admin-section" ng-controller="AdminController">
+    <div class="container">
+    <h1 class="text-center"> Users list</h1>
+    <br>
+ <table class="table table-bordered">
+	  <tr class="info">
+        <th>Id</th>
+        <th>Nume</th>
+        <th>Prenume</th>
+		<th>Email </th>
+		<th> Username</th>
+ 
+      </tr>
+ 
+	  <tr ng-repeat="item in members">
+        <td>{{ item.id}}</td>
+        <td>{{ item.nume }}</td>
+		<td> {{item.prenume}} </td>
+		<td> {{item.email}} </td>
+		<td> {{item.username}}</td>
+        
+      </tr>
+	 	  
+	  </table>
+    
+    
+    </div>
+</section>

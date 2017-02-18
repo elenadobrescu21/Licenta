@@ -23,7 +23,8 @@
             
              <div class="form-group">
                 <label  class="control-label" for="username">Password</label>
-                <input  class="form-control" type="password" id="password" name="password" ng-model="fields.password" required>
+                <input  class="form-control" type="password" id="password" name="password" ng-minlength="6" ng-model="fields.password" required>
+                <span ng-if="!register.password.$valid" class="help-block">Parola trebuie sa contina cel putin 6 caractere</span>
                 <span  ng-show="register.password.$touched && register.password.$invalid" class="help-block">Completati parola</span>
             </div>
 			

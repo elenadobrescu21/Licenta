@@ -19,27 +19,23 @@ angular.module("app").controller("RegisterController", function($scope, $http, $
 	    newMember.username = $scope.fields.username;
 	    newMember.password = $scope.fields.password;
 	    newMember.email = $scope.fields.email;
-	    newMember.authorities = "user";
+	    newMember.authorities = "ROLE_USER";
 	    
 	    console.log(newMember);
 	    
 	    $http.post("http://localhost:8080/user", newMember).success(function(data, status, headers, config) {
 	    	console.log(status);
-	    	if(data.message == "Username deja existent") {
+	    	//226 = IM_USED
+	    	if(status==226) {
 	    		$scope.hasError = true;
-	    		$scope.errorMessage = data.message;	
+	    		$scope.errorMessage = data.message;
 	    		console.log("Avem eroare: " + $scope.hasError);
-	    		console.log($scope.errorMessage);
-	    	} else
-	    		if(data.message == "Email deja in uz") {
-	    			$scope.hasError = true;
-	    			$scope.errorMessage = data.message;
-	    			console.log("Avem eroare: " + $scope.hasError);
-		    		console.log($scope.errorMessage);
-	    		} else {
-	    			$state.go('default');
-	    			console.log("Userul a fost creat");
-	    		}
+	    		console.log($scope.errorMessage);  		
+	    	}
+	    	if(status==200) {
+	    		$state.go('default');
+    			console.log("Userul a fost creat");
+	    	}	   
 	    				
 	    }).error(function(error) {
 	        $scope.hasError = true;
@@ -47,8 +43,6 @@ angular.module("app").controller("RegisterController", function($scope, $http, $
 	        console.log(JSON.stringify("User couldn't be created " + error));
 	    });
 	   
-
 	  }
 	
-
 });
