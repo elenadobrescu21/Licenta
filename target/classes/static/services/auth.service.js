@@ -2,19 +2,20 @@ angular.module("app").factory('Auth', function($http, $q, $state, AuthToken){
 	
 	var authFactory = {};
 	
-	authFactory.login = function(username, password) {
+	authFactory.login = function(username, password,callback) {
 		
-		return $http.post('http://localhost:8080/auth', {
+		$http.post('http://localhost:8080/auth', {
 			username: username,
 			password: password
 		})
-		.success(function(data){
+		.success(function(data, status, headers, config){
 			AuthToken.setToken(data.token);
-			return data;
+			callback(data);
 		})	
 		.error(function(error){
-				console.log("Bad credentials");
-				return $q.reject({message: "Bad credentials"});
+				console.log("Bad credentials din AuthFactory");
+				errorMessage = "Bad Credentials";
+				callback(errorMessage);
 		})
 	}
 	
@@ -71,7 +72,7 @@ angular.module("app").factory('Auth', function($http, $q, $state, AuthToken){
 	
 })
 
-.factory('AuthInterceptor', function($q, $location, AuthToken) {
+.factory('AuthInterceptor', function($q, $location,AuthToken) {
 	
 	var interceptorFactory = {};
 	interceptorFactory.request = function(config) {
@@ -83,8 +84,9 @@ angular.module("app").factory('Auth', function($http, $q, $state, AuthToken){
 	}
 	interceptorFactory.responseError = function(response) {
 		//403 = forbidden
-		if(response.status == 403) {
-			$state.go('login');
+		if(response.status == 403 || response.status==401) {
+			//$state.go('login');
+			console.log("Avem status code:"  + response.status);
 			return $q.reject(response);		
 		}
 	}

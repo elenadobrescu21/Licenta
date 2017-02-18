@@ -4,6 +4,7 @@ angular.module("app").controller("HomeController",function($scope, $rootScope, $
 	var vm = this;
 
 	$scope.isLoggedIn = Auth.isLoggedIn();
+	vm.badCredentials = false;
 		
 	vm.isAuthenticated = Auth.isLoggedIn();
 	console.log("Userul este autentificat: " +  Auth.isLoggedIn());
@@ -23,26 +24,25 @@ angular.module("app").controller("HomeController",function($scope, $rootScope, $
 	vm.login = function () {
 		vm.processing = true;
 		vm.error = "";
-		Auth.login(vm.username, vm.password)
-		.success(function(data){
+		Auth.login(vm.username, vm.password, function(data){
 			vm.processing = false;
 			console.log("Vm processing:" + vm.processing);
 			vm.user = Auth.getUser();
 			Auth.getUser(function(result){
 				vm.user = result;
 			});
-			if(data.token) {
-				$state.go('default');
-				$window.location.reload();		
-			} else {
-				console.log("Bad credentials");
-				vm.error = "Eroare";
-			}					
+			if(typeof data !== "undefined") {
+				if(data.token) {
+					$state.go('default');
+					$window.location.reload();		
+				} else {
+					console.log("Bad credentials din HomeController");
+					vm.badCredentials = true;
+					vm.badCredentialsMessage = "Username sau parola incorecte";
+				}	
+			}
 		})
-		.error(function(error){
-				console.log("Bad credentials!!");
-		
-		})
+				
 	}
 	
 	vm.doLogout = function() {

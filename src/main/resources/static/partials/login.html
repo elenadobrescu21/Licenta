@@ -16,6 +16,10 @@
                 <input  class="form-control" type="password" id="password" name="password" ng-model="login.password" required>
                 <span  ng-show="login.password.$touched && login.password.$invalid" class="help-block">Completati parola</span>
             </div>
+            
+            <div class="alert alert-danger form-group center-block" ng-show="login.badCredentials">
+            <h4> {{login.badCredentialsMessage}}</h4>
+            </div>
 	 
 		   <div class="form-group center-block">
                 <button class="btn btn-default" name="submit" ng-click="login.login()">Login</button>
