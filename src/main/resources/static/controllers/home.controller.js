@@ -13,6 +13,10 @@ angular.module("app").controller("HomeController",function($scope, $rootScope, $
 		vm.user = result;
 	});
 	
+	Auth.isAdmin(function(result){
+		vm.isAdmin = result;
+	})
+	
 	
 	$rootScope.$on('$routeChangeStart', function(){
 		vm.isAuthenticated = Auth.isLoggedIn();
@@ -29,7 +33,7 @@ angular.module("app").controller("HomeController",function($scope, $rootScope, $
 			console.log("Vm processing:" + vm.processing);
 			vm.user = Auth.getUser();
 			Auth.getUser(function(result){
-				vm.user = result;
+				vm.user = result;		
 			});
 			if(typeof data !== "undefined") {
 				if(data.token) {
@@ -48,7 +52,7 @@ angular.module("app").controller("HomeController",function($scope, $rootScope, $
 	vm.doLogout = function() {
 		Auth.logout();
 		$state.go('default');
-		$state.reload();
+		$window.location.reload();	
 	}
 		
 })

@@ -1,4 +1,6 @@
-<section class="admin-section" ng-controller="AdminController">
+<section class="admin-section" ng-controller="AdminController as admin">
+<div ng-switch = "admin.isAdmin">
+<div ng-switch-when="true">
     <div class="container">
     <h1 class="text-center"> Users list</h1>
     <br>
@@ -22,7 +24,15 @@
       </tr>
 	 	  
 	  </table>
-    
-    
+     
     </div>
+  </div>
+  
+  <div ng-switch-when="false" class="alert alert-danger text-center">
+  
+  <h1>You do not have acces to this page</h1>
+  
+  </div>
+    </div>
+    
 </section>

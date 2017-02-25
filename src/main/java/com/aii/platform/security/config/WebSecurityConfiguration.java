@@ -42,13 +42,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth
-			.inMemoryAuthentication()
-				.withUser("user").password("password").roles("USER").and()
-				.withUser("admin").password("password").roles("USER", "ADMIN");
-		auth
 		.userDetailsService(userDetailsService)
 		.passwordEncoder(new BCryptPasswordEncoder());
-
 	}
 	
 	@Bean
@@ -78,7 +73,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	                .and()
 	                .authorizeRequests()
 	                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-	                .antMatchers("/auth/**", "/user/**").permitAll()
+	                .antMatchers("/auth/**").permitAll()
+	                .antMatchers("/user/all").access("hasRole('ROLE_ADMIN')")
 	                .antMatchers(
 	                        HttpMethod.GET,
 	                        "/",

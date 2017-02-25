@@ -48,6 +48,35 @@ angular.module("app").factory('Auth', function($http, $q, $state, AuthToken){
 		}
 	}
 	
+	authFactory.isAdmin = function(callback) {
+	    isAdmin = false;	
+		if(AuthToken.getToken()) {
+			$http.get("http://localhost:8080/me").success(function(data){
+				console.log("Data:", data);
+				console.log("Authorities:" , data.authorities);
+				console.log("Authorities length", data.authorities.length);
+				for (var i = 0; i < data.authorities.length; i++) {
+				    console.log(data.authorities[i].authority);
+				    if(data.authorities[i].authority == "ROLE_ADMIN") {
+				    	console.log("Userul este admin");
+				    	isAdmin = true;
+				    }
+				}
+				callback(isAdmin);
+			})
+			.error(function(error){
+				console.log("User couldn't be retrieved");
+				callback(false);
+			})		
+		} else {
+			return $q.reject({message: "User has no token"});
+		}
+		
+		
+	}
+	
+	
+	
 	return authFactory;
 
 })

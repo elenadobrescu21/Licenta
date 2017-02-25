@@ -1,4 +1,4 @@
-var app = angular.module("app", ['ui.router']);
+var app = angular.module("app", ['ui.router','lr.upload']);
 
 app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider) {
     //
@@ -26,6 +26,13 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $location
         url: "/users",
         templateUrl: "partials/user-management.html"
     })
+    
+     .state('upload', {
+        url: "/upload",
+        templateUrl: "partials/upload-file.html"
+    })
+    
+   
     
    $httpProvider.interceptors.push('AuthInterceptor');
    $locationProvider.html5Mode(true);

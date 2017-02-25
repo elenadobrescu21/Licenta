@@ -1,6 +1,6 @@
 angular.module("app").controller("RegisterController", function($scope, $http, $state){
 	
-	$http.defaults.headers.post["Content-Type"] = "application/json";
+	//$http.defaults.headers.post["Content-Type"] = "application/json";
 	$scope.fields = {
 			  nume:'',
 			  prenume: '',
@@ -38,7 +38,7 @@ angular.module("app").controller("RegisterController", function($scope, $http, $
 	    	}	   
 	    				
 	    }).error(function(error) {
-	        $scope.hasError = true;
+	       // $scope.hasError = true;
 	        console.log("Avem eroare: " + $scope.hasError);
 	        console.log(JSON.stringify("User couldn't be created " + error));
 	    });

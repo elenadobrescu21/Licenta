@@ -14,7 +14,7 @@
              <div class="form-group">
                 <label  class="control-label" for="username">Password</label>
                 <input  class="form-control" type="password" id="password" name="password" ng-model="login.password" required>
-                <span  ng-show="login.password.$touched && login.password.$invalid" class="help-block">Completati parola</span>
+                <span  ng-show="loginForm.password.$touched && loginForm.password.$invalid" class="help-block">Completati parola</span>
             </div>
             
             <div class="alert alert-danger form-group center-block" ng-show="login.badCredentials">
@@ -22,7 +22,7 @@
             </div>
 	 
 		   <div class="form-group center-block">
-                <button class="btn btn-default" name="submit" ng-click="login.login()">Login</button>
+                <button class="btn btn-default" name="submit" type="submit" ng-click="login.login()">Login</button>
             </div>	
            	
             </div>
