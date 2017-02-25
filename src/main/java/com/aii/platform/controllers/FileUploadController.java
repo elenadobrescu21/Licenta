@@ -38,7 +38,7 @@ public class FileUploadController {
 	     System.out.println("You have successfully uploaded the file " + file.getOriginalFilename() + "!");
 	     return new ResponseEntity<Response>(new Response("File uploaded successfully"), new HttpHeaders(), HttpStatus.OK);
 	        
-	    }
+	}
 	 
 	 @ExceptionHandler(StorageFileNotFoundException.class) 
 	 public ResponseEntity handleStorageFileNotFound(StorageFileNotFoundException exc) {

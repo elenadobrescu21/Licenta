@@ -1,52 +1,28 @@
-<!--  
-<section ng-controller="UploadController"> 
-	<div>
-	
-	<input type = "file" file-model = "myFile"/>
-     <button ng-click = "uploadFile()">upload me</button>
-
-	</div>
-</section>
--->
+<section ng-controller="UploadController">
  
- <!--  
- <form id="upload-file-form">
-    <label for="upload-file-input">Upload your file:</label>
-    <input id="upload-file-input" type="file" name="uploadfile" accept="*" />
-    <br />
-    <span id="upload-file-message"></span>
+  <div class="container">
+  <form method="post"  id="uploadForm" name="uploadForm">
+  <div class="text-center"><h1>Upload a file</h1></div>
+  
+   <div class="form-group">
+       <label  class="control-label" for="title">Titlu</label>
+       <input  class="form-control" type="text" id="title" name="title" ng-model="title" required>
+       <span  ng-show="uploadForm.title.$touched && uploadForm.title.$invalid" class="help-block">Completati titlul</span>
+   </div>
+   
+    <div class="form-group">
+       <label  class="control-label" for="title">Fisier</label>
+        <input type="file" file-model="myFile"/>
+       
+   </div>
+   
+   <div class="form-group center-block">
+      <button class="btn btn-default" name="submit" type="submit" ng-click="doUpload()">Upload</button>
+    </div>	
+  
   </form>
-  -->
-  <h1> Upload a file</h1>
+  
+  </div>
+  </section>
  
-  <div
-  class="btn btn-primary btn-upload"
-  upload-button
-
-  // Mandatory, the url of the backend that is going to handle the upload
-  url="http://localhost:8080/upload"
-
-  // Optional, file param name for upload
-  param="file"
-
-  // Optional, object to send as form data with the upload
-  data="formData"
-
-  // Optional, comma separated list or array of allowed mimetypes, defaults to allowing all types
-  accept="{{acceptTypes}}"
-
-  // Optional, Allow selecting multiple files, defaults to false
-  multiple="{{allowMultiple}}"
-
-  // Optional, force all uploads through the iframe solution, defaults to false and should normally not be included
-  force-iframe-upload="{{forceIframeUpload}}"
-
-  // Optional, make file input required and add ng-invalid-required if required is set to true on the input button
-  required="true|false"
-
-  on-upload="onUpload(files)" // Optional callback when uploading starts
-  on-success="onSuccess(response)" // Optional callback
-  on-error="onError(response)" // Optional callback
-  on-complete="onComplete(response)" // Optional, callback (called on both on-success and on-error)
-
->Fileupload</div>
+  
