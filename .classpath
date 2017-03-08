@@ -32,5 +32,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/Users/elenadobrescu/Documents/external jars/pdfbox-app-2.0.4.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -15,33 +15,18 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 		headers : {
 		'Content-Type' : undefined
 		}
-		}).success(function() {
+		}).success(function(data, status, headers, config) {
 			$state.go('default');
+			console.log('Data message din success: '+ data.message);
+			console.log('Status din success: ' + status);
 			console.log('success');
 		}).error(function() {
 			console.log('error');
+			console.log('Data message din error: '+ data.message);
+			console.log('Status din error:'+ status);
 		});
 		}
-	
-	
-//	$scope.doUpload = function () {
-//	    upload({
-//	      url: '/uploadArticle',
-//	      method: 'POST',
-//	      data: {
-//	          title: $scope.title,
-//	          file: $scope.myFile, // a jqLite type="file" element, upload() will extract all the files from the input and put them into the FormData object before sending.
-//	        }
-//	    }).then(
-//	      function (response) {
-//	        console.log(response.data); // will output whatever you choose to return from the server on a successful upload
-//	      },
-//	      function (response) {
-//	          console.error(response); //  Will return if status code is above 200 and lower than 300, same as $http
-//	      }
-//	    );
-//	  }
-//	
+
 })
 
 angular.module("app").directive('fileModel', ['$parse', function ($parse) {

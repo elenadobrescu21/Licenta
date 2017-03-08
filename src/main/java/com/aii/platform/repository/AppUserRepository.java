@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import com.aii.platform.models.*;
 
-@Repository
-public interface AppUserRepository extends CrudRepository<AppUser,Integer>{
+
+public interface AppUserRepository extends CrudRepository<AppUser,Long>{
 	
 	public AppUser findByUsername(@Param("username") String username);
 	public AppUser findByEmail(@Param("email") String email);

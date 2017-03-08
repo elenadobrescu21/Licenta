@@ -1,12 +1,20 @@
 package com.aii.platform.models;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity(name="appUser")
 @Table(name="appUser")
@@ -39,6 +47,10 @@ public class AppUser {
 	@Column(name="authorities")
 	@NotNull
 	private String authorities;
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="appUser")
+	//@JsonIgnore
+	private List<UploadedArticle> uploadedArticles;
 	
 	public AppUser() {
 		
@@ -115,6 +127,15 @@ public class AppUser {
 	public void setAuthorities(String authorities) {
 		this.authorities = authorities;
 	}
-		
 
+
+	public List<UploadedArticle> getUploadedArticles() {
+		return uploadedArticles;
+	}
+
+//
+//	public void setUploadedArticles(List<UploadedArticle> uploadedArticles) {
+//		this.uploadedArticles = uploadedArticles;
+//	}
+	
 }

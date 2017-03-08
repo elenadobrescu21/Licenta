@@ -1,5 +1,6 @@
 package com.aii.platform.controllers;
 
+import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,16 @@ public class AppUserController {
 	 public ResponseEntity getAllUsers() {
 		return new ResponseEntity((List)appUserRepository.findAll(), new HttpHeaders(), HttpStatus.OK);
 	  
+	}
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.GET)
+	public ResponseEntity<?> getUserById(@PathVariable("id") Long id){
+		if(appUserRepository.findOne(id)!=null){
+			return new ResponseEntity<AppUser>(appUserRepository.findOne(id), new HttpHeaders(), HttpStatus.OK);	
+		} else {
+			return new ResponseEntity<Response>(new Response("User couldn't be found"), new HttpHeaders(), HttpStatus.NOT_FOUND);
+		}
+		
 	}
 		
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE) 

@@ -32,6 +32,11 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $location
         templateUrl: "partials/upload-file.html"
     })
     
+     .state('download', {
+        url: "/download",
+        templateUrl: "partials/download-pdf.html"
+    })
+    
    
     
    $httpProvider.interceptors.push('AuthInterceptor');

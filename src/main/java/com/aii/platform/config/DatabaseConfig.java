@@ -20,6 +20,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.aii.platform.models.AppUser;
+import com.aii.platform.models.UploadedArticle;
+
 @Configuration
 @EnableJpaRepositories("com.aii.platform.repository")
 @EnableTransactionManagement
@@ -45,6 +48,8 @@ public class DatabaseConfig {
 		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
 		sessionFactory.setDataSource(dataSource());
 		sessionFactory.setPackagesToScan(new String[] { "com.aii.platform.models" });
+		sessionFactory.setAnnotatedClasses(AppUser.class);
+		sessionFactory.setAnnotatedClasses(UploadedArticle.class);
 		sessionFactory.setHibernateProperties(additionalProperties());
 		return sessionFactory;
 	}
