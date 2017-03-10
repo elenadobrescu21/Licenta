@@ -48,7 +48,7 @@ public class AppUser {
 	@NotNull
 	private String authorities;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy="appUser")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="appUser", orphanRemoval = true)
 	//@JsonIgnore
 	private List<UploadedArticle> uploadedArticles;
 	

@@ -1,5 +1,7 @@
 package com.aii.platform.models;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -34,12 +38,15 @@ public class UploadedArticle {
 	@Column(name = "filename")
 	private String filename;
 	
+	@Column(name="uploaded_on")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date uploadedOn = new Date();
+	
 	@Transient
 	@JsonIgnore
 	private byte[] file;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="id", nullable = false)
+	@ManyToOne
 	@JsonIgnore
 	private AppUser appUser;
 	
@@ -47,12 +54,12 @@ public class UploadedArticle {
 		
 	}
 
-	public UploadedArticle(Long id,String title,String filename, byte[] file) {
-		this.uploadedArticle_ID = id;
-		this.title = title;
-		this.filename = filename;
-		this.file = file;
-	}
+//	public UploadedArticle(Long id,String title,String filename, byte[] file) {
+//		this.uploadedArticle_ID = id;
+//		this.title = title;
+//		this.filename = filename;
+//		this.file = file;
+//	}
 	
 	public UploadedArticle(String title,String filename, byte[] file) {
 		super();

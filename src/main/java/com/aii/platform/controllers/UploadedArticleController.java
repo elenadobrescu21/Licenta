@@ -85,6 +85,10 @@ public class UploadedArticleController {
 		AppUser user = appUserRepository.findByUsername(username);
 		String titleToBeSaved = title.replace("\"", "");
 		
+		if(uploadedArticleRepository.findByTitle(titleToBeSaved)!=null) {
+			return new ResponseEntity<Response>(new Response("Titlu deja existent") , new HttpHeaders(), HttpStatus.IM_USED);
+		}
+		
 		  try {
 		      // Get the filename and build the local file path
 		      String filename = file.getOriginalFilename();
