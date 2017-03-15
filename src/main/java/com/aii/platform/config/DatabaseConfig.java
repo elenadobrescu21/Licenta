@@ -29,7 +29,7 @@ import com.aii.platform.models.UploadedArticle;
 public class DatabaseConfig {
 	
 	private static final String DRIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
-	private static final String DB_URL = "jdbc:mysql://localhost:3306/platforma_aii?autoReconnect=true&useSSL=false";
+	private static final String DB_URL = "jdbc:mysql://localhost:3306/platforma_aii?autoReconnect=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8";
 	private static final String DB_USERNAME = "root";
 	private static final String DB_PASSWORD = "root";
 	
@@ -81,6 +81,7 @@ public class DatabaseConfig {
 	      Properties properties = new Properties();
 	      properties.setProperty("hibernate.hbm2ddl.auto", "update");
 	      properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+	      
 	      return properties;
 	   }
 	

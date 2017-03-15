@@ -2,6 +2,9 @@ package com.aii.platform.utils;
 
 import java.io.UnsupportedEncodingException;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class DiacriticsUtils {
 	
 	public boolean checkForDiacritics(String stringToBeChecked) {
@@ -10,7 +13,6 @@ public class DiacriticsUtils {
 		for(int i=0; i<stringToBeChecked.length(); i++) {
 			char c = stringToBeChecked.charAt(i);
 			String character = Character.toString(c);
-			System.out.println(character);
 			switch(character) {
 			case "Ă" : hasDiacritics = true;
 					   break;			

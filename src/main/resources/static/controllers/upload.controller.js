@@ -1,5 +1,7 @@
 angular.module("app").controller("UploadController", function($scope,$http,$state,$window, upload) {
 	
+	$scope.hasError = false;
+	$scope.errorMessage = "";
 	$scope.doUpload = function() {
 
 		var file = $scope.myFile;
@@ -16,10 +18,19 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 		'Content-Type' : undefined
 		}
 		}).success(function(data, status, headers, config) {
-			$state.go('default');
-			console.log('Data message din success: '+ data.message);
-			console.log('Status din success: ' + status);
-			console.log('success');
+			//226 = IM_USED
+			if(status == 226) {
+				$scope.hasError = true;
+				$scope.errorMessage = data.message;
+				
+			}
+			if(status == 200) {
+				$state.go('default');
+				console.log('Data message din success: '+ data.message);
+				console.log('Status din success: ' + status);
+				console.log('success');			
+			}
+			
 		}).error(function() {
 			console.log('error');
 			console.log('Data message din error: '+ data.message);

@@ -41,8 +41,17 @@ public class AppUserController {
 			return new ResponseEntity<AppUser>(appUserRepository.findOne(id), new HttpHeaders(), HttpStatus.OK);	
 		} else {
 			return new ResponseEntity<Response>(new Response("User couldn't be found"), new HttpHeaders(), HttpStatus.NOT_FOUND);
+		}	
+	}
+	
+	@RequestMapping(value="/title/{title}", method = RequestMethod.GET)
+	public ResponseEntity<?> getAuthorByTitle(@PathVariable("title") String title) {
+		if(appUserRepository.findByTitle(title)!=null) {
+			return new ResponseEntity<List<AppUser>>((List)appUserRepository.findByTitle(title), new HttpHeaders(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Response>(new Response("User couldn't be found"), new HttpHeaders(), HttpStatus.NOT_FOUND);
+			
 		}
-		
 	}
 		
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE) 

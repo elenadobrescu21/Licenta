@@ -96,6 +96,24 @@
     <artifactId>commons-fileupload</artifactId>
     <version>1.3.2</version>
 </dependency>
+
+<dependency>
+    <groupId>org.apache.lucene</groupId>
+    <artifactId>lucene-core</artifactId>
+    <version>4.5.0</version>
+</dependency>
+
+<dependency>
+        <groupId>org.apache.lucene</groupId>
+        <artifactId>lucene-analyzers-common</artifactId>
+        <version>4.5.0</version>
+  </dependency>
+  
+  <dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-math3</artifactId>
+    <version>3.2</version>
+ </dependency>
 	
 
    </dependencies>

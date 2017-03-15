@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Paths;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,6 +41,7 @@ import com.aii.platform.repository.UploadedArticleRepository;
 import com.aii.platform.security.TokenUtils;
 import com.aii.platform.security.model.SpringSecurityUser;
 import com.aii.platform.services.storage.StorageService;
+import com.aii.platform.utils.DiacriticsUtils;
 
 @Controller
 public class UploadedArticleController {
@@ -52,6 +54,9 @@ public class UploadedArticleController {
 	
 	@Autowired
 	private AppUserRepository appUserRepository;
+	
+	@Autowired
+	private DiacriticsUtils diacriticsUtils;
 	
 	
 	@RequestMapping(value="/downloadPDF", method = RequestMethod.GET, produces="application/pdf")
@@ -78,16 +83,23 @@ public class UploadedArticleController {
 	@RequestMapping(value = "/uploadArticle", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<?> uploadArticle(@RequestParam(value="title") String title,
-			@RequestParam(value = "file") MultipartFile file,HttpServletRequest request) {
+			@RequestParam(value = "file") MultipartFile file,HttpServletRequest request) throws UnsupportedEncodingException,
+	FileNotFoundException {
 		
 		String token = request.getHeader("X-Auth-Token");
 		String username = tokenUtils.getUsernameFromToken(token);
 		AppUser user = appUserRepository.findByUsername(username);
+		String titleToBeCompared = title.replace("\"", "");
 		String titleToBeSaved = title.replace("\"", "");
 		
-		if(uploadedArticleRepository.findByTitle(titleToBeSaved)!=null) {
-			return new ResponseEntity<Response>(new Response("Titlu deja existent") , new HttpHeaders(), HttpStatus.IM_USED);
+		if(diacriticsUtils.checkForDiacritics(titleToBeCompared)) {
+			titleToBeCompared = diacriticsUtils.removeDiacritics(titleToBeCompared);
 		}
+		System.out.println("Title with removed diacritics:" + titleToBeCompared);
+		
+		if(uploadedArticleRepository.findByTitle(titleToBeCompared)!=null) {
+			return new ResponseEntity<Response>(new Response("Titlu deja existent") , new HttpHeaders(), HttpStatus.IM_USED);
+		} else {
 		
 		  try {
 		      // Get the filename and build the local file path
@@ -124,8 +136,9 @@ public class UploadedArticleController {
 			    	  PDFTextStripperByArea stripper = new PDFTextStripperByArea();
 			    	  stripper.setSortByPosition(true);
 			    	  PDFTextStripper Tstripper = new PDFTextStripper();
+			    	  int numberOfPages = document.getNumberOfPages();
 			    	  Tstripper.setStartPage(1);
-			    	  Tstripper.setEndPage(1);
+			    	  Tstripper.setEndPage(numberOfPages);
 			    	  Tstripper.getArticleStart();
 			    	  String st = new String(Tstripper.getText(document).getBytes(), "UTF-8");
 			    	  String st2 = Tstripper.getArticleStart();
@@ -147,11 +160,14 @@ public class UploadedArticleController {
 		  		return new ResponseEntity<Response>(new Response("Only pdf accepted"), new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
 		  	}
 		  	    
-		  	System.out.println("File name: " + file.getName());
+		  	//System.out.println("File name: " + file.getName());
 		  	System.out.println("Content type: " + file.getContentType());
 		    System.out.println("File uploaded successfully: " + file.getOriginalFilename());
 		    return new ResponseEntity<Response>(new Response("File uploaded successfully"), new HttpHeaders(), HttpStatus.OK);
-		  } // method uploadFile
+		}
+		
+		} // method uploadFile
+		
 
 		
 		@RequestMapping(value="/article/{title}", method = RequestMethod.GET)
