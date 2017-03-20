@@ -30,7 +30,7 @@ public class UploadedArticle {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long uploadedArticle_ID;
+	private Long uploadedArticleId;
 	
 	@Column(name = "title", unique=true)
 	private String title;
@@ -42,9 +42,9 @@ public class UploadedArticle {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date uploadedOn = new Date();
 	
-	@Transient
-	@JsonIgnore
-	private byte[] file;
+//	@Transient
+//	@JsonIgnore
+//	private byte[] file;
 	
 	@ManyToOne
 	@JsonIgnore
@@ -61,11 +61,10 @@ public class UploadedArticle {
 //		this.file = file;
 //	}
 	
-	public UploadedArticle(String title,String filename, byte[] file) {
+	public UploadedArticle(String title,String filename) {
 		super();
 		this.title = title;
 		this.filename = filename;
-		this.file = file;
 	}
 
 	public String getTitle() {
@@ -76,15 +75,6 @@ public class UploadedArticle {
 		this.title = title;
 	}
 
-	public byte[] getFile() {
-		return file;
-	}
-
-	public void setFile(byte[] file) {
-		this.file = file;
-	}
-
-	
 	public AppUser getAppUser() {
 		return appUser;
 	}

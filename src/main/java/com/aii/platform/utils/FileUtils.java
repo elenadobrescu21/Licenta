@@ -63,5 +63,10 @@ public class FileUtils {
 		      stream.write(file.getBytes());
 		      stream.close();
 	}
+	
+	public void renameFile(File initialFile, String newFilePath){
+		initialFile.renameTo(new File(newFilePath));
+		
+	}
 
 }

@@ -13,8 +13,14 @@
     <div class="form-group">
        <label class="control-label" for="title">Fisier</label>
        <p><label class="control-label" for="pdf-only">Sunt acceptate doar fisierele in format PDF</label> </p>
-       <input type="file" file-model="myFile" accept="application/pdf"/>
-       
+       <input type="file" file-model="myFile" accept="application/pdf"/>    
+   </div>
+   <div class="form-group">
+   <label class="control-label" for="coautori"> Adaugati coautori?</label>
+   <button class="btn btn-default" type="button" name="coautori" ng-click="adaugaCoautori()">Adauga</button>
+   <div class="coauthors" id="coautori">
+   
+   </div>
    </div>
    <div class="alert alert-danger form-group center-block" ng-show="hasError">
    <h4>{{errorMessage}}</h4>

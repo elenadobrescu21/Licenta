@@ -40,7 +40,8 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $location
    
     
    $httpProvider.interceptors.push('AuthInterceptor');
-   $locationProvider.html5Mode(true);
+    //pentru # la rute
+   //$locationProvider.html5Mode(true);
     
          
 });

@@ -1,7 +1,33 @@
-angular.module("app").controller("UploadController", function($scope,$http,$state,$window, upload) {
+angular.module("app").controller("UploadController", function($scope,$http,$state,$window, upload, User) {
 	
 	$scope.hasError = false;
 	$scope.errorMessage = "";
+	$scope.existaCoautori = false;
+	$scope.numarCoautori = 0;
+	
+	$scope.allUsers = [];
+	
+	 User.all().then(function(result) {
+	      console.log("Members", result.data);
+	      $scope.allUsers = result.data;
+	  }, function(err) {
+	      console.error(err);
+	  })
+	 
+	$scope.adaugaCoautori = function() {
+		//$scope.existaCoautori = true;
+		// var $div = $("<div ng-controller='MyCtrl'>new: {{content.label}}</div>");
+		var $div = $("<p> Coautor: </p> <select> <option ng-repeat='user in allUsers' data-id='{{ user.id }}'>{{user.nume}}  {{user.prenume}} </option>  </select>")
+        var target = angular.element(document.querySelector(' #coautori'));
+
+		angular.element(target).injector().invoke(function($compile) {
+		    var $scope = angular.element(target).scope();
+		    target.append($compile($div)($scope));
+		    //$scope.$apply();
+		  });
+
+	}
+	
 	$scope.doUpload = function() {
 
 		var file = $scope.myFile;
