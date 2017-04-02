@@ -17,5 +17,8 @@ public interface AppUserRepository extends CrudRepository<AppUser,Long>{
 	@Query("select a from appUser a join a.uploadedArticles u where (u.title=:titleName)")
 	public List<AppUser> findByTitle(@Param("titleName") String titleName);
 	
+	@Query("select a from appUser a join a.uploadedArticles u where (u.uploadedArticleId=:articleId)")
+	public AppUser findByArticleId(@Param("articleId") Long articleId);
+	
 
 }

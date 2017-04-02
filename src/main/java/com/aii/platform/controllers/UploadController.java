@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Paths;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.aii.platform.models.AppUser;
 import com.aii.platform.models.Response;
+import com.aii.platform.models.Coauthor;
 import com.aii.platform.models.UploadedArticle;
 import com.aii.platform.repository.AppUserRepository;
 import com.aii.platform.repository.UploadedArticleRepository;
@@ -37,6 +39,7 @@ import com.aii.platform.utils.PDFBoxUtils;
 import com.aii.platform.utils.lucene.CosineDocumentSimilarity;
 import com.aii.platform.utils.lucene.Indexer;
 import com.aii.platform.utils.lucene.LuceneReader;
+import com.google.gson.Gson;
 
 @Controller
 public class UploadController {
@@ -63,9 +66,11 @@ public class UploadController {
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<?> uploadArticle(@RequestParam(value="title") String title,
-			@RequestParam(value = "file") MultipartFile file,HttpServletRequest request) throws IOException {
+			@RequestParam(value = "file") MultipartFile file,
+			HttpServletRequest request) throws IOException {
 		
 		String token = request.getHeader("X-Auth-Token");
+		
 		String username = tokenUtils.getUsernameFromToken(token);
 		AppUser user = appUserRepository.findByUsername(username);
 		String titleToBeCompared = title.replace("\"", "");
@@ -73,6 +78,22 @@ public class UploadController {
 		
 		String filename = file.getOriginalFilename();
 		String filepath = Paths.get(TEMP_DIR, filename).toString();
+		
+		String coauthors = request.getParameter("coauthors");
+		Coauthor[] coauthorsArray = null;
+		System.out.println(coauthors.length());
+		if(coauthors.length() > 2) {
+			coauthorsArray = new Gson().fromJson(coauthors, Coauthor[].class);
+		}
+		
+		System.out.println("Array of coauthors"); 
+		for (Coauthor s : coauthorsArray) {
+		       System.out.println("Coauthor id: " + s.getId());
+		       System.out.println("Coauthor fullname: " + s.getFullname());
+		    }
+		
+		System.out.println("Request: " + request.getParameter("title"));
+		System.out.println("Request coauthors:" + request.getParameter("coauthors"));
 		
 		try {
 			fileUtils.saveFileLocally(filepath, file);
@@ -83,7 +104,7 @@ public class UploadController {
 		
 		PDFBoxUtils pdfUtils = new PDFBoxUtils();
 	    String content = pdfUtils.getTextContentFromPDF(filepath);
-	    System.out.println(content);
+	   // System.out.println(content);
 	    
 	    String maxID = uploadedArticleRepository.getMaxId();
 	    int maxId = (maxID==null) ? 0 : Integer.parseInt(maxID);
@@ -112,8 +133,8 @@ public class UploadController {
 	  		CosineDocumentSimilarity cosSim = new CosineDocumentSimilarity(reader2.getReader(),
 	  				luceneDocumentID, i);
 	  		double cosineSimilarity = cosSim.getCosineSimilarity();
-	  		if(cosineSimilarity > 0.95) {
-	  			isSimilar = true;
+	  		if(cosineSimilarity > 0.98) {
+	  		//	isSimilar = true;
 	  			idSimilar = i;
 	  			LuceneReader reader3 = new LuceneReader();
 	  			Document similarDocument = reader3.getReader().document(idSimilar);
@@ -137,9 +158,25 @@ public class UploadController {
 		    UploadedArticle articleToUpload = new UploadedArticle(titleToBeSaved,filename);
 		    user.getUploadedArticles().add(articleToUpload);
 		    articleToUpload.setAppUser(user);
+		    if(coauthorsArray!=null) {
+		    	for(int i=0; i<coauthorsArray.length; i++) {
+		    		AppUser coauthor = appUserRepository.findOne((long)coauthorsArray[i].getId());
+		    		articleToUpload.addCoauthor(coauthor);
+		    		coauthor.addArticle(articleToUpload);
+		    	}
+		    }
+		    
 		    try {
-		      appUserRepository.save(user);	      
+		      appUserRepository.save(user);	
 		      uploadedArticleRepository.save(articleToUpload);
+		      
+		      if(coauthorsArray!=null) {
+		    	  for(int i=0; i<coauthorsArray.length; i++) {
+		    		  AppUser userCoauthor = appUserRepository.findOne((long)coauthorsArray[i].getId());
+		    		  appUserRepository.save(userCoauthor);
+		    	  }
+		      }
+		      
 		    } catch (Exception e) {
 		    	  e.printStackTrace();
 		    	  System.out.println("Couldn't upload file to db");

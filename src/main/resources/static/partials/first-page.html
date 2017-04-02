@@ -1,6 +1,6 @@
-	<div ng-cloak class="container">
+	<div ng-cloak class="container" ng-controller="HomeController as home">
   	<div class="row">
-        <div class="col-md-12" ng-controller="HomeController as home">
+        <div class="col-md-12">
             <h1>Welcome</h1>
            
             <div ng-switch="isLoggedIn">
@@ -8,7 +8,7 @@
                    <p> You are logged in as {{home.user.username}}.</p>
                    <p> Userul este admin: {{home.isAdmin}}. </p>
              <p> Click <a ui-sref="upload"> here</a> to upload a file</p>
-              <p> Click <a href="/#/upload"> here</a> to upload a file</p>
+              <p> Click <a ui-sref="search"> here</a> to search for a file</p>
              <p> Click <a ui-sref="download"> here</a> to download a file</p>
                 </div>
  
@@ -19,16 +19,24 @@
                     You don't have an account yet? <a class="alert-link" ui-sref="register">Register a new account</a>
                 </div>
             </div>
+            
         
-        
-        <!--  
-        <div class="alert alert-warning">
-            <h3> You can log in <a class="alert-link" ui-sref="login">here</a> </h3>
-        </div>
-        <div class="alert alert-warning" >
-              You don't have an account yet? <a class="alert-link" ui-sref="register">Register a new account</a>
-         </div>
-       -->
         </div>
     </div>
+       <h1> Latest articles</h1>
+         <div class="latest-articles alert alert-info">
+            <div class="row" ng-repeat = "article in articlesWithAuthors">
+            <div class="col-md-6" >
+            <h2> {{article.title}} </h2>
+            <p> Uploaded by {{ article.author }} on {{ article.uploadedOn}} </p>
+            
+            </div>
+            <div class="col-md-6">
+            <button class="btn btn-default download-btn" ng-click="downloadArticle(article.id)" type="button"> Download</button>
+            </div>
+            
+ 			</div>
+            </div>
+           
+           
   	</div>

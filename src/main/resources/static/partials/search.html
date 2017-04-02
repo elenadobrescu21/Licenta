@@ -1,0 +1,50 @@
+<div class="container">
+<div class="alert alert-warning" ng-controller="SearchCtrl as ctrl" layout="column" ng-cloak>
+<h1> Cautati articole dupa autor </h1>
+  <md-content class="md-padding">
+    <form ng-submit="$event.preventDefault()">
+      
+      <md-autocomplete
+          ng-disabled="ctrl.isDisabled"
+          md-no-cache="ctrl.noCache"
+          md-selected-item="ctrl.selectedItem"
+          md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
+          md-search-text="ctrl.searchText"
+          md-selected-item-change="ctrl.selectedItemChange(item)"
+          md-items="item in ctrl.querySearch(ctrl.searchText)"
+          md-item-text="item.fullname"
+          md-min-length="0"
+          placeholder="Nume autor">
+        <md-item-template>
+          <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.fullname}}</span>
+        </md-item-template>
+        <md-not-found>
+          No states matching "{{ctrl.searchText}}" were found.
+          <a ng-click="ctrl.newState(ctrl.searchText)">Create a new one!</a>
+        </md-not-found>
+        <br>
+        
+      </md-autocomplete>
+      <br>
+  
+      <button class="btn btn-default" type="button" ng-disabled="!ctrl.searchText" ng-click="ctrl.sendSelectedItem(item)"> Cauta</button>
+      <br/>
+   
+    </form>
+  </md-content>
+  
+  <div class="latest-articles alert alert-warning" ng-show="ctrl.visibleTable">
+      <div class="row" ng-repeat = "article in ctrl.articles">
+         <div class="col-md-6" >
+          <h2> {{article.title}} </h2>
+            <p> Uploaded on {{ article.uploadedOn}} </p>
+            
+            </div>
+            <div class="col-md-6">
+            <button class="btn btn-default download-btn" ng-click="downloadArticle(article.id)" type="button"> Download</button>
+            </div>
+            
+ 			</div>
+     </div>
+</div>
+</div>

@@ -1,4 +1,4 @@
-var app = angular.module("app", ['ui.router','lr.upload']);
+var app = angular.module("app", ['ui.router','lr.upload', 'ngMaterial']);
 
 app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider) {
     //
@@ -37,11 +37,18 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $location
         templateUrl: "partials/download-pdf.html"
     })
     
+     .state('search', {
+        url: "/search",
+        templateUrl: "partials/search.html"
+    })
+    
+   
+    
    
     
    $httpProvider.interceptors.push('AuthInterceptor');
     //pentru # la rute
-   //$locationProvider.html5Mode(true);
+  // $locationProvider.html5Mode(true);
     
          
 });

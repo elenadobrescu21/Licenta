@@ -48,7 +48,7 @@ public class CosineDocumentSimilarity {
            String term = text.utf8ToString();
            int freq = (int) termsEnum.totalTermFreq();
            frequencies.put(term, freq);
-           System.out.println(term + ":" + freq);
+           //System.out.println(term + ":" + freq);
            terms.add(term);
        }
        return frequencies;

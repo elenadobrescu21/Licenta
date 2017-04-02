@@ -53,6 +53,16 @@ public class AppUserController {
 			
 		}
 	}
+	
+	@RequestMapping(value="/article/{articleId}", method = RequestMethod.GET)
+	public ResponseEntity<?> getAuthorByArticleId(@PathVariable("articleId") String articleId) {
+		int id = Integer.parseInt(articleId);
+		if(appUserRepository.findByArticleId((long)id)!=null) {
+			return new ResponseEntity<AppUser>(appUserRepository.findByArticleId((long)id), new HttpHeaders(), HttpStatus.OK);
+		} else{
+			return new ResponseEntity<Response>(new Response("User couldn't be found"), new HttpHeaders(), HttpStatus.NOT_FOUND);
+		}
+	}
 		
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE) 
 	public ResponseEntity addNewUser(@RequestBody AppUser user) {

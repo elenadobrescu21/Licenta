@@ -1,5 +1,6 @@
 package com.aii.platform.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -9,6 +10,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -51,6 +55,22 @@ public class AppUser {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy="appUser", orphanRemoval = true)
 	//@JsonIgnore
 	private List<UploadedArticle> uploadedArticles;
+	
+	@ManyToMany(mappedBy = "coauthors")
+	private List<UploadedArticle> coauthorArticles = new ArrayList<UploadedArticle>();
+	
+	@ManyToMany
+	@JoinTable(name = "user_favouriteArticle", 
+	joinColumns = {
+	@JoinColumn( name="user_id",
+				referencedColumnName = "id"
+			)
+	},
+		inverseJoinColumns = {
+				@JoinColumn(name="article_id",
+						referencedColumnName = "uploadedArticleId")
+		})
+	private List<UploadedArticle> favouriteArticles = new ArrayList<UploadedArticle>();
 	
 	public AppUser() {
 		
@@ -132,10 +152,38 @@ public class AppUser {
 	public List<UploadedArticle> getUploadedArticles() {
 		return uploadedArticles;
 	}
-
-//
-//	public void setUploadedArticles(List<UploadedArticle> uploadedArticles) {
-//		this.uploadedArticles = uploadedArticles;
-//	}
 	
+	public void addArticle(UploadedArticle uploadedArticle) {
+		this.coauthorArticles.add(uploadedArticle);
+	}
+
+
+//	public List<UploadedArticle> getCoauthorArticles() {
+//		return coauthorArticles;
+//	}
+
+
+	public void setCoauthorArticles(List<UploadedArticle> coauthorArticles) {
+		this.coauthorArticles = coauthorArticles;
+	}
+
+
+	public void setUploadedArticles(List<UploadedArticle> uploadedArticles) {
+		this.uploadedArticles = uploadedArticles;
+	}
+
+
+	public List<UploadedArticle> getFavouriteArticles() {
+		return favouriteArticles;
+	}
+
+
+	public void setFavouriteArticles(List<UploadedArticle> favouriteArticles) {
+		this.favouriteArticles = favouriteArticles;
+	}
+	
+	
+	
+	
+		
 }

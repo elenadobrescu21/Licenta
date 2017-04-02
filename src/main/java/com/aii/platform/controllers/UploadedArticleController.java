@@ -46,6 +46,8 @@ import com.aii.platform.utils.DiacriticsUtils;
 @Controller
 public class UploadedArticleController {
 	
+	private static final String UPLOAD_DIR = "src/main/resources/static/file-storage/uploads";
+	
 	@Autowired
 	private UploadedArticleRepository uploadedArticleRepository;
 	
@@ -59,17 +61,22 @@ public class UploadedArticleController {
 	private DiacriticsUtils diacriticsUtils;
 	
 	
-	@RequestMapping(value="/downloadPDF", method = RequestMethod.GET, produces="application/pdf")
-	public ResponseEntity<byte[]> getPDF() {
+	@RequestMapping(value="/downloadPDF/{articleId}", method = RequestMethod.GET, produces="application/pdf")
+	public ResponseEntity<byte[]> getPDF(@PathVariable("articleId") String articleId) {
 		FileInputStream fileStream;
+		int id = Integer.parseInt(articleId);
+		UploadedArticle downloadedArticle = uploadedArticleRepository.findOne((long) id);
+		String filename = downloadedArticle.getFilename();
+		String filepath = Paths.get(UPLOAD_DIR, filename).toString();
 		try {
-			fileStream = new FileInputStream(new File("src/main/resources/static/uploads/Date_examene_IS.pdf"));
+			fileStream = new FileInputStream(new File(filepath));
 			byte[] contents = IOUtils.toByteArray(fileStream);
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.parseMediaType("application/pdf"));
-			String filename ="Date_examene_IS";
 			headers.setContentDispositionFormData(filename, filename);
 			ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(contents, headers, HttpStatus.OK);
+			downloadedArticle.incrementNumberOfDownloads();
+			uploadedArticleRepository.save(downloadedArticle);
 			return response;
 		}catch(FileNotFoundException e) {
 			System.err.println(e);
@@ -79,97 +86,7 @@ public class UploadedArticleController {
 		return null;
 	}
 	
-//	
-//	@RequestMapping(value = "/uploadArticle", method = RequestMethod.POST)
-//	@ResponseBody
-//	public ResponseEntity<?> uploadArticle(@RequestParam(value="title") String title,
-//			@RequestParam(value = "file") MultipartFile file,HttpServletRequest request) throws UnsupportedEncodingException,
-//	FileNotFoundException {
-//		
-//		String token = request.getHeader("X-Auth-Token");
-//		String username = tokenUtils.getUsernameFromToken(token);
-//		AppUser user = appUserRepository.findByUsername(username);
-//		String titleToBeCompared = title.replace("\"", "");
-//		String titleToBeSaved = title.replace("\"", "");
-//		
-//		if(diacriticsUtils.checkForDiacritics(titleToBeCompared)) {
-//			titleToBeCompared = diacriticsUtils.removeDiacritics(titleToBeCompared);
-//		}
-//		System.out.println("Title with removed diacritics:" + titleToBeCompared);
-//		
-//		if(uploadedArticleRepository.findByTitle(titleToBeCompared)!=null) {
-//			return new ResponseEntity<Response>(new Response("Titlu deja existent") , new HttpHeaders(), HttpStatus.IM_USED);
-//		} else {
-//		
-//		  try {
-//		      // Get the filename and build the local file path
-//		      String filename = file.getOriginalFilename();
-//		      String directory = "src/main/resources/static/uploads";
-//		      String filepath = Paths.get(directory, filename).toString();
-//		      
-//		      byte[] uploadedFile = file.getBytes();
-//		      
-//		      UploadedArticle articleToUpload = new UploadedArticle(titleToBeSaved,filename, uploadedFile);
-//		      user.getUploadedArticles().add(articleToUpload);
-//		      articleToUpload.setAppUser(user);
-//		      try {
-//		      appUserRepository.save(user);	      
-//		      uploadedArticleRepository.save(articleToUpload);
-//		      } catch (Exception e) {
-//		    	  e.printStackTrace();
-//		    	  System.out.println("Couldn't upload file to db");
-//		    	  return new ResponseEntity<Response>(new Response("Couldn't upload file to database"), new HttpHeaders(), HttpStatus.BAD_REQUEST);
-//		      }
-//		      
-//		      
-//		      // Save the file locally
-//		      BufferedOutputStream stream =
-//		          new BufferedOutputStream(new FileOutputStream(new File(filepath)));
-//		      stream.write(file.getBytes());
-//		      stream.close();
-//		      
-//		      try {
-//			      PDDocument document = null;
-//			      document = PDDocument.load(new File(filepath));
-//			      document.getClass();
-//			      if(!document.isEncrypted()) {
-//			    	  PDFTextStripperByArea stripper = new PDFTextStripperByArea();
-//			    	  stripper.setSortByPosition(true);
-//			    	  PDFTextStripper Tstripper = new PDFTextStripper();
-//			    	  int numberOfPages = document.getNumberOfPages();
-//			    	  Tstripper.setStartPage(1);
-//			    	  Tstripper.setEndPage(numberOfPages);
-//			    	  Tstripper.getArticleStart();
-//			    	  String st = new String(Tstripper.getText(document).getBytes(), "UTF-8");
-//			    	  String st2 = Tstripper.getArticleStart();
-//			    	  System.out.println("Text:" + st);
-//			    	  System.out.println("Lungimea textului " + st.length());
-//			    	   	  
-//			      }
-//			      } catch(Exception e) {
-//			    	  e.printStackTrace();
-//			      }
-//		    }
-//		    catch (Exception e) {
-//		      System.out.println(e.getMessage());
-//		      System.out.println("Couldn't upload file 1");
-//		      return new ResponseEntity<Response>(new Response("Couldn't upload file"), new HttpHeaders(), HttpStatus.BAD_REQUEST);
-//		    }
-//		  	
-//		  	if(!file.getContentType().equals("application/pdf")) {
-//		  		return new ResponseEntity<Response>(new Response("Only pdf accepted"), new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
-//		  	}
-//		  	    
-//		  	//System.out.println("File name: " + file.getName());
-//		  	System.out.println("Content type: " + file.getContentType());
-//		    System.out.println("File uploaded successfully: " + file.getOriginalFilename());
-//		    return new ResponseEntity<Response>(new Response("File uploaded successfully"), new HttpHeaders(), HttpStatus.OK);
-//		}
-//		
-//		} // method uploadFile
-//		
-
-		
+			
 		@RequestMapping(value="/article/{title}", method = RequestMethod.GET)
 		public ResponseEntity<?> getArticleByTitle(@PathVariable("title") String title) {
 			if(uploadedArticleRepository.findByTitle(title)!= null) {
@@ -187,7 +104,7 @@ public class UploadedArticleController {
 				return new ResponseEntity<UploadedArticle>(uploadedArticleRepository.findOne(id), new HttpHeaders(), HttpStatus.OK);
 				
 			} else {
-				return new ResponseEntity<Response>(new Response("File couldn't be found"), new HttpHeaders(), HttpStatus.OK);
+				return new ResponseEntity<Response>(new Response("Article couldn't be found"), new HttpHeaders(), HttpStatus.OK);
 			}
 			
 		}
@@ -195,6 +112,31 @@ public class UploadedArticleController {
 		@RequestMapping(value="/maxId", method=RequestMethod.GET)
 		public ResponseEntity<?> getMaxId() {
 			return new ResponseEntity<>(uploadedArticleRepository.getMaxId(), new HttpHeaders(), HttpStatus.OK);
+		}
+		
+		@RequestMapping(value="/latestArticles", method=RequestMethod.GET)
+		public ResponseEntity<?> getLatestArticles() {
+			if(uploadedArticleRepository.findFirst3ByOrderByUploadedOnDesc()==null) {
+				return new ResponseEntity<Response>(new Response("There are no articles yet"), new HttpHeaders(), HttpStatus.NOT_FOUND);
+			} else {
+			return new ResponseEntity<>(uploadedArticleRepository.findFirst3ByOrderByUploadedOnDesc(), new HttpHeaders(), HttpStatus.OK);
+			}
+		}
+		
+		@RequestMapping(value="/allArticles", method = RequestMethod.GET)
+		public ResponseEntity<?> getAllArticles() {
+			if(uploadedArticleRepository.findAll() == null) {
+				return new ResponseEntity<Response>(new Response("There are no articles yet"), new HttpHeaders(), HttpStatus.NOT_FOUND);
+			}
+			return new ResponseEntity<>(uploadedArticleRepository.findAll(), new HttpHeaders(), HttpStatus.OK);
+		}
+		
+		@RequestMapping(value="/articleByAuthor/{authorId}", method = RequestMethod.GET)
+		public ResponseEntity<?> getArticlesByAuthorId(@PathVariable("authorId") Long authorId) {
+			if(uploadedArticleRepository.findByAppUserId(authorId)==null) {
+				return new ResponseEntity<Response>(new Response("Acest autor inca nu a publicat niciun articol"), new HttpHeaders(), HttpStatus.NOT_FOUND);
+			}
+			return new ResponseEntity<>(uploadedArticleRepository.findByAppUserId(authorId), new HttpHeaders(), HttpStatus.OK);
 		}
 		
 	}

@@ -1,7 +1,10 @@
 package com.aii.platform.models;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,7 +12,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
@@ -39,32 +44,79 @@ public class UploadedArticle {
 	private String filename;
 	
 	@Column(name="uploaded_on")
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date uploadedOn = new Date();
 	
-//	@Transient
-//	@JsonIgnore
-//	private byte[] file;
+	@Column(name="downloads")
+	private int numberOfDownloads;
+
 	
 	@ManyToOne
 	@JsonIgnore
+	@JoinColumn(name = "appUserId", nullable = false)
 	private AppUser appUser;
+	
+	@ManyToMany
+	@JoinTable(name = "article_coauthor", 
+	joinColumns = {
+	@JoinColumn( name="article_id",
+				referencedColumnName = "uploadedArticleId"
+			)
+	},
+		inverseJoinColumns = {
+				@JoinColumn(name="coauthor_id",
+						referencedColumnName = "id")
+		})
+	private List<AppUser> coauthors = new ArrayList<AppUser>();
+	
+	@ManyToMany(mappedBy="favouriteArticles")
+	private List<AppUser> favouritedBy = new ArrayList<AppUser>();
+	
+	@ManyToMany(mappedBy="articles")
+	private List<Tag> tags = new ArrayList<Tag>();
 	
 	public UploadedArticle() {
 		
 	}
-
-//	public UploadedArticle(Long id,String title,String filename, byte[] file) {
-//		this.uploadedArticle_ID = id;
-//		this.title = title;
-//		this.filename = filename;
-//		this.file = file;
-//	}
 	
 	public UploadedArticle(String title,String filename) {
 		super();
 		this.title = title;
 		this.filename = filename;
+		this.numberOfDownloads = 0;
+	}
+
+	
+	public Long getUploadedArticleId() {
+		return uploadedArticleId;
+	}
+
+	public void setUploadedArticleId(Long uploadedArticleId) {
+		this.uploadedArticleId = uploadedArticleId;
+	}
+
+	public String getFilename() {
+		return filename;
+	}
+
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+
+	public Date getUploadedOn() {
+		return uploadedOn;
+	}
+
+	public void setUploadedOn(Date uploadedOn) {
+		this.uploadedOn = uploadedOn;
+	}
+
+	public List<AppUser> getCoauthors() {
+		return coauthors;
+	}
+
+	public void setCoauthors(List<AppUser> coauthors) {
+		this.coauthors = coauthors;
 	}
 
 	public String getTitle() {
@@ -83,5 +135,32 @@ public class UploadedArticle {
 		this.appUser = owner;
 	}
 	
+	public void addCoauthor(AppUser coauthor) {
+		this.coauthors.add(coauthor);
+	}
+
+	public int getNumberOfDownloads() {
+		return numberOfDownloads;
+	}
+
+	public void setNumberOfDownloads(int numberOfDownloads) {
+		this.numberOfDownloads = numberOfDownloads;
+	}
+	
+	public void incrementNumberOfDownloads() {
+		this.numberOfDownloads++;
+	}
+
+	public List<AppUser> getFavouritedBy() {
+		return favouritedBy;
+	}
+
+	public void setFavouritedBy(List<AppUser> favouritedBy) {
+		this.favouritedBy = favouritedBy;
+	}
+	
+	
+	
+
 
 }

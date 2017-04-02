@@ -15,13 +15,38 @@
        <p><label class="control-label" for="pdf-only">Sunt acceptate doar fisierele in format PDF</label> </p>
        <input type="file" file-model="myFile" accept="application/pdf"/>    
    </div>
-   <div class="form-group">
-   <label class="control-label" for="coautori"> Adaugati coautori?</label>
-   <button class="btn btn-default" type="button" name="coautori" ng-click="adaugaCoautori()">Adauga</button>
-   <div class="coauthors" id="coautori">
+ 
+ <div ng-show="coAuthorShow">
+ <p> <b> Coautori: </b> </p>
+  <div ng-repeat="coA in coAuthors track by $index"> {{coA.fullname}}  </div>
+  <div ng-show="!finalizat">
+  <select name="mySelect" id="mySelect"
+      ng-options="user.fullname for user in users"
+      ng-model="coAuthor"></select>
+  <button class="btn btn-default" type="button" ng-click="addCoauthor()">Adauga coautor</button>
+  <button class="btn btn-default" type="button" ng-click="finalizare()">Finalizare</button>
+  </div>
+  
+  <!--  
+  <p>Pentru a adauga un coautor ce nu are cont click <a ng-click="addCoauthorWithoutAccount()">aici</a>
+  
+  <div ng-show="coAuthorWithouthAccount">
+  <div ng-repeat="coAWithoutAccount in coAuthorsWithoutAccount">{{coAWithoutAccount }}</div>
+  	<div class="form-group">
+       <label  class="control-label" for="title">Coautor</label>
+       <input  class="form-control" type="text" id="coAuthorWithoutAccount" name="coAuthorWithoutAccount" ng-model="coAuthorWithoutAccount" required>
+       <span  ng-show="uploadForm.coAuthorWithoutAccount.$touched && uploadForm.coAuthorWithoutAccount.$invalid" class="help-block">Completati numele</span>
+   </div>
+   <button class="btn btn-default" type="button" ng-click="saveCoauthorWithoutAccount()">Adauga</button>
+  </div>
+  -->
+  
+  </div>
+  
+  <button class="btn btn-main" type="button" ng-show="!coAuthorShow" ng-click="adaugaCoautori()">Addauga coautori</button>
    
-   </div>
-   </div>
+   <br>
+   <br>
    <div class="alert alert-danger form-group center-block" ng-show="hasError">
    <h4>{{errorMessage}}</h4>
    </div>

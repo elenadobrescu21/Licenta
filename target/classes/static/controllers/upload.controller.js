@@ -3,40 +3,74 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 	$scope.hasError = false;
 	$scope.errorMessage = "";
 	$scope.existaCoautori = false;
-	$scope.numarCoautori = 0;
+	$scope.numberOfCoauthors = 0;
+	$scope.models = [];
+	$scope.users = [];
+	$scope.coAuthorShow = false;
+	$scope.coAuthors = [];
+	$scope.coAuthor = {};
+	//$scope.coAuthorWithoutAccount = {};
+	$scope.coAuthorsWithoutAccount = [];
+	$scope.finalizat = true;
 	
 	$scope.allUsers = [];
+	
+	$scope.coAuthorWithouthAccount = false;
 	
 	 User.all().then(function(result) {
 	      console.log("Members", result.data);
 	      $scope.allUsers = result.data;
+	      for(i=0; i<result.data.length; i++) {
+	    	  console.log(result.data[i].id);
+	    	  var name = result.data[i].nume + " " + result.data[i].prenume;
+	    	  var obj = {id: result.data[i].id, fullname: name};
+	    	  $scope.users.push(obj);
+	      }
 	  }, function(err) {
 	      console.error(err);
 	  })
-	 
-	$scope.adaugaCoautori = function() {
-		//$scope.existaCoautori = true;
-		// var $div = $("<div ng-controller='MyCtrl'>new: {{content.label}}</div>");
-		var $div = $("<p> Coautor: </p> <select> <option ng-repeat='user in allUsers' data-id='{{ user.id }}'>{{user.nume}}  {{user.prenume}} </option>  </select>")
-        var target = angular.element(document.querySelector(' #coautori'));
-
-		angular.element(target).injector().invoke(function($compile) {
-		    var $scope = angular.element(target).scope();
-		    target.append($compile($div)($scope));
-		    //$scope.$apply();
-		  });
-
-	}
+	  
+	  $scope.addCoauthor = function(){
+	    $scope.coAuthors.push($scope.coAuthor);
+	  };
+	  
+	  $scope.adaugaCoautori = function() {
+		  $scope.coAuthorShow = !$scope.coAuthorShow;
+		  $scope.finalizat = false;
+	  }
+	  
+	  $scope.addCoauthorWithoutAccount = function(){
+		$scope.coAuthorWithouthAccount = true;
+	  }
+	  
+	  $scope.showCoauthors = function() {
+		  console.log("Users:");
+		  console.log($scope.users);
+		  console.log("Coautori")
+		  console.log($scope.coAuthors);
+	  }
+	  
+	  $scope.saveCoauthorWithoutAccount = function(){
+		 $scope.coAuthorsWithoutAccount.push($scope.coAuthorWithoutAccount);
+		  console.log("A fost adaugat");
+		  console.log($scope.coAuthorWithoutAccount);
+	  }
+	  
+	  $scope.finalizare = function() {
+		  $scope.finalizat = true;
+	  }
+	  
 	
 	$scope.doUpload = function() {
 
 		var file = $scope.myFile;
 		console.log('file is ' );
 		console.dir(file);
-		var uploadUrl = "http://localhost:8080/uploadArticle";
+		var uploadUrl = "http://localhost:8080/upload";
 		var fd = new FormData();
 		fd.append('title',angular.toJson($scope.title,true));
-		fd.append('file', file);	
+		fd.append('file', file);
+		fd.append('coauthors', angular.toJson($scope.coAuthors,true));
 		console.log('Title '+ $scope.title);
 		$http.post(uploadUrl, fd, {
 		transformRequest : angular.identity,
