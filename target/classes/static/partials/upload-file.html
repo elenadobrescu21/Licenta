@@ -27,30 +27,28 @@
   <button class="btn btn-default" type="button" ng-click="finalizare()">Finalizare</button>
   </div>
   
-  <!--  
-  <p>Pentru a adauga un coautor ce nu are cont click <a ng-click="addCoauthorWithoutAccount()">aici</a>
+  </div>
   
-  <div ng-show="coAuthorWithouthAccount">
-  <div ng-repeat="coAWithoutAccount in coAuthorsWithoutAccount">{{coAWithoutAccount }}</div>
-  	<div class="form-group">
-       <label  class="control-label" for="title">Coautor</label>
-       <input  class="form-control" type="text" id="coAuthorWithoutAccount" name="coAuthorWithoutAccount" ng-model="coAuthorWithoutAccount" required>
-       <span  ng-show="uploadForm.coAuthorWithoutAccount.$touched && uploadForm.coAuthorWithoutAccount.$invalid" class="help-block">Completati numele</span>
+  <button class="btn btn-default" type="button" ng-show="!coAuthorShow" ng-click="adaugaCoautori()">Addauga coautori</button> 
+   <br>
+   <br>
+    <div class="form-group">
+       <label  class="control-label" for="title">Adaugati tag-uri</label>
+       <input  class="form-control" type="text" id="tag" name="tag" ng-model="tag"
+        ng-maxlength="40" ng-minlength="2" ng-keypress="($event.which==13)?addTag():0" />
+       <span  ng-show="uploadForm.tag.$touched && uploadForm.tag.$invalid" class="help-block">Un tag trebuie sa aiba cel putin 2 caractere si maxim 40</span>
    </div>
-   <button class="btn btn-default" type="button" ng-click="saveCoauthorWithoutAccount()">Adauga</button>
-  </div>
-  -->
-  
-  </div>
-  
-  <button class="btn btn-main" type="button" ng-show="!coAuthorShow" ng-click="adaugaCoautori()">Addauga coautori</button>
-   
-   <br>
-   <br>
+   <button class="btn btn-default" type="button" ng-click="addTag()">Adauga tag</button> 
+	<br>
+	<br>
+	<p class="tags"> <b> Tags: &nbsp</b> </p>
+	<div class="tags" ng-repeat="tag in tags"> {{tag}}, &nbsp </div>
+	
    <div class="alert alert-danger form-group center-block" ng-show="hasError">
    <h4>{{errorMessage}}</h4>
    </div>
    
+   <br>
    <div class="form-group center-block">
       <button class="btn btn-default" name="submit" type="submit" ng-click="doUpload()">Upload</button>
     </div>	

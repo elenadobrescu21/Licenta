@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,9 +30,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.aii.platform.models.AppUser;
 import com.aii.platform.models.Response;
+import com.aii.platform.models.Tag;
 import com.aii.platform.models.Coauthor;
 import com.aii.platform.models.UploadedArticle;
 import com.aii.platform.repository.AppUserRepository;
+import com.aii.platform.repository.TagRepository;
 import com.aii.platform.repository.UploadedArticleRepository;
 import com.aii.platform.security.TokenUtils;
 import com.aii.platform.utils.FileUtils;
@@ -51,6 +54,8 @@ public class UploadController {
 	@Autowired
 	private UploadedArticleRepository uploadedArticleRepository;
 	
+	@Autowired TagRepository tagRepository;
+	
 	@Autowired
 	private TokenUtils tokenUtils;
 	
@@ -58,10 +63,13 @@ public class UploadController {
 	private AppUserRepository appUserRepository;
 	
 	@Autowired
-	FileUtils fileUtils;
+	private FileUtils fileUtils;
 	
 	@Autowired
-	Indexer indexer;
+	private Indexer indexer;
+	
+	
+	
 	
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	@ResponseBody
@@ -77,20 +85,60 @@ public class UploadController {
 		String titleToBeSaved = title.replace("\"", "");
 		
 		String filename = file.getOriginalFilename();
+		String filenameWithoutExtension = filename.replaceAll(".pdf", "");
+		System.out.println("Replaced filename: " + filenameWithoutExtension);
+		
+		List<UploadedArticle> allArticles;
+		allArticles = (List<UploadedArticle>) uploadedArticleRepository.findAll();
+		for(UploadedArticle article: allArticles) {
+			if(filename.equals(article.getFilename())) {
+				System.out.println("Exista 2 fisiere care au acelasi nume");
+				filename = filenameWithoutExtension+"2"+".pdf";
+				System.out.println("Filename din conditie:" + filename);
+			}
+			
+		}
+		
+		
 		String filepath = Paths.get(TEMP_DIR, filename).toString();
+
+		boolean hasCoauthors = false;
 		
 		String coauthors = request.getParameter("coauthors");
 		Coauthor[] coauthorsArray = null;
+		
 		System.out.println(coauthors.length());
-		if(coauthors.length() > 2) {
+		if(coauthors!=null && coauthors.length() > 2) {
 			coauthorsArray = new Gson().fromJson(coauthors, Coauthor[].class);
+			hasCoauthors = true;
 		}
 		
+		if(hasCoauthors == true) {
 		System.out.println("Array of coauthors"); 
 		for (Coauthor s : coauthorsArray) {
 		       System.out.println("Coauthor id: " + s.getId());
 		       System.out.println("Coauthor fullname: " + s.getFullname());
-		    }
+			}
+		}
+		
+		boolean hasTags = false;
+		String tags = request.getParameter("tags");
+		String[] userTags = null;
+		if(tags!=null && tags.length() > 2) {
+			userTags =  new Gson().fromJson(tags, String[].class);
+			hasTags = true;
+			
+		}
+		
+		System.out.println("Taguri");
+		if(hasTags == true) {
+			for(String t: userTags) {
+				t = t.toLowerCase();
+				System.out.println(t);
+			}
+		}
+		
+		
 		
 		System.out.println("Request: " + request.getParameter("title"));
 		System.out.println("Request coauthors:" + request.getParameter("coauthors"));
@@ -110,7 +158,7 @@ public class UploadController {
 	    int maxId = (maxID==null) ? 0 : Integer.parseInt(maxID);
 	    int currentId;
 	    if(maxId == 0) {
-	    	currentId = 0;
+	    	currentId = 1;
 	    } else {
 	    	currentId = maxId + 1;
 	    }
@@ -123,18 +171,19 @@ public class UploadController {
 	    LuceneReader reader = new LuceneReader();
 	  	System.out.println("Numarul de fisiere indexate:" + reader.countNumberOfIndexedDocuments());
 	  	int luceneDocumentID = reader.getDocumentId(id);
-	  	System.out.println("Document ID:"+ reader.getDocumentId(id));
-	  	
+	  	System.out.println("Internal Lucene ID:"+ reader.getDocumentId(id));
+	  	  	
 	  	boolean isSimilar = false;
 	  	int idSimilar;
-	  	for(int i=0; i<reader.countNumberOfIndexedDocuments()-2; i++) {
+	  	if(reader.countNumberOfIndexedDocuments() > 1) {
+	  	for(int i=0; i<reader.countNumberOfIndexedDocuments()-1; i++) {
 	  		LuceneReader reader2 = new LuceneReader();
 
 	  		CosineDocumentSimilarity cosSim = new CosineDocumentSimilarity(reader2.getReader(),
 	  				luceneDocumentID, i);
 	  		double cosineSimilarity = cosSim.getCosineSimilarity();
 	  		if(cosineSimilarity > 0.98) {
-	  		//	isSimilar = true;
+	  		    isSimilar = true;
 	  			idSimilar = i;
 	  			LuceneReader reader3 = new LuceneReader();
 	  			Document similarDocument = reader3.getReader().document(idSimilar);
@@ -145,16 +194,19 @@ public class UploadController {
 	  		System.out.println("Similaritatea dintre document si documentul cu id-ul " + i + "este "
 	  				+ cosineSimilarity);
 
+	  		}
 	  	}
 	  	//daca este similar atunci sterge documentul din folder si recreeaza indexul cu restul documentelor
 	  	if(isSimilar == true) {
-	  		return new ResponseEntity<Response>(new Response("Exista document similar"), new HttpHeaders(), HttpStatus.OK);
+	  		//trebuie sa stergem fisierul ce tocmai a fost uploadat din director
+	  		fileUtils.deleteFileFromDirectory(filepath);
+	  		Indexer indexer2 = new Indexer();
+	  		indexer2.deleteDocumentById(id, TEMP_DIR);
+	  		System.out.println("Fisierul este duplicat si a fost sters");
+	  		return new ResponseEntity<Response>(new Response("Exista document similar"), new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
 	  	}else {
 	  		String filepathToUploads = Paths.get(UPLOAD_DIR, filename).toString();
 	  		
-	  		//fileUtils.saveFileLocally(filepathToUploads, file);
-	  		//fileUtils.deleteFileFromDirectory(filepath);
-	  	 
 		    UploadedArticle articleToUpload = new UploadedArticle(titleToBeSaved,filename);
 		    user.getUploadedArticles().add(articleToUpload);
 		    articleToUpload.setAppUser(user);
@@ -165,10 +217,36 @@ public class UploadController {
 		    		coauthor.addArticle(articleToUpload);
 		    	}
 		    }
-		    
+		  
+		    if(hasTags == true) {
+	    	  	List<Tag> existingTags = (List<Tag>) tagRepository.findAll();
+		    	List<Tag> newTags = new ArrayList<Tag>();
+		    	for(Tag tag : existingTags) {
+		    		for(String userTag : userTags) {
+		    			if(userTag.equals(tag.getDenumire())) {
+		    				Long tagId = tag.getTagId();
+		    				Tag tagFromDatabase = tagRepository.findOne(tagId);
+		    				tagFromDatabase.addArticle(articleToUpload);
+		    				articleToUpload.addTag(tagFromDatabase);
+		    				break;
+		    				
+		    			} else {
+		    				Tag newTag = new Tag(userTag);
+		    				tagRepository.save(newTag);
+		    				articleToUpload.addTag(newTag);
+		    				newTags.add(newTag);
+		    				//break;
+		    				
+		    			}
+		    		}
+		    	}
+		    }
+		   
+		      
 		    try {
 		      appUserRepository.save(user);	
 		      uploadedArticleRepository.save(articleToUpload);
+		      
 		      
 		      if(coauthorsArray!=null) {
 		    	  for(int i=0; i<coauthorsArray.length; i++) {
@@ -176,8 +254,12 @@ public class UploadController {
 		    		  appUserRepository.save(userCoauthor);
 		    	  }
 		      }
+		     
 		      
-		    } catch (Exception e) {
+		  
+		      }
+		            
+		    catch (Exception e) {
 		    	  e.printStackTrace();
 		    	  System.out.println("Couldn't upload file to db");
 		    	  return new ResponseEntity<Response>(new Response("Couldn't upload file to database"), new HttpHeaders(), HttpStatus.BAD_REQUEST);

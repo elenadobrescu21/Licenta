@@ -159,6 +159,10 @@ public class UploadedArticle {
 		this.favouritedBy = favouritedBy;
 	}
 	
+	public void addTag(Tag tag) {
+		this.tags.add(tag);
+	}
+	
 	
 	
 

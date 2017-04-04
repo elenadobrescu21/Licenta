@@ -21,7 +21,7 @@ public class Tag {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long tagId;
 	
-	@Column(name="denumire", nullable=false)
+	@Column(name="denumire", nullable=false, unique=true)
 	private String denumire;
 	
 	@ManyToMany
@@ -67,6 +67,10 @@ public class Tag {
 
 	public void setArticles(List<UploadedArticle> articles) {
 		this.articles = articles;
+	}
+	
+	public void addArticle(UploadedArticle article) {
+		this.articles.add(article);
 	}
 	
 

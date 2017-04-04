@@ -2,6 +2,7 @@ package com.aii.platform.utils.lucene;
 
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
@@ -50,7 +51,20 @@ public class Indexer {
 	        IndexWriter writer = new IndexWriter(indexDirectory, iwc);
 	        addDocument(writer,file, content, id);
 	        writer.close();
-		}
+	}
+	 
+	public void deleteDocumentById(String documentId,String indexDirectoryPath) throws IOException {
+		Directory indexDirectory = FSDirectory.open(new File(indexDirectoryPath));
+		Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT);
+	
+		IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_CURRENT,
+                analyzer);
+        iwc.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
+        
+        IndexWriter writer = new IndexWriter(indexDirectory, iwc);
+		this.writer.deleteDocuments(new Term(FILE_ID, documentId));
+		writer.close();
+	}
 	 
 	 public  void addDocument(IndexWriter writer, File file, String content, int id) throws IOException {
 	        Document doc = new Document();

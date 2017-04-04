@@ -9,9 +9,9 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 	$scope.coAuthorShow = false;
 	$scope.coAuthors = [];
 	$scope.coAuthor = {};
-	//$scope.coAuthorWithoutAccount = {};
 	$scope.coAuthorsWithoutAccount = [];
 	$scope.finalizat = true;
+	$scope.tags = [];
 	
 	$scope.allUsers = [];
 	
@@ -60,7 +60,15 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 		  $scope.finalizat = true;
 	  }
 	  
-	
+	  $scope.addTag = function() {
+		  event.preventDefault();
+		  if($scope.tag.length>2) {
+		  $scope.tags.push($scope.tag);
+		  $scope.tag = null;
+		  }
+	  }
+	  
+	  
 	$scope.doUpload = function() {
 
 		var file = $scope.myFile;
@@ -71,6 +79,7 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 		fd.append('title',angular.toJson($scope.title,true));
 		fd.append('file', file);
 		fd.append('coauthors', angular.toJson($scope.coAuthors,true));
+		fd.append('tags', angular.toJson($scope.tags,true));
 		console.log('Title '+ $scope.title);
 		$http.post(uploadUrl, fd, {
 		transformRequest : angular.identity,
