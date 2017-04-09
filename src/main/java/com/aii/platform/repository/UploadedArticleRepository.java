@@ -13,9 +13,11 @@ public interface UploadedArticleRepository extends CrudRepository<UploadedArticl
 	
 	public UploadedArticle findByTitle(@Param("title") String title);
 	
-	public List<UploadedArticle> findFirst3ByOrderByUploadedOnDesc();
+	public List<UploadedArticle> findFirst3ByOrderByUploadedArticleIdDesc();
 	
 	public List<UploadedArticle> findByAppUserId(@Param("appUserId") Long appUserId);
+	
+	public UploadedArticle findByFilename(@Param("filename")String filename);
 	
 	@Query("select max(u.uploadedArticleId) from uploadedArticle u")
 	public String getMaxId();

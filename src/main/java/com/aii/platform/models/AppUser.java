@@ -27,7 +27,7 @@ public class AppUser {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(name="nume", nullable=false)
 	@NotNull
 	private String nume;

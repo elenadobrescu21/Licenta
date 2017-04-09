@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.aii.platform.models.AppUser;
 import com.aii.platform.models.Response;
 import com.aii.platform.repository.AppUserRepository;
+import com.aii.platform.service.AppUserService;
 
 
 @RestController
@@ -26,39 +27,35 @@ import com.aii.platform.repository.AppUserRepository;
 public class AppUserController {
 	
 	@Autowired
-	private AppUserRepository appUserRepository;
+	private AppUserService appUserService;
 
 	
 	@RequestMapping(value="/all", method=RequestMethod.GET)	
-	 public ResponseEntity getAllUsers() {
-		return new ResponseEntity((List)appUserRepository.findAll(), new HttpHeaders(), HttpStatus.OK);
-	  
+	 public ResponseEntity<?> getAllUsers() {
+		
+		if(appUserService.getAllUsers() != null) {
+			return new ResponseEntity<List<AppUser>>(appUserService.getAllUsers(), new HttpHeaders(), HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<Response>(new Response("No users"), new HttpHeaders(), HttpStatus.NO_CONTENT);
+		}
+		  
 	}
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public ResponseEntity<?> getUserById(@PathVariable("id") Long id){
-		if(appUserRepository.findOne(id)!=null){
-			return new ResponseEntity<AppUser>(appUserRepository.findOne(id), new HttpHeaders(), HttpStatus.OK);	
+		if(appUserService.getAppUserById(id)!=null){
+			return new ResponseEntity<AppUser>(appUserService.getAppUserById(id), new HttpHeaders(), HttpStatus.OK);	
 		} else {
 			return new ResponseEntity<Response>(new Response("User couldn't be found"), new HttpHeaders(), HttpStatus.NOT_FOUND);
 		}	
 	}
 	
-	@RequestMapping(value="/title/{title}", method = RequestMethod.GET)
-	public ResponseEntity<?> getAuthorByTitle(@PathVariable("title") String title) {
-		if(appUserRepository.findByTitle(title)!=null) {
-			return new ResponseEntity<List<AppUser>>((List)appUserRepository.findByTitle(title), new HttpHeaders(), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<Response>(new Response("User couldn't be found"), new HttpHeaders(), HttpStatus.NOT_FOUND);
-			
-		}
-	}
-	
 	@RequestMapping(value="/article/{articleId}", method = RequestMethod.GET)
 	public ResponseEntity<?> getAuthorByArticleId(@PathVariable("articleId") String articleId) {
 		int id = Integer.parseInt(articleId);
-		if(appUserRepository.findByArticleId((long)id)!=null) {
-			return new ResponseEntity<AppUser>(appUserRepository.findByArticleId((long)id), new HttpHeaders(), HttpStatus.OK);
+		if(appUserService.getAppUserByUploadedArticleId((long)id)!=null) {
+			return new ResponseEntity<AppUser>(appUserService.getAppUserByUploadedArticleId((long)id), new HttpHeaders(), HttpStatus.OK);
 		} else{
 			return new ResponseEntity<Response>(new Response("User couldn't be found"), new HttpHeaders(), HttpStatus.NOT_FOUND);
 		}
@@ -72,16 +69,15 @@ public class AppUserController {
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String hashedPassword = passwordEncoder.encode(userPassword);
 		user.setPassword(hashedPassword);
-		if(appUserRepository.findByUsername(userUsername) != null) {
+		if(appUserService.getAppUserByUsername(userUsername) != null) {
 			return new ResponseEntity<Response>(new Response("Username deja existent"), new HttpHeaders(), HttpStatus.IM_USED);
 		} else
-			if(appUserRepository.findByEmail(userEmail)!= null) {
+			if(appUserService.getAppUserByEmail(userEmail)!= null) {
 				return new ResponseEntity<Response>(new Response("Email deja in uz"), new HttpHeaders(), HttpStatus.IM_USED);
 			} else {
-				appUserRepository.save(user);
-				return new ResponseEntity<Response>(new Response("User has been created"), new HttpHeaders(), HttpStatus.OK);
-				
+				appUserService.saveUser(user);
+				return new ResponseEntity<Response>(new Response("User has been created"), new HttpHeaders(), HttpStatus.OK);		
 			}		
-	}
+		}
 	
 }

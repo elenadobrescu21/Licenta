@@ -30,7 +30,7 @@ public class LuceneReader {
 	}
 	
 	public int countNumberOfIndexedDocuments(){
-		return reader.numDocs();
+		return reader.maxDoc();
 	}
 
 	public IndexReader getReader() {
@@ -41,6 +41,18 @@ public class LuceneReader {
 		this.reader = reader;
 	}
 	
+	 /*
+	  * function which returns the internal Lucene ID
+	  */
+	 public int getDocumentId(long id) throws IOException {
+		 Integer intId = (int)(long) id;
+		 String stringId = Integer.toString(intId);
+		 IndexSearcher searcher = new IndexSearcher(reader);
+		 TermQuery query = new TermQuery(new Term(FILE_ID, stringId));
+		 TopDocs topdocs = searcher.search(query, 1);
+		 int docId = topdocs.scoreDocs[0].doc;
+		 return docId;	 	 
+	 }
 	 
 	 public int getDocumentId(String id) throws IOException {
 		 IndexSearcher searcher = new IndexSearcher(reader);
@@ -48,10 +60,8 @@ public class LuceneReader {
 		 TopDocs topdocs = searcher.search(query, 1);
 		 int docId = topdocs.scoreDocs[0].doc;
 		 return docId;
-		 	 
+		 
 	 }
-	
-	
 	
 
 }

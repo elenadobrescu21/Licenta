@@ -13,7 +13,8 @@
     <div class="form-group">
        <label class="control-label" for="title">Fisier</label>
        <p><label class="control-label" for="pdf-only">Sunt acceptate doar fisierele in format PDF</label> </p>
-       <input type="file" file-model="myFile" accept="application/pdf"/>    
+       <input type="file" id="file" name="file" file-model="myFile" accept="application/pdf" required/>
+        <span  ng-show="uploadForm.file.$touched" class="help-block">Incarcati fisierul</span>    
    </div>
  
  <div ng-show="coAuthorShow">
@@ -35,7 +36,7 @@
     <div class="form-group">
        <label  class="control-label" for="title">Adaugati tag-uri</label>
        <input  class="form-control" type="text" id="tag" name="tag" ng-model="tag"
-        ng-maxlength="40" ng-minlength="2" ng-keypress="($event.which==13)?addTag():0" />
+        ng-maxlength="40" ng-minlength="2"/>
        <span  ng-show="uploadForm.tag.$touched && uploadForm.tag.$invalid" class="help-block">Un tag trebuie sa aiba cel putin 2 caractere si maxim 40</span>
    </div>
    <button class="btn btn-default" type="button" ng-click="addTag()">Adauga tag</button> 

@@ -40,6 +40,20 @@ public class Indexer {
 	        TYPE_STORED.freeze();
 	    }
 	 
+	 public Indexer() {
+		 
+	 }
+	 
+	 public Indexer(String indexDirectoryPath) throws IOException {
+		 Directory indexDirectory = FSDirectory.open(new File(indexDirectoryPath));
+			Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT);
+		
+			IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_CURRENT,
+	                analyzer);
+	    
+	         this.writer = new IndexWriter(indexDirectory, iwc);
+	 }
+	 
 	 public void createIndex(String indexDirectoryPath, File file, String content,int id) throws IOException {
 			Directory indexDirectory = FSDirectory.open(new File(indexDirectoryPath));
 			Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT);
@@ -53,17 +67,9 @@ public class Indexer {
 	        writer.close();
 	}
 	 
-	public void deleteDocumentById(String documentId,String indexDirectoryPath) throws IOException {
-		Directory indexDirectory = FSDirectory.open(new File(indexDirectoryPath));
-		Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT);
-	
-		IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_CURRENT,
-                analyzer);
-        iwc.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
-        
-        IndexWriter writer = new IndexWriter(indexDirectory, iwc);
+	public void deleteDocumentById(String documentId) throws IOException {	
 		this.writer.deleteDocuments(new Term(FILE_ID, documentId));
-		writer.close();
+		this.writer.close();
 	}
 	 
 	 public  void addDocument(IndexWriter writer, File file, String content, int id) throws IOException {

@@ -63,8 +63,8 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 	  $scope.addTag = function() {
 		  event.preventDefault();
 		  if($scope.tag.length>2) {
-		  $scope.tags.push($scope.tag);
-		  $scope.tag = null;
+			  $scope.tags.push($scope.tag);
+			  $scope.tag = null;
 		  }
 	  }
 	  

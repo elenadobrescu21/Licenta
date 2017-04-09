@@ -116,10 +116,10 @@ public class UploadedArticleController {
 		
 		@RequestMapping(value="/latestArticles", method=RequestMethod.GET)
 		public ResponseEntity<?> getLatestArticles() {
-			if(uploadedArticleRepository.findFirst3ByOrderByUploadedOnDesc()==null) {
+			if(uploadedArticleRepository.findFirst3ByOrderByUploadedArticleIdDesc()==null) {
 				return new ResponseEntity<Response>(new Response("There are no articles yet"), new HttpHeaders(), HttpStatus.NOT_FOUND);
 			} else {
-			return new ResponseEntity<>(uploadedArticleRepository.findFirst3ByOrderByUploadedOnDesc(), new HttpHeaders(), HttpStatus.OK);
+			return new ResponseEntity<>(uploadedArticleRepository.findFirst3ByOrderByUploadedArticleIdDesc(), new HttpHeaders(), HttpStatus.OK);
 			}
 		}
 		

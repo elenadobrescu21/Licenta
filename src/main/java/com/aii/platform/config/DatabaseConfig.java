@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.aii.platform.models.AppUser;
+import com.aii.platform.models.Tag;
 import com.aii.platform.models.UploadedArticle;
 
 @Configuration
@@ -50,6 +51,7 @@ public class DatabaseConfig {
 		sessionFactory.setPackagesToScan(new String[] { "com.aii.platform.models" });
 		sessionFactory.setAnnotatedClasses(AppUser.class);
 		sessionFactory.setAnnotatedClasses(UploadedArticle.class);
+		sessionFactory.setAnnotatedClasses(Tag.class);
 		sessionFactory.setHibernateProperties(additionalProperties());
 		return sessionFactory;
 	}

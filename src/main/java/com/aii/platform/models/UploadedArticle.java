@@ -72,6 +72,7 @@ public class UploadedArticle {
 	@ManyToMany(mappedBy="favouriteArticles")
 	private List<AppUser> favouritedBy = new ArrayList<AppUser>();
 	
+	
 	@ManyToMany(mappedBy="articles")
 	private List<Tag> tags = new ArrayList<Tag>();
 	
