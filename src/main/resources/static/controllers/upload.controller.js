@@ -1,4 +1,4 @@
-angular.module("app").controller("UploadController", function($scope,$http,$state,$window, upload, User) {
+angular.module("app").controller("UploadController", function($scope,$http,$state,$window, upload, User, Auth) {
 	
 	$scope.hasError = false;
 	$scope.errorMessage = "";
@@ -16,6 +16,12 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 	$scope.allUsers = [];
 	
 	$scope.coAuthorWithouthAccount = false;
+		
+	Auth.getUser(function(result){
+		$scope.user = result;
+		console.log("Currently logged in user");
+		console.log($scope.user);
+	});
 	
 	 User.all().then(function(result) {
 	      console.log("Members", result.data);
@@ -26,6 +32,14 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 	    	  var obj = {id: result.data[i].id, fullname: name};
 	    	  $scope.users.push(obj);
 	      }
+	    for(i=0; i<$scope.users.length; i++) {
+	    	if($scope.users[i].username == $scope.user.username) {
+	    		var index = i;
+	    		break;
+	    	}
+	    }
+	    console.log("index: ", index);
+	    $scope.users.splice(index,1);
 	  }, function(err) {
 	      console.error(err);
 	  })

@@ -28,6 +28,18 @@ public class TagService {
 		return tagRepository.findByDenumire(denumire);
 	}
 	
+	public Tag saveTag(Tag tag) {
+		return tagRepository.save(tag);
+	}
+	
+	public List<Tag> getAllTagsByArticleId(Long articleId) {
+		return tagRepository.findByArticlesUploadedArticleId(articleId);
+	}
+	
+	public long countAllTags() {
+		return tagRepository.count();
+	}
+	
 	
 
 }

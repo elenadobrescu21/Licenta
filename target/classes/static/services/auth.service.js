@@ -33,6 +33,14 @@ angular.module("app").factory('Auth', function($http, $q, $state, AuthToken){
 		}		
 	}
 	
+	authFactory.getLoggedInUser = function () {
+		if(AuthToken.getToken()) {
+			$http.get("http://localhost:8080/me").then(function(result){
+				return result.data;
+			})
+		}
+	}
+	
 	authFactory.getUser = function (callback) {
 		if(AuthToken.getToken()) {
 			$http.get("http://localhost:8080/me").success(function(data){

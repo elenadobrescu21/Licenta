@@ -19,7 +19,7 @@ public class AppUserService {
 		return (List<AppUser>) appUserRepository.findAll();				
 	}
 	
-	public AppUser getAppUserById(Long id) {
+	public AppUser getAppUserById(long id) {
 		return appUserRepository.findOne(id);
 		
 	}
@@ -41,8 +41,12 @@ public class AppUserService {
 		appUserRepository.delete(appUserId);
 	}
 	
-	public void saveUser(AppUser appUser) {
-		appUserRepository.save(appUser);
+	public AppUser saveUser(AppUser appUser) {
+		return appUserRepository.save(appUser);
+	}
+	
+	public long countAllUsers(){
+		return appUserRepository.count();
 	}
 	
 

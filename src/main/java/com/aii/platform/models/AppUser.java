@@ -1,3 +1,4 @@
+
 package com.aii.platform.models;
 
 import java.util.ArrayList;
@@ -53,13 +54,12 @@ public class AppUser {
 	private String authorities;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy="appUser", orphanRemoval = true)
-	//@JsonIgnore
 	private List<UploadedArticle> uploadedArticles;
 	
 	@ManyToMany(mappedBy = "coauthors")
 	private List<UploadedArticle> coauthorArticles = new ArrayList<UploadedArticle>();
 	
-	@ManyToMany
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(name = "user_favouriteArticle", 
 	joinColumns = {
 	@JoinColumn( name="user_id",
@@ -76,11 +76,9 @@ public class AppUser {
 		
 	}
 	
-   
-	public AppUser(Long id, String nume, String prenume, String username, String password, String email,
+	public AppUser(String nume, String prenume, String username, String password, String email,
 			String authorities) {
 		super();
-		this.id = id;
 		this.nume = nume;
 		this.prenume = prenume;
 		this.username = username;
@@ -158,11 +156,6 @@ public class AppUser {
 	}
 
 
-//	public List<UploadedArticle> getCoauthorArticles() {
-//		return coauthorArticles;
-//	}
-
-
 	public void setCoauthorArticles(List<UploadedArticle> coauthorArticles) {
 		this.coauthorArticles = coauthorArticles;
 	}
@@ -182,8 +175,24 @@ public class AppUser {
 		this.favouriteArticles = favouriteArticles;
 	}
 	
+	public UploadedArticle getUploadedArticleById(Long id){
+		UploadedArticle article = null;
+		for(UploadedArticle u: this.uploadedArticles) {
+			if(u.getUploadedArticleId()==id) {
+				article = u;
+				return u;
+			}
+		}
+		return article;
+	}
 	
+	public void addArticleToFavourites(UploadedArticle uploadedArticle){
+		this.uploadedArticles.add(uploadedArticle);
+	}
 	
+	public void addArticleInCollaboration(UploadedArticle uploadedArticle) {
+		this.coauthorArticles.add(uploadedArticle);
+	}
 	
-		
+				
 }

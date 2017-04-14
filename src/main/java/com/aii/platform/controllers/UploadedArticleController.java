@@ -35,11 +35,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.aii.platform.models.AppUser;
 import com.aii.platform.models.Response;
+import com.aii.platform.models.Tag;
 import com.aii.platform.models.UploadedArticle;
 import com.aii.platform.repository.AppUserRepository;
 import com.aii.platform.repository.UploadedArticleRepository;
 import com.aii.platform.security.TokenUtils;
 import com.aii.platform.security.model.SpringSecurityUser;
+import com.aii.platform.service.TagService;
+import com.aii.platform.service.UploadedArticleService;
 import com.aii.platform.services.storage.StorageService;
 import com.aii.platform.utils.DiacriticsUtils;
 
@@ -59,6 +62,12 @@ public class UploadedArticleController {
 	
 	@Autowired
 	private DiacriticsUtils diacriticsUtils;
+	
+	@Autowired
+	private UploadedArticleService uploadedArticleService;
+	
+	@Autowired
+	private TagService tagService;
 	
 	
 	@RequestMapping(value="/downloadPDF/{articleId}", method = RequestMethod.GET, produces="application/pdf")
@@ -131,14 +140,26 @@ public class UploadedArticleController {
 			return new ResponseEntity<>(uploadedArticleRepository.findAll(), new HttpHeaders(), HttpStatus.OK);
 		}
 		
-		@RequestMapping(value="/articleByAuthor/{authorId}", method = RequestMethod.GET)
-		public ResponseEntity<?> getArticlesByAuthorId(@PathVariable("authorId") Long authorId) {
-			if(uploadedArticleRepository.findByAppUserId(authorId)==null) {
-				return new ResponseEntity<Response>(new Response("Acest autor inca nu a publicat niciun articol"), new HttpHeaders(), HttpStatus.NOT_FOUND);
-			}
-			return new ResponseEntity<>(uploadedArticleRepository.findByAppUserId(authorId), new HttpHeaders(), HttpStatus.OK);
+		@RequestMapping(value="/testTag", method = RequestMethod.GET)
+		public ResponseEntity<?> associateArticleWithTag(){
+			UploadedArticle article = uploadedArticleService.getArticleById(1);
+			Tag tag = tagService.getTagByDenumire("poo");
+			article.addTag(tag);
+			tag.addArticle(article);
+			tagService.saveTag(tag);
+			
+			return new ResponseEntity<>(new Response("Asociere terminata"), new HttpHeaders(),HttpStatus.OK);
+			
 		}
 		
+//		@RequestMapping(value="/articleByAuthor/{authorId}", method = RequestMethod.GET)
+//		public ResponseEntity<?> getArticlesByAuthorId(@PathVariable("authorId") Long authorId) {
+//			if(uploadedArticleRepository.findByAppUserId(authorId)==null) {
+//				return new ResponseEntity<Response>(new Response("Acest autor inca nu a publicat niciun articol"), new HttpHeaders(), HttpStatus.NOT_FOUND);
+//			}
+//			return new ResponseEntity<>(uploadedArticleRepository.findByAppUserId(authorId), new HttpHeaders(), HttpStatus.OK);
+//		}
+//		
 	}
 
 

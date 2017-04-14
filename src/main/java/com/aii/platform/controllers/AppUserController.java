@@ -51,6 +51,15 @@ public class AppUserController {
 		}	
 	}
 	
+	@RequestMapping(value="/test", method=RequestMethod.GET)
+	public ResponseEntity<?> test() {
+		AppUser appuser = appUserService.getAppUserById(1);
+		appuser.setPrenume("Elena Alexandra");
+		appUserService.saveUser(appuser);
+		return new ResponseEntity<>(new Response("App user modified"), new HttpHeaders(), HttpStatus.OK);
+		
+	}
+	
 	@RequestMapping(value="/article/{articleId}", method = RequestMethod.GET)
 	public ResponseEntity<?> getAuthorByArticleId(@PathVariable("articleId") String articleId) {
 		int id = Integer.parseInt(articleId);
@@ -77,7 +86,8 @@ public class AppUserController {
 			} else {
 				appUserService.saveUser(user);
 				return new ResponseEntity<Response>(new Response("User has been created"), new HttpHeaders(), HttpStatus.OK);		
-			}		
+			}	
+
 		}
-	
+		
 }

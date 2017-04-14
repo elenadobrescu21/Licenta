@@ -3,7 +3,15 @@ angular.module("app").factory('Article', function($http) {
 	var articleFactory = {};
 	
 	articleFactory.latestArticles = function(){
-		return $http.get('http://localhost:8080/latestArticles');
+		return $http.get('http://localhost:8080/latestArticles').then(function(result){
+			return result.data;
+		});
+	}
+	
+	articleFactory.allArticles = function() {
+		return $http.get('http://localhost:8080/allArticles').then(function(result){
+			return result.data;
+		})
 	}
 	
 	articleFactory.getArticlesByAuthor = function(authorId, response) {

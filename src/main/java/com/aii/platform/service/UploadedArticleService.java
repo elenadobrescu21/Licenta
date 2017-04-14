@@ -20,8 +20,13 @@ public class UploadedArticleService {
 		return (List<UploadedArticle>) uploadedArticleRepository.findAll();		
 	}
 	
-	public UploadedArticle getArticleById(Long articleId) {
-		return uploadedArticleRepository.findOne(articleId);
+	public UploadedArticle getArticleById(int i) {
+		return uploadedArticleRepository.findOne((long)i);
+	}
+	
+	public UploadedArticle getArticleById(long id) {
+		return uploadedArticleRepository.findOne(id);
+		
 	}
 	
 	public List<UploadedArticle> getLastThreeUploadedArticles() {
@@ -34,12 +39,37 @@ public class UploadedArticleService {
 	    return maxId;
 	}
 	
-	public List<UploadedArticle> getArticlesByAppUserId(Long appUserId) {
-		return uploadedArticleRepository.findByAppUserId(appUserId);
-		
+//	public List<UploadedArticle> getArticlesByAppUserId(Long appUserId) {
+//		return uploadedArticleRepository.findByAppUserId(appUserId);
+//		
+//	}
+	
+	public long countAllArticles() {
+		return uploadedArticleRepository.count();
 	}
+	
 	public UploadedArticle getArticleByFilename(String filename) {
 		return uploadedArticleRepository.findByFilename(filename);
+	}
+	
+	public UploadedArticle saveUploadedArticle(UploadedArticle uploadedArticle){
+		return uploadedArticleRepository.save(uploadedArticle);
+	}
+	
+	public List<UploadedArticle> getAllArticlesByTagId(Long tagId) {
+		return uploadedArticleRepository.findByTagsTagId(tagId);
+	}
+	
+	public List<UploadedArticle> getAllArticlesByDenumireTag(String denumire) {
+		return uploadedArticleRepository.findByTagsDenumire(denumire);
+	}
+	
+	public List<UploadedArticle> getAllArticlesFavouritedByUser(Long appUserId) {
+		return uploadedArticleRepository.findByFavouritedById(appUserId);
+	}
+	
+	public List<UploadedArticle> getAllArticlesInCollaborationByAppUserId(Long appUserId){
+		return uploadedArticleRepository.findByCoauthorsId(appUserId);
 	}
 	
 }

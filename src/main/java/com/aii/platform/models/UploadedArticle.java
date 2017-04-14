@@ -1,3 +1,4 @@
+
 package com.aii.platform.models;
 
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class UploadedArticle {
 	@JoinColumn(name = "appUserId", nullable = false)
 	private AppUser appUser;
 	
-	@ManyToMany
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(name = "article_coauthor", 
 	joinColumns = {
 	@JoinColumn( name="article_id",
@@ -82,6 +83,13 @@ public class UploadedArticle {
 	
 	public UploadedArticle(String title,String filename) {
 		super();
+		this.title = title;
+		this.filename = filename;
+		this.numberOfDownloads = 0;
+	}
+	
+	public UploadedArticle(Long id, String title, String filename) {
+		this.uploadedArticleId = id;
 		this.title = title;
 		this.filename = filename;
 		this.numberOfDownloads = 0;
@@ -164,8 +172,13 @@ public class UploadedArticle {
 		this.tags.add(tag);
 	}
 	
+	public void addOwner(AppUser appUser){
+		this.appUser = appUser;
+	}
 	
+	public void addToUsersWhoFavourited(AppUser appUser) {
+		this.favouritedBy.add(appUser);
+	}
 	
-
 
 }

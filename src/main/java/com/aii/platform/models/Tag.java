@@ -1,8 +1,10 @@
+
 package com.aii.platform.models;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,7 +26,7 @@ public class Tag {
 	@Column(name="denumire", nullable=false, unique=true)
 	private String denumire;
 	
-	@ManyToMany
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(name = "article_tag", 
 	joinColumns = {
 	@JoinColumn(name="tag_id",
