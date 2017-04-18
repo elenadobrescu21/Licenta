@@ -1,0 +1,35 @@
+<section class="single-article" ng-init="loadArticle()" ng-controller="ArticleController">
+	<div class = "container">
+		<div class="row">
+			<div class="col-md-6">
+				
+			</div>
+			
+			<div class="col-md-6">
+				<h3> {{ article.titlu}}</h3>
+				<h4> Incarcat de {{article.owner}} la data de {{article.uploadedOn}}</h4>
+				<div ng-show="hasCoauthors" > <h4>Coautori: </h4>
+				<p ng-repeat="coauth in article.coauthors">{{coauth}} </p>
+				</div>
+				<h4> Numar descarcari: {{article.numberOfDownloads}} </h4>
+				<div ng-show="hasTags" > <h4> Taguri:</h4>
+					<p ng-repeat="tag in article.tags">{{tag}} </p>
+				</div>
+				
+					<button class="btn btn-default download-btn" ng-click="downloadArticle(article.id)" type="button"> Download</button>
+				
+					<button type="button" class="btn btn-default favourite-btn">
+  						<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Favourite
+	    			</button>
+				
+				
+				</div>
+			
+			</div>
+		
+		
+		</div>	
+	
+	</div>
+
+</section>

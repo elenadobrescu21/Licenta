@@ -22,6 +22,8 @@ public class UploadedArticleServiceTest extends AbstractTest{
 	@Autowired
 	private UploadedArticleService uploadedArticleService;
 	
+	
+	
 	@Test
 	public void testGetAllArticles() {
 		List<UploadedArticle> allArticles = uploadedArticleService.getAllArticles();

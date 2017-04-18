@@ -2,6 +2,7 @@ package com.aii.platform.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,10 +40,10 @@ public class UploadedArticleService {
 	    return maxId;
 	}
 	
-//	public List<UploadedArticle> getArticlesByAppUserId(Long appUserId) {
-//		return uploadedArticleRepository.findByAppUserId(appUserId);
-//		
-//	}
+	public List<UploadedArticle> getArticlesByAppUserId(Long appUserId) {
+		return uploadedArticleRepository.findByAppUserId(appUserId);
+		
+	}
 	
 	public long countAllArticles() {
 		return uploadedArticleRepository.count();
@@ -64,12 +65,16 @@ public class UploadedArticleService {
 		return uploadedArticleRepository.findByTagsDenumire(denumire);
 	}
 	
-	public List<UploadedArticle> getAllArticlesFavouritedByUser(Long appUserId) {
+	public Set<UploadedArticle> getAllArticlesFavouritedByUser(Long appUserId) {
 		return uploadedArticleRepository.findByFavouritedById(appUserId);
 	}
 	
 	public List<UploadedArticle> getAllArticlesInCollaborationByAppUserId(Long appUserId){
 		return uploadedArticleRepository.findByCoauthorsId(appUserId);
+	}
+	
+	public UploadedArticle getArticleByTitle(String title) {
+		return uploadedArticleRepository.findByTitle(title);
 	}
 	
 }

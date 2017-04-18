@@ -23,20 +23,32 @@
         
         </div>
     </div>
+    <div class="latest-articles" ng-show="isLoggedIn">
        <h1> Latest articles</h1>
          <div class="latest-articles alert alert-info">
-            <div class="row" ng-repeat = "article in articlesWithAuthors">
+         <div class="article-container" ng-repeat = "article in latestArticles">
+            <div class="row" >
             <div class="col-md-6" >
-            <h2> {{article.title}} </h2>
-            <p> Uploaded by {{ article.author }} on {{ article.uploadedOn}} </p>
+            <a ui-sref="article/{{article.id}}"> <h2> {{article.titlu}} </h2> </a>
+            <p> Uploaded by {{ article.owner }} on {{ article.uploadedOn}} </p>
             
             </div>
-            <div class="col-md-6">
-            <button class="btn btn-default download-btn" ng-click="downloadArticle(article.id)" type="button"> Download</button>
-            </div>
-            
+        
+        <div class="col-md-6">
+           
+        <button class="btn btn-default download-btn" ng-click="downloadArticle(article.id)" type="button"> Download</button>
+      
+        <button type="button" class="btn btn-default favourite-btn" ng-click="addToFavourites(article.id)">
+  				<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Favourite
+	    </button>
+			
+	
+			
+            </div> 
+                     
  			</div>
+ 			
             </div>
-           
-           
+           </div>
+        </div>
   	</div>

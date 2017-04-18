@@ -69,13 +69,8 @@ public class UploadController {
 	@Autowired
 	private UploadedArticleRepository uploadedArticleRepository;
 	
-	@Autowired TagRepository tagRepository;
-	
 	@Autowired
 	private TokenUtils tokenUtils;
-	
-	@Autowired
-	private AppUserRepository appUserRepository;
 	
 	@Autowired
 	private FileUtils fileUtils;
@@ -108,10 +103,11 @@ public class UploadController {
 		String[] userTags = null;
 		if(tags!=null && tags.length() > 2) {
 			userTags =  new Gson().fromJson(tags, String[].class);	
+			for(String userTag: userTags) {
+				userTag = userTag.toLowerCase();
+			}
 		}
-		for(String userTag: userTags) {
-			userTag = userTag.toLowerCase();
-		}
+		
 		return userTags;
 	}
 	
@@ -161,7 +157,7 @@ public class UploadController {
 	}
 	
 		
-    @RequestMapping(value="/uploadArticle", method =RequestMethod.POST) 
+    @RequestMapping(value="/upload", method =RequestMethod.POST) 
     @ResponseBody
     public ResponseEntity<?> uploadAnArticle(@RequestParam(value="title")String title,
     		@RequestParam(value="file")MultipartFile file,HttpServletRequest request) throws IOException {
@@ -169,7 +165,7 @@ public class UploadController {
     	String token = request.getHeader("X-Auth-Token");
 		
 		String username = tokenUtils.getUsernameFromToken(token);
-		AppUser user = appUserRepository.findByUsername(username);
+		AppUser user = appUserService.getAppUserByUsername(username);
 		String titleToBeCompared = title.replace("\"", "");
 		String titleToBeSaved = title.replace("\"", "");
 		
@@ -177,8 +173,7 @@ public class UploadController {
 		String filenameWithoutExtension = filename.replaceAll(".pdf", "");
 		System.out.println("Replaced filename: " + filenameWithoutExtension);
 		
-		List<UploadedArticle> allArticles;
-		allArticles = (List<UploadedArticle>) uploadedArticleRepository.findAll();
+		List<UploadedArticle> allArticles = uploadedArticleService.getAllArticles();
 		for(UploadedArticle article: allArticles) {
 			if(filename.equals(article.getFilename())) {
 				System.out.println("Exista 2 fisiere care au acelasi nume");
@@ -186,7 +181,7 @@ public class UploadController {
 				System.out.println("Filename din conditie:" + filename);
 			}
 			
-		}
+		} 
 			
 		String filepath = Paths.get(TEMP_DIR, filename).toString();
 		
@@ -283,21 +278,22 @@ public class UploadController {
 	    	boolean newUserTags = false;
 	    	List<Tag> existingTags = tagService.getAllTags();
 	    	Set<String> newTags = new HashSet<String>();
-	    	for(Tag t: existingTags) {
-	    		for(String userTag: userTags) {
-	    			if(!userTag.equals(t.getDenumire())) {
-	    				newUserTags = true;
-	    				newTags.add(userTag);
-	    			}
+	    	for(String userTag : userTags) {
+	    		boolean exists = this.checkIfTagAlreadyExists(existingTags, userTag);
+	    		if(exists == false) {
+	    			newTags.add(userTag);
 	    		}
 	    	}
 	    	
+	    	System.out.println("taguri noi:");
 	    	for(String newTag : newTags) {
+	    		System.out.println("newTag: " + newTag);
 	    		Tag tag = new Tag(newTag);
 	    		tagService.saveTag(tag);
 	    	}
 	    	
 	    	for(String userTag : userTags) {
+	    		System.out.println("User tag:" + userTag);
 	    		Tag tagFromDB = tagService.getTagByDenumire(userTag);
 	    		tagFromDB.addArticle(articleToUpload);
 	    		articleToUpload.addTag(tagFromDB);
@@ -311,6 +307,17 @@ public class UploadController {
 	    return new ResponseEntity<Response>(new Response("Article added"), new HttpHeaders(), HttpStatus.OK);
 	  	}
 		
+    }
+    
+    public boolean checkIfTagAlreadyExists(List<Tag> existingTags, String tagToBeCompared){
+    	boolean exists = false;
+    	for(Tag t: existingTags) {
+    		if(tagToBeCompared.equals(t.getDenumire())) {
+    			exists = true;
+    			break;
+    		}
+    	}
+    	return exists;
     }
     
    

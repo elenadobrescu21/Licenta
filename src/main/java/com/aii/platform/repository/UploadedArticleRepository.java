@@ -1,6 +1,7 @@
 package com.aii.platform.repository;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,7 +25,7 @@ public interface UploadedArticleRepository extends JpaRepository<UploadedArticle
 	
 	public List<UploadedArticle> findByTagsDenumire(@Param("denumire")String denumire);
 	
-	public List<UploadedArticle> findByFavouritedById(@Param("appUserId") Long appUserId);
+	public Set<UploadedArticle> findByFavouritedById(@Param("appUserId") Long appUserId);
 	
 	public List<UploadedArticle> findByCoauthorsId(@Param("coauthorId") Long coauthorId);
 	

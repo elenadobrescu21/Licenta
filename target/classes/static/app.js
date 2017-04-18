@@ -9,7 +9,7 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $location
     $stateProvider
         .state('default', {
             url: "/",
-            templateUrl: "partials/first-page.html"
+            templateUrl: "partials/home.html"
         })
    
     .state('register', {
@@ -42,10 +42,12 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $location
         templateUrl: "partials/search.html"
     })
     
-   
+      .state('article', {
+        url: "/article/:id",
+        templateUrl: "partials/article.html"
+    })
     
-   
-    
+     
    $httpProvider.interceptors.push('AuthInterceptor');
     //pentru # la rute
   // $locationProvider.html5Mode(true);

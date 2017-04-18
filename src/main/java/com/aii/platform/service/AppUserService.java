@@ -45,6 +45,10 @@ public class AppUserService {
 		return appUserRepository.save(appUser);
 	}
 	
+	public List<AppUser> getCoauthorsByArticleId(Long articleId) {
+		return appUserRepository.findByCoauthorArticlesUploadedArticleId(articleId);
+	}
+	
 	public long countAllUsers(){
 		return appUserRepository.count();
 	}

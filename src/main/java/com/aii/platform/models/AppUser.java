@@ -2,7 +2,9 @@
 package com.aii.platform.models;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -70,7 +72,7 @@ public class AppUser {
 				@JoinColumn(name="article_id",
 						referencedColumnName = "uploadedArticleId")
 		})
-	private List<UploadedArticle> favouriteArticles = new ArrayList<UploadedArticle>();
+	private Set<UploadedArticle> favouriteArticles = new HashSet<UploadedArticle>();
 	
 	public AppUser() {
 		
@@ -166,14 +168,10 @@ public class AppUser {
 	}
 
 
-	public List<UploadedArticle> getFavouriteArticles() {
+	public Set<UploadedArticle> getFavouriteArticles() {
 		return favouriteArticles;
 	}
-
-
-	public void setFavouriteArticles(List<UploadedArticle> favouriteArticles) {
-		this.favouriteArticles = favouriteArticles;
-	}
+	
 	
 	public UploadedArticle getUploadedArticleById(Long id){
 		UploadedArticle article = null;
@@ -187,12 +185,13 @@ public class AppUser {
 	}
 	
 	public void addArticleToFavourites(UploadedArticle uploadedArticle){
-		this.uploadedArticles.add(uploadedArticle);
+		this.favouriteArticles.add(uploadedArticle);
 	}
 	
 	public void addArticleInCollaboration(UploadedArticle uploadedArticle) {
 		this.coauthorArticles.add(uploadedArticle);
 	}
 	
-				
+	
+	
 }

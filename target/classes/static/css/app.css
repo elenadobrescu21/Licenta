@@ -1,23 +1,54 @@
-h2, h3{
-	margin-top:0px;
-	padding-top:0px;
-}
 
-.download-btn{
-	margin-top:30px;
+.download-btn, .favourite-btn{
+	margin-top:40px;
 }
 
 md-content.md-default-theme, md-content {
 	background-color: transparent;
 }
 
- .dropdown{
-	display:inline-block;
-} 
-
 .coauthors{
 	display:inline-block;
 }
 .tags{
 	display:inline-block;
+}
+
+.glyphicon-star{
+	color: yellow;
+}
+
+.welcome-title{
+	margin-top: 30px;
+	margin-bottom:30px;
+}
+
+.user-section{
+	margin-top:95px;
+}
+
+.upload-text{
+	display:inline-block;
+}
+
+.upload{
+	margin-top:30px;
+}
+
+.latest-articles-title{
+	color:black;
+	margin-bottom:20px;
+}
+
+.user-status-text{
+	margin-bottom: 30px;
+	color:black;
+}
+
+.article-container{
+	margin-bottom:40px;
+}
+
+.abstract{
+	height: 150px;
 }

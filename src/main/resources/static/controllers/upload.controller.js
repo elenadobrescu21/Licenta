@@ -12,6 +12,7 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 	$scope.coAuthorsWithoutAccount = [];
 	$scope.finalizat = true;
 	$scope.tags = [];
+	$scope.abstract = [];
 	
 	$scope.allUsers = [];
 	
@@ -23,15 +24,9 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 		console.log($scope.user);
 	});
 	
-	 User.all().then(function(result) {
-	      console.log("Members", result.data);
-	      $scope.allUsers = result.data;
-	      for(i=0; i<result.data.length; i++) {
-	    	  console.log(result.data[i].id);
-	    	  var name = result.data[i].nume + " " + result.data[i].prenume;
-	    	  var obj = {id: result.data[i].id, fullname: name};
-	    	  $scope.users.push(obj);
-	      }
+	 User.getAllUsersDTO().then(function(result) {
+		  console.log(result);
+	      $scope.users = result;	    
 	    for(i=0; i<$scope.users.length; i++) {
 	    	if($scope.users[i].username == $scope.user.username) {
 	    		var index = i;

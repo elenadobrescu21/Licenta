@@ -2,6 +2,9 @@ package com.aii.platform.controllers;
 
 import java.io.File;
 import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -17,9 +20,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aii.platform.models.AppUser;
+import com.aii.platform.models.BooleanResponse;
 import com.aii.platform.models.Response;
+import com.aii.platform.models.UploadedArticle;
 import com.aii.platform.repository.AppUserRepository;
+import com.aii.platform.security.TokenUtils;
 import com.aii.platform.service.AppUserService;
+import com.aii.platform.service.UploadedArticleService;
 
 
 @RestController
@@ -28,6 +35,12 @@ public class AppUserController {
 	
 	@Autowired
 	private AppUserService appUserService;
+	
+	@Autowired
+	private TokenUtils tokenUtils;
+	
+	@Autowired
+	private UploadedArticleService uploadedArticleService;
 
 	
 	@RequestMapping(value="/all", method=RequestMethod.GET)	
@@ -51,15 +64,15 @@ public class AppUserController {
 		}	
 	}
 	
-	@RequestMapping(value="/test", method=RequestMethod.GET)
-	public ResponseEntity<?> test() {
-		AppUser appuser = appUserService.getAppUserById(1);
-		appuser.setPrenume("Elena Alexandra");
-		appUserService.saveUser(appuser);
-		return new ResponseEntity<>(new Response("App user modified"), new HttpHeaders(), HttpStatus.OK);
+	@RequestMapping(value="/coauthorsByArticleId/{articleId}", method=RequestMethod.GET)
+	public ResponseEntity<?> getCoauthorsByArticleId(@PathVariable(value="articleId")Long articleId) {
+		List<AppUser> coauthorsForArticle = appUserService.getCoauthorsByArticleId(articleId);
+		
+		return new ResponseEntity<>(coauthorsForArticle, new HttpHeaders(), HttpStatus.OK);
 		
 	}
 	
+
 	@RequestMapping(value="/article/{articleId}", method = RequestMethod.GET)
 	public ResponseEntity<?> getAuthorByArticleId(@PathVariable("articleId") String articleId) {
 		int id = Integer.parseInt(articleId);
@@ -89,5 +102,26 @@ public class AppUserController {
 			}	
 
 		}
+	
+	@RequestMapping(value="/checkIfArticleIsFavourited/{articleId}", method = RequestMethod.GET)
+	public ResponseEntity<?>checkIfArticleIsFavourited(@PathVariable(value="articleId")Long articleId,
+			HttpServletRequest request){
+		
+		String token = request.getHeader("X-Auth-Token");
+		String username = tokenUtils.getUsernameFromToken(token);
+		AppUser user = appUserService.getAppUserByUsername(username);
+		
+		boolean articleIsFavourited = false;
+		
+		Set<UploadedArticle> favouriteArticles = uploadedArticleService.getAllArticlesFavouritedByUser(user.getId());
+		for(UploadedArticle u : favouriteArticles) {
+			if(u.getUploadedArticleId().equals(articleId)){
+				articleIsFavourited = true;
+			}
+		}
+		
+		return new ResponseEntity<BooleanResponse>(new BooleanResponse(articleIsFavourited),new HttpHeaders(), HttpStatus.OK);
+		
+	}
 		
 }

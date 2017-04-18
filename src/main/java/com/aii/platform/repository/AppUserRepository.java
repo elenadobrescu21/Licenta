@@ -15,6 +15,8 @@ public interface AppUserRepository extends JpaRepository<AppUser,Long>{
 	public AppUser findByUsername(@Param("username") String username);
 	
 	public AppUser findByEmail(@Param("email") String email);
+
+	public List<AppUser> findByCoauthorArticlesUploadedArticleId(@Param("uploadedArticleId")Long uploadedArticleId);
 	
 	@Query("select a from appUser a join a.uploadedArticles u where (u.title=:titleName)")
 	public List<AppUser> findByTitle(@Param("titleName") String titleName);

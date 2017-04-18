@@ -3,7 +3,9 @@ package com.aii.platform.models;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -23,6 +25,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.validation.constraints.Size;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -50,8 +53,11 @@ public class UploadedArticle {
 	
 	@Column(name="downloads")
 	private int numberOfDownloads;
-
 	
+	@Column(name="abstract")
+	@Size(min=50, max=1500)
+	private String abstractSection;
+
 	@ManyToOne
 	@JsonIgnore
 	@JoinColumn(name = "appUserId", nullable = false)
@@ -71,10 +77,21 @@ public class UploadedArticle {
 	private List<AppUser> coauthors = new ArrayList<AppUser>();
 	
 	@ManyToMany(mappedBy="favouriteArticles")
-	private List<AppUser> favouritedBy = new ArrayList<AppUser>();
+	@JsonIgnore
+	private Set<AppUser> favouritedBy = new HashSet<AppUser>();
 	
 	
-	@ManyToMany(mappedBy="articles")
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinTable(name = "article_tag", 
+	joinColumns = {
+	@JoinColumn( name="article_id",
+				referencedColumnName = "uploadedArticleId"
+			)
+	},
+		inverseJoinColumns = {
+				@JoinColumn(name="tag_id",
+						referencedColumnName = "tagId")
+		})
 	private List<Tag> tags = new ArrayList<Tag>();
 	
 	public UploadedArticle() {
@@ -105,7 +122,7 @@ public class UploadedArticle {
 	}
 
 	public String getFilename() {
-		return filename;
+		return this.filename;
 	}
 
 	public void setFilename(String filename) {
@@ -160,14 +177,23 @@ public class UploadedArticle {
 		this.numberOfDownloads++;
 	}
 
-	public List<AppUser> getFavouritedBy() {
+	public Set<AppUser> getFavouritedBy() {
 		return favouritedBy;
 	}
+	
+	
+	public List<Tag> getTags() {
+		return tags;
+	}
 
-	public void setFavouritedBy(List<AppUser> favouritedBy) {
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
+
+	public void setFavouritedBy(Set<AppUser> favouritedBy) {
 		this.favouritedBy = favouritedBy;
 	}
-	
+
 	public void addTag(Tag tag) {
 		this.tags.add(tag);
 	}

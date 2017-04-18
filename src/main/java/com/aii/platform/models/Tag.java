@@ -26,17 +26,7 @@ public class Tag {
 	@Column(name="denumire", nullable=false, unique=true)
 	private String denumire;
 	
-	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinTable(name = "article_tag", 
-	joinColumns = {
-	@JoinColumn(name="tag_id",
-				referencedColumnName = "tagId"
-			)
-	},
-		inverseJoinColumns = {
-				@JoinColumn(name="article_id",
-						referencedColumnName = "uploadedArticleId")
-		})
+	@ManyToMany(mappedBy="tags")
 	private List<UploadedArticle> articles = new ArrayList<UploadedArticle>();
 	
 	public Tag(){

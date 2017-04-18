@@ -16,6 +16,14 @@
        <input type="file" id="file" name="file" file-model="myFile" accept="application/pdf" required/>
         <span  ng-show="uploadForm.file.$touched" class="help-block">Incarcati fisierul</span>    
    </div>
+   
+   <div class="form-group">
+   	<label class="control-label" for="abstract"> Abstract</label>
+   	<textarea cols="100" class="form-control" type="text" id="abstract" name="abstract" ng-model="abstract" required>
+   	</textarea>
+   	<span  ng-show="uploadForm.abstract.$touched && uploadForm.abstract.$invalid" class="help-block">Completati sectiunea</span>
+   
+   </div>
  
  <div ng-show="coAuthorShow">
  <p> <b> Coautori: </b> </p>
