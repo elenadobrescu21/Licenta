@@ -1,4 +1,6 @@
-
+body{
+	background-color:#FAFAFA;
+}
 .download-btn, .favourite-btn{
 	margin-top:40px;
 }
@@ -52,3 +54,114 @@ md-content.md-default-theme, md-content {
 .abstract{
 	height: 150px;
 }
+
+.header-home{
+	background-image:url("/pictures/constellation.png");
+	height:400px;
+	background-size:cover;
+}
+
+.welcome-header{
+	color:white;
+	opacity:0.9;
+	padding-top:90px;
+}
+
+.header-buttons{
+	padding-top:20px;
+	text-align:center;
+}
+
+.header-buttons a{
+	font-size:15px;
+	border: 1px solid white;
+	padding:10px 15px;
+	border-radius: 10px;
+}
+
+a, a:hover{
+	text-decoration:none;
+}
+
+.header-button {
+	color:white;
+	background:transparent;
+	margin-left:20px;
+	transition-property: background;
+	transition-duration: 1s;
+	transition-timing-function: linear;
+}
+
+.header-button:hover{
+	background: #34b1c4;
+	color:white;
+}
+.latest-articles{
+	text-align:center;
+}
+
+.article-container{
+	border:1px solid #12528B;
+	padding:20px;
+	border-radius:10px;
+}
+
+footer{
+	text-align: center;
+	height:50px;
+	background: #e7e7e7;
+	
+}
+
+footer .copyright-container, footer .back-to-top {
+	display:inline-block;
+}
+
+footer .back-to-top a {
+	color: #16A084;
+	opacity: 0.9;
+	margin-left:10px;
+}
+
+footer .back-to-top a i{
+	-webkit-transition : -webkit-transform .8s ease-in-out;
+	transition: transform .8s ease-in-out;
+}
+
+footer .back-to-top a i:hover{
+	-webkit-transform: rotate(360deg);
+	transform: rotate(360deg);
+}
+
+.copyright-container{
+	padding-top:10px;
+	padding-bottom:0px;
+	margin-bottom:0px;
+}
+
+.article-page{
+	padding:30px;
+	padding-left:60px;
+	
+}
+
+.coauthor-name{
+	display:inline-block;
+}
+.coauthor{
+	border:1px solid black;
+	border-radius:10px;
+	padding:10px;
+	display:inline-block;
+}
+
+.tag{
+	padding-left:10px;
+	padding-right:10px;
+	text-align:center;
+	display:inline-block;
+	background-color: grey;
+	border-radius:10px;
+	color:white;
+}
+

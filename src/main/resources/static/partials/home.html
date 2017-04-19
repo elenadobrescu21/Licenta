@@ -1,63 +1,49 @@
-<div ng-cloak class="container" ng-controller="HomeController as home">
+<div ng-cloak class="container container-home" ng-controller="HomeController as home">
 
-<div ng-switch="true">
-    <div ng-switch-when="true">
+<div class="container" ng-switch="true">
+    <div class="container" ng-switch-when="true">
+    	<div class="row">
+    		<div class ="col-md-12">
+    			<div class="header-home">
+    				<h3 class="welcome-header text-center"> Bine ati venit, {{home.user.nume}} {{home.user.prenume}}! </h3>
+    				<div class="header-buttons">
+    					<a  class="header-button"> Arhiva articole</a>
+    					<a ui-sref="upload" class="header-button"> Incarcati articol</a>
+    				
+    				</div>
+    			</div>
+    
+   		    </div>
+    
+    </div>
         <div class="row">
-            <div class="col-md-8">
-                <h1 class="welcome-title"> Bine ati venit, {{home.user.nume}} {{home.user.prenume}}! </h1>
-
-                <div class="alert alert-success">
-                    <h2 class="latest-articles-title"> Ultimele articole </h2>
-
-                    <div class="latest-articles" ng-repeat="article in latestArticles">
-                        <div class="row">
-                        <div class="article-container">
-                            <div class="col-md-6">
-
-                              <a href="/#/article/{{article.id}}">
-                              <h3> <i class="fa fa-file-text-o" aria-hidden="true"></i> {{article.titlu}} </h3>
-                              </a>
-                                <p> Incarcat de <i>{{article.owner}}</i> la data de <i> {{article.uploadedOn}}
-                                </i> </p>
-                            </div> 
-                            
-						
-                            <div class="col-md-6">
-                                <button class="btn btn-default download-btn" type="button" ng-click="downloadArticle(article.id)">
-                                  <span class="glyphicon glyphicon-download-alt" aria-hidden="true"> </span>
-                                   Download
-                                </button>
-
-                                <button type="button" class="btn btn-default favourite-btn" ng-click="addToFavourites(article.id)">
-                                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Favourite
-                                </button>
-                            </div>
-
-						</div>
-
-                        </div>
-
-
-                    </div>
-
-                </div>
-
+            <div class="col-md-12">            
+				<h1 class="welcome-title text-center"> Ultimele articole </h1>  
             </div>
+        </div>
+        
+        <div class="row latest-articles">
+        <div class="col-md-4" ng-repeat="article in latestArticles">
+       		<div class="article-container">
+       		
+       		<i class="fa fa-file-text-o fa-4x" aria-hidden="true"></i>
+       		<a href="/#/article/{{article.id}}" ><h3>{{article.titlu}}</h3> </a>
+       		 <p> Incarcat de <i>{{ article.owner.fullname}} </i> </p>
+       		 <p> la data de <i>{{ article.uploadedOn }} </i> </p>
+       		 
+       		  <button class="btn btn-default download-btn" type="button" ng-click="downloadArticle(article.id)">
+                  <span class="glyphicon glyphicon-download-alt" aria-hidden="true"> </span>
+                       Download
+                  </button>
 
-            <div class="col-md-4">
-			<div class="alert alert-warning user-section">
-                <h2 class="text-center user-status-text"> Statusul meu</h2>
-                <h4>Articole incarcate:  </h4>
-                <h4>Articole descarcate: </h4>
-                
-                <div class="upload">
-                   <a ui-sref="upload"> <i class="fa fa-upload fa-4x" aria-hidden="true"></i>
-                    <h3 class="upload-text"> Incarcati un articol </h3>
-                    </a>
-                </div>
-			</div>
-            </div>  <!-- end col-md-4 -->
-
+              <button type="button" class="btn btn-default favourite-btn" ng-click="addToFavourites(article.id)">
+                   <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Favourite
+              </button>
+        	
+        	</div>
+        </div>
+        
+        
         </div>
 
 

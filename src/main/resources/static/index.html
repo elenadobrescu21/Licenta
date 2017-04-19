@@ -59,7 +59,7 @@
 </head>
 <body>
 <header>
-        <nav class="navbar navbar-default">
+        <nav class="navbar navbar-default" ng-controller="HomeController as home">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -94,7 +94,7 @@
                             <li><a href="#">Another action</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">Logout</a></li>
+                    <li ng-show="isLoggedIn"><a ng-click="home.doLogout()" href="#">Logout</a></li>
 
                 </ul>
             </div><!-- /.navbar-collapse -->
@@ -102,6 +102,20 @@
     </nav>
     </header>
  <div ui-view></div>
+ 
+<!--  <footer>
+ <div class="copyright-container">
+ 	<h5> Copyright <i class="fa fa-copyright" aria-hidden="true"></i> 2017 Platforma AII</h5>
+ 
+ </div>
+ 
+ <div class="back-to-top">
+ 	<a href="#top"> <i class="fa fa-arrow-circle-o-up fa-2x"></i></a>
+ </div>
+ 
+ </footer>
+  -->
+ 
 </body>
 
 </html>

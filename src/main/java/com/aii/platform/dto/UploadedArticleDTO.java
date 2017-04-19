@@ -1,6 +1,7 @@
 package com.aii.platform.dto;
 
 import java.util.Date;
+import java.util.List;
 
 public class UploadedArticleDTO {
 	
@@ -14,9 +15,9 @@ public class UploadedArticleDTO {
 	
 	private String filePath;
 	
-	private String owner;
+	private AppUserDTO owner;
 	
-	private String[] coauthors;
+	private List<AppUserDTO> coauthors;
 	
 	private String[] tags;
 	
@@ -24,8 +25,8 @@ public class UploadedArticleDTO {
 		
 	}
 	
-	public UploadedArticleDTO(Long id, String titlu, String filepath,int numberOfDownloads, Date date, String owner,
-			String[] coauthors, String[] tags) {
+	public UploadedArticleDTO(Long id, String titlu, String filepath,int numberOfDownloads, Date date, AppUserDTO owner,
+			List<AppUserDTO> coauthors, String[] tags) {
 		super();
 		this.id = id;
 		this.titlu = titlu;
@@ -69,19 +70,19 @@ public class UploadedArticleDTO {
 		this.uploadedOn = uploadedOn;
 	}
 
-	public String getOwner() {
+	public AppUserDTO getOwner() {
 		return owner;
 	}
 
-	public void setOwner(String owner) {
+	public void setOwner(AppUserDTO owner) {
 		this.owner = owner;
 	}
 
-	public String[] getCoauthors() {
+	public List<AppUserDTO> getCoauthors() {
 		return coauthors;
 	}
 
-	public void setCoauthors(String[] coauthors) {
+	public void setCoauthors(List<AppUserDTO> coauthors) {
 		this.coauthors = coauthors;
 	}
 

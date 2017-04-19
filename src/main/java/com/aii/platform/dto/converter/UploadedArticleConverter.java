@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.aii.platform.dto.AppUserDTO;
 import com.aii.platform.dto.UploadedArticleDTO;
 import com.aii.platform.models.AppUser;
 import com.aii.platform.models.Tag;
@@ -44,12 +45,19 @@ public class UploadedArticleConverter {
 		List<Tag> tagList = tagService.getAllTagsByArticleId(requestedUploadedArticle.getUploadedArticleId());
 		
 		String ownerFullName = owner.getNume() + " " + owner.getPrenume();
-		String[] coauthorFullNames = new String[coauthors.size()];
+		Long ownerId = owner.getId();
+		String username = owner.getUsername();
+		AppUserDTO ownerDTO = new AppUserDTO(ownerId, ownerFullName, username);
+		List<AppUserDTO> coauthorsList = new ArrayList<AppUserDTO>();
 		String[] tags = new String[tagList.size()];
 		
 		int i = 0;
 		for(AppUser c: coauthors) {
-			coauthorFullNames[i++] = c.getNume() + " " + c.getPrenume();
+//			coauthorFullNames[i++] = c.getNume() + " " + c.getPrenume();
+			String fullName = c.getNume() + " " + c.getPrenume();
+			Long id = c.getId();
+			String userName = c.getUsername();
+			coauthorsList.add(new AppUserDTO(id, fullName, username));
 		}
 		i = 0;
 		for(Tag t:tagList){
@@ -61,8 +69,8 @@ public class UploadedArticleConverter {
 				requestedUploadedArticle.getFilename(),
 				requestedUploadedArticle.getNumberOfDownloads(),
 				requestedUploadedArticle.getUploadedOn(),
-				ownerFullName,
-				coauthorFullNames,
+				ownerDTO,
+				coauthorsList,
 				tags);
 		
 		return uploadedArticleDTO;
