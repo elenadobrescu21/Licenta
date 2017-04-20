@@ -79,6 +79,7 @@ public class UploadedArticleServiceTest extends AbstractTest{
 		Assert.assertEquals("failure-expected name match","Rezolvare", uploadedArticles.get(0).getTitle());
 	}
 	
+
 	
 	
 }

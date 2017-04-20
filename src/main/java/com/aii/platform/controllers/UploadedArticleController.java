@@ -150,6 +150,14 @@ public class UploadedArticleController {
 			return new ResponseEntity<>(uploadedArticleService.getArticlesByAppUserId(authorId), new HttpHeaders(), HttpStatus.OK);
 		}
 		
+		@RequestMapping(value="/articleByCoauthor/{id}", method = RequestMethod.GET)
+		public ResponseEntity<?> getAllArticlesInCollaborationByAppUserId(@PathVariable("id") Long coauthorId) {
+			if(uploadedArticleService.getAllArticlesInCollaborationByAppUserId(coauthorId)==null) {
+				return new ResponseEntity<Response>(new Response("Acest autor nu are articole in colaborare"), new HttpHeaders(), HttpStatus.NOT_FOUND);
+			}
+			return new ResponseEntity<>(uploadedArticleService.getAllArticlesInCollaborationByAppUserId(coauthorId), new HttpHeaders(), HttpStatus.OK);
+		}
+		
 		@RequestMapping(value="/testFavourite", method=RequestMethod.GET)
 		public ResponseEntity<?> testFavourite() {
 			AppUser user = appUserService.getAppUserById(1L);

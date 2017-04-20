@@ -2,6 +2,7 @@ package com.aii.platform.dto.converter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -77,6 +78,17 @@ public class UploadedArticleConverter {
 	}
 	
 	public List<UploadedArticleDTO> convertListToDTO(List<UploadedArticle> allArticles) {
+		List<UploadedArticleDTO> allArticlesDTO = new ArrayList<UploadedArticleDTO>();
+		
+		for(UploadedArticle article: allArticles) {
+			UploadedArticleDTO articleDTO = this.convertUploadedArticleToDTO(article.getUploadedArticleId());
+			allArticlesDTO.add(articleDTO);		
+		}
+		
+		return allArticlesDTO;
+	}
+	
+	public List<UploadedArticleDTO> convertSetToDTO(Set<UploadedArticle> allArticles) {
 		List<UploadedArticleDTO> allArticlesDTO = new ArrayList<UploadedArticleDTO>();
 		
 		for(UploadedArticle article: allArticles) {

@@ -74,6 +74,7 @@ public class UploadedArticle {
 				@JoinColumn(name="coauthor_id",
 						referencedColumnName = "id")
 		})
+	@JsonIgnore
 	private List<AppUser> coauthors = new ArrayList<AppUser>();
 	
 	@ManyToMany(mappedBy="favouriteArticles")
@@ -92,6 +93,7 @@ public class UploadedArticle {
 				@JoinColumn(name="tag_id",
 						referencedColumnName = "tagId")
 		})
+	@JsonIgnore
 	private List<Tag> tags = new ArrayList<Tag>();
 	
 	public UploadedArticle() {

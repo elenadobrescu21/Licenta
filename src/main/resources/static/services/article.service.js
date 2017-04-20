@@ -2,6 +2,11 @@ angular.module("app").factory('Article', function($http, ServicePDF) {
 	
 	var articleFactory = {};
 	
+	articleFactory.allArticlesDTO = function () {
+		return $http.get('http://localhost:8080/articleDTO/all').then(function(result){
+			return result.data;
+		})
+	}
 	
 	articleFactory.articleById = function(articleId) {
 		return $http.get('http://localhost:8080/articleDTO/'+articleId).then(function(result){

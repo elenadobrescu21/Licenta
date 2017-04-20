@@ -12,6 +12,12 @@ angular.module("app").factory('User', function($http) {
 		})
 	}
 	
+	userFactory.getUserDTOById = function(userId) {
+		return $http.get('http://localhost:8080/userDTOExtended/'+ userId).then(function(result){
+			return result.data;
+		})
+	}
+	
 	userFactory.getAuthorByArticleId = function(id,title, filename, uploadedOn) {
 		return $http.get('http://localhost:8080/user/article/'+id);
 	}

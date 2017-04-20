@@ -47,6 +47,15 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $location
         templateUrl: "partials/article.html"
     })
     
+      .state('user', {
+        url: "/user/:id",
+        templateUrl: "partials/user-page.html"
+    })
+    
+     .state('arhiva', {
+        url: "/arhiva",
+        templateUrl: "partials/arhiva.html"
+    })
      
    $httpProvider.interceptors.push('AuthInterceptor');
     //pentru # la rute

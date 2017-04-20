@@ -1,13 +1,13 @@
 <div ng-cloak class="container container-home" ng-controller="HomeController as home">
 
-<div class="container" ng-switch="true">
+<div class="container" ng-switch="isLoggedIn">
     <div class="container" ng-switch-when="true">
     	<div class="row">
     		<div class ="col-md-12">
     			<div class="header-home">
     				<h3 class="welcome-header text-center"> Bine ati venit, {{home.user.nume}} {{home.user.prenume}}! </h3>
     				<div class="header-buttons">
-    					<a  class="header-button"> Arhiva articole</a>
+    					<a ui-sref="arhiva" class="header-button"> Arhiva articole</a>
     					<a ui-sref="upload" class="header-button"> Incarcati articol</a>
     				
     				</div>

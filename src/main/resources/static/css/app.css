@@ -165,3 +165,10 @@ footer .back-to-top a i:hover{
 	color:white;
 }
 
+.pagination-container {
+
+/*   display: flex; */
+  justify-content: center;
+  text-align: center;
+}
+

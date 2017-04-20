@@ -59,6 +59,7 @@ public class AppUser {
 	private List<UploadedArticle> uploadedArticles;
 	
 	@ManyToMany(mappedBy = "coauthors")
+	@JsonIgnore
 	private List<UploadedArticle> coauthorArticles = new ArrayList<UploadedArticle>();
 	
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

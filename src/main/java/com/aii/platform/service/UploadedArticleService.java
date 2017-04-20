@@ -77,4 +77,5 @@ public class UploadedArticleService {
 		return uploadedArticleRepository.findByTitle(title);
 	}
 	
+	
 }
