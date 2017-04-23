@@ -26,6 +26,9 @@ public class UploadedArticleDTOController {
 	@Autowired
 	private UploadedArticleConverter uploadedArticleConverter;
 	
+	@Autowired
+	private UploadedArticleService uploadedArticleService;
+	
 	
 	@RequestMapping(value="/articleDTO/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getArticleDTOById(@PathVariable(value="id")Long articleId){
@@ -47,6 +50,15 @@ public class UploadedArticleDTOController {
 		List<UploadedArticleDTO> allArticlesDTO = uploadedArticleConverter.convertArticleListToDTO();
 		
 		return new ResponseEntity<List<UploadedArticleDTO>>(allArticlesDTO, new HttpHeaders(), HttpStatus.OK);
+		
+	}
+	
+	@RequestMapping(value="/articleDTO/findByTag/{tag}", method = RequestMethod.GET)
+	public ResponseEntity<?> getArticlesByTag(@PathVariable(value="tag")String tag) {
+		List<UploadedArticle> articlesByTag = uploadedArticleService.getAllArticlesByDenumireTag(tag);
+		List<UploadedArticleDTO> articlesByTagDTO = uploadedArticleConverter.convertListToDTO(articlesByTag);
+		
+		return new ResponseEntity<List<UploadedArticleDTO>>(articlesByTagDTO, new HttpHeaders(), HttpStatus.OK);
 		
 	}
 	

@@ -38,11 +38,30 @@
   
   </div>
   
+
+  
   <button class="btn btn-default" type="button" ng-show="!coAuthorShow" ng-click="adaugaCoautori()">Addauga coautori</button> 
    <br>
    <br>
+     <p> Pentru a adauga un coautor ce nu are cont click <a ng-click="addCoauthorWithoutAccount()">aici</a></p>
+  
+  <div ng-show="coAuthorWithouthAccountShow">
+  <b> Coautori fara cont: </b>
+	  <div ng-repeat="coAWithoutAccount in coAuthorsWithoutAccount"> {{coAWithoutAccount}}</div>
+	  <br>
+	  <div class="form-group">
+	  	<label class="control-label" for="coAuthorWithoutAccount"> Nume coautor</label>
+	  	<input class="form-control" type="text" id="coAuthorWithoutAccount" name="coAuthorWithoutAccount" ng-model="coAuthorWithoutAccount">
+	  	<br>
+	 	<button class="btn btn-default" type="button" ng-click="saveCoauthorWithoutAccount()"> Adauga</button>
+	  </div>
+	  
+	  
+   
+  </div>
+   <br>
     <div class="form-group">
-       <label  class="control-label" for="title">Adaugati tag-uri</label>
+       <label  class="control-label" for="tag">Adaugati tag-uri</label>
        <input  class="form-control" type="text" id="tag" name="tag" ng-model="tag"
         ng-maxlength="40" ng-minlength="2"/>
        <span  ng-show="uploadForm.tag.$touched && uploadForm.tag.$invalid" class="help-block">Un tag trebuie sa aiba cel putin 2 caractere si maxim 40</span>

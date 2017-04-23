@@ -23,7 +23,7 @@
 	 User.all().then(function(result) {
 	      console.log("Members", result.data);
 	      self.users = result.data; 
-	      for(i=0; i<result.data.length; i++) {
+	      for( var i=0; i<result.data.length; i++) {
 	    	  console.log(result.data[i].id);
 	    	  var name = result.data[i].nume + " " + result.data[i].prenume;
 	    	  var obj = {id: result.data[i].id, fullname: name};

@@ -56,6 +56,11 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $location
         url: "/arhiva",
         templateUrl: "partials/arhiva.html"
     })
+    
+    .state('search-tag', {
+        url: "/search-tag",
+        templateUrl: "partials/search-tag.html"
+    })
      
    $httpProvider.interceptors.push('AuthInterceptor');
     //pentru # la rute

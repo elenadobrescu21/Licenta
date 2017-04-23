@@ -50,7 +50,7 @@ public class UploadedArticleServiceTest extends AbstractTest{
 	
 	@Test
 	public void testCreateUploadedArticle() {
-		UploadedArticle newUploadedArticle = new UploadedArticle("Test", "test.pdf");
+		UploadedArticle newUploadedArticle = new UploadedArticle("Test", "test.pdf", "abstract");
 		AppUser owner = appUserService.getAppUserById(1);
 		newUploadedArticle.setAppUser(owner);
 		UploadedArticle createdUploadedArticle = uploadedArticleService.saveUploadedArticle(newUploadedArticle);

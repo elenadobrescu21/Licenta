@@ -20,6 +20,12 @@ angular.module("app").factory('Article', function($http, ServicePDF) {
 		});
 	}
 	
+	articleFactory.getArticlesByTag = function(tag) {
+		return $http.get('http://localhost:8080/articleDTO/findByTag/'+ tag).then(function(result){
+			return result.data;
+		})
+	}
+	
 	articleFactory.checkIfArticleIsFavourited = function(article){
 		return $http.get('http://localhost:8080/user/checkIfArticleIsFavourited/'+article.id).then(function(result){
 			return result.data;

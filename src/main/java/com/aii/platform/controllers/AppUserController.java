@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aii.platform.models.AppUser;
-import com.aii.platform.models.BooleanResponse;
-import com.aii.platform.models.Response;
 import com.aii.platform.models.UploadedArticle;
 import com.aii.platform.repository.AppUserRepository;
+import com.aii.platform.response.BooleanResponse;
+import com.aii.platform.response.Response;
 import com.aii.platform.security.TokenUtils;
 import com.aii.platform.service.AppUserService;
 import com.aii.platform.service.UploadedArticleService;

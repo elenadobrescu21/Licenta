@@ -1,4 +1,4 @@
-package com.aii.platform.models;
+package com.aii.platform.response;
 
 public class BooleanResponse {
 	

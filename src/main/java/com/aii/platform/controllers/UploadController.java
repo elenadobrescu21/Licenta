@@ -41,15 +41,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.aii.platform.models.AppUser;
-import com.aii.platform.models.Response;
 import com.aii.platform.models.Tag;
 import com.aii.platform.models.Coauthor;
 import com.aii.platform.models.UploadedArticle;
 import com.aii.platform.repository.AppUserRepository;
 import com.aii.platform.repository.TagRepository;
 import com.aii.platform.repository.UploadedArticleRepository;
+import com.aii.platform.response.Response;
 import com.aii.platform.security.TokenUtils;
 import com.aii.platform.service.AppUserService;
+import com.aii.platform.service.CoauthorService;
 import com.aii.platform.service.TagService;
 import com.aii.platform.service.UploadedArticleService;
 import com.aii.platform.utils.FileUtils;
@@ -87,6 +88,9 @@ public class UploadController {
 	@Autowired
 	private TagService tagService;
 	
+	@Autowired
+	private CoauthorService coauthorService;
+	
 	public Coauthor[] getCoauthors(HttpServletRequest request) {
 		String coauthors = request.getParameter("coauthors");
 		Coauthor[] coauthorsArray = null;
@@ -109,6 +113,15 @@ public class UploadController {
 		}
 		
 		return userTags;
+	}
+	
+	public String[] getCoauthorsWithoutAccount(HttpServletRequest request) {
+		String coauthorsWithoutAccount = request.getParameter("coauthors-without-account");
+		String[] coauthors = null;
+		if(coauthorsWithoutAccount !=null && coauthorsWithoutAccount.length() > 2) {
+			coauthors = new Gson().fromJson(coauthorsWithoutAccount, String[].class);
+		}
+		return coauthors;
 	}
 	
 	public void indexDocument(MultipartFile file, String content, int currentId) throws IllegalStateException, IOException {
@@ -171,6 +184,8 @@ public class UploadController {
 		
 		String filename = file.getOriginalFilename();
 		String filenameWithoutExtension = filename.replaceAll(".pdf", "");
+		
+		String abstractSection = request.getParameter("abstract");
 		System.out.println("Replaced filename: " + filenameWithoutExtension);
 		
 		List<UploadedArticle> allArticles = uploadedArticleService.getAllArticles();
@@ -258,13 +273,14 @@ public class UploadController {
 	  		
 	  	} else {
 	  			
-	    UploadedArticle articleToUpload = new UploadedArticle(titleToBeSaved,filename);
+	    UploadedArticle articleToUpload = new UploadedArticle(titleToBeSaved,filename, abstractSection);
 	    user.getUploadedArticles().add(articleToUpload);
 	    articleToUpload.setAppUser(user);   
 	    uploadedArticleService.saveUploadedArticle(articleToUpload); 
 	    
 	    Coauthor[] coauthorsArray = this.getCoauthors(request);
 	    String[] userTags = this.getTags(request);
+	    String[] coauthorsWithoutAccount = this.getCoauthorsWithoutAccount(request);
 	    
 	    if(coauthorsArray!=null) {
 	    	for(Coauthor c : coauthorsArray) {
@@ -300,7 +316,31 @@ public class UploadController {
 	    	}
 	    }
 	    
-	    if(coauthorsArray!=null || userTags!=null) {
+	    if(coauthorsWithoutAccount!=null) {
+	    	boolean newCoauthorsWithoutAccount = false;
+	    	List<Coauthor> existingCoauthors = coauthorService.getAllCoauthors();
+	    	Set<String> newCoauthors = new HashSet<String>();
+	    	for(String c : coauthorsWithoutAccount) {
+	    		boolean alreadyExisting = this.checkIfCoauthorAlreadyExists(existingCoauthors, c);
+	    		if(alreadyExisting == false) {
+	    			newCoauthors.add(c);
+	    		}
+	    	}
+	    	
+	    	for(String newCoauthor : newCoauthors) {
+	    		Coauthor coauthor = new Coauthor(newCoauthor);
+	    		coauthorService.saveCoauthor(coauthor);
+	    	}
+	    	
+	    	for(String coauthorWithoutAccount : coauthorsWithoutAccount ) {
+	    		Coauthor coauthorFromDb = coauthorService.getCoauthorByFullname(coauthorWithoutAccount);
+	    		coauthorFromDb.adaugaArticol(articleToUpload);
+	    		articleToUpload.addCoauthorWithoutAccount(coauthorFromDb);
+	    	}
+	    	
+	    }
+	    
+	    if(coauthorsArray!=null || userTags!=null || coauthorsWithoutAccount!=null) {
 	    	uploadedArticleService.saveUploadedArticle(articleToUpload);
 	    }
 	    
@@ -313,6 +353,17 @@ public class UploadController {
     	boolean exists = false;
     	for(Tag t: existingTags) {
     		if(tagToBeCompared.equals(t.getDenumire())) {
+    			exists = true;
+    			break;
+    		}
+    	}
+    	return exists;
+    }
+    
+    public boolean checkIfCoauthorAlreadyExists(List<Coauthor> existingCoauthors, String coauthorToBeCompared) {
+    	boolean exists = false;
+    	for(Coauthor c: existingCoauthors ) {
+    		if(coauthorToBeCompared.equals(c.getFullname())) {
     			exists = true;
     			break;
     		}

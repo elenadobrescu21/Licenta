@@ -30,7 +30,7 @@
     
     <!-- Angular Material -->
      <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
-</head>
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css">
     
@@ -47,6 +47,7 @@
     <script src="services/fileUpload.service.js"></script>
     <script src="services/download.service.js"></script>
     <script src="services/article.service.js"></script>
+    <script src="services/tag.service.js"></script>
  
 	<!-- Controllers -->
     <script src="controllers/home.controller.js"></script>
@@ -58,6 +59,7 @@
     <script src="controllers/article.controller.js"></script>
     <script src="controllers/user.controller.js"></script>
     <script src="controllers/arhiva.controller.js"></script>
+    <script src="controllers/search-tag.controller.js"></script>
    
 </head>
 <body>
@@ -83,18 +85,20 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Cautare <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Cautare dupa autor</a></li>
-                            <li><a href="#">Cautare dupa cuvinte cheie</a></li>
+                            <li><a ui-sref="search">Cautare dupa autor</a></li>
+                            <li><a href="/#/search-tag">Cautare dupa cuvinte cheie</a></li>
                         </ul>
                     </li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Profilul meu<span class="caret"></span></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Profilul meu<span class="caret"></span></a>
                         <ul class="dropdown-menu">
+                        	<li><a href="/#/user/{{home.user.id}}"> Pagina mea </a></li>
                             <li><a href="#">Setari</a></li>
-                            <li><a href="#">Another action</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/#/upload">Incarcati articol</a></li>
                         </ul>
                     </li>
                     <li ng-show="isLoggedIn"><a ng-click="home.doLogout()" href="#">Logout</a></li>

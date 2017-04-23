@@ -20,6 +20,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -77,6 +78,21 @@ public class UploadedArticle {
 	@JsonIgnore
 	private List<AppUser> coauthors = new ArrayList<AppUser>();
 	
+	
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinTable(name = "article_coauthorWithoutAccount", 
+	joinColumns = {
+	@JoinColumn( name="article_id",
+				referencedColumnName = "uploadedArticleId"
+			)
+	},
+		inverseJoinColumns = {
+				@JoinColumn(name="autor_fara_cont_id",
+						referencedColumnName = "id")
+		})
+	@JsonIgnore
+	private List<Coauthor> coauthorsWithoutAccount = new ArrayList<Coauthor>();
+	
 	@ManyToMany(mappedBy="favouriteArticles")
 	@JsonIgnore
 	private Set<AppUser> favouritedBy = new HashSet<AppUser>();
@@ -96,15 +112,19 @@ public class UploadedArticle {
 	@JsonIgnore
 	private List<Tag> tags = new ArrayList<Tag>();
 	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="article", orphanRemoval = true)
+	private List<Comment> comentarii = new ArrayList<Comment>();
+	
 	public UploadedArticle() {
 		
 	}
 	
-	public UploadedArticle(String title,String filename) {
+	public UploadedArticle(String title,String filename, String abstractSection) {
 		super();
 		this.title = title;
 		this.filename = filename;
 		this.numberOfDownloads = 0;
+		this.abstractSection = abstractSection;
 	}
 	
 	public UploadedArticle(Long id, String title, String filename) {
@@ -206,6 +226,10 @@ public class UploadedArticle {
 	
 	public void addToUsersWhoFavourited(AppUser appUser) {
 		this.favouritedBy.add(appUser);
+	}
+	
+	public void addCoauthorWithoutAccount(Coauthor coauthor) {
+		this.coauthorsWithoutAccount.add(coauthor);
 	}
 	
 

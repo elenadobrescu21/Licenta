@@ -15,6 +15,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity(name="tag")
 @Table(name="tag")
 public class Tag {
@@ -27,6 +29,7 @@ public class Tag {
 	private String denumire;
 	
 	@ManyToMany(mappedBy="tags")
+	@JsonIgnore
 	private List<UploadedArticle> articles = new ArrayList<UploadedArticle>();
 	
 	public Tag(){

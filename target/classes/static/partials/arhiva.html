@@ -46,11 +46,55 @@
 	</ul> 
 </nav>
 </div>
-	<div class="pagination-results">
-
-
+	<div ng-switch="isDefault">
+	<div class="row" >
+		<div class="col-md-8">
+		 <form class="form-inline">
+        	<div class="form-group search-form">
+            	
+            	<input type="text" ng-model="search" class="form-control" placeholder="Search">
+        	</div>
+    	</form>
+		</div>
+		
+		<div class="col-md-4">
+	
+		</div>
+	
 	</div>
-    
-    </div>
-            
+	<br>
+		<div ng-switch-when="true" class="pagination-default">
+		
+			<div class="row">
+			    <div class="col-md-4" ng-repeat="article in allArticles | orderBy : 'titlu' | filter:search" >
+			    <h4> <a href="/#/article/{{article.id}}"> <i class="fa fa-file-text-o fa-2x" aria-hidden="true"></i> {{article.titlu}}</a></h4>
+			    <p> Incarcat de <i> <a href="/#/user/{{article.owner.id}}"> {{article.owner.fullname}}</i> </a> </p>
+			    
+			    </div>		  
+			</div>
+
+			</div>
+
+		<div class="pagination-results" ng-switch-when="false">
+			<div ng-repeat="article in filteredArticles | orderBy : 'titlu' | filter:search" ng-if="$index % 3 == 0" class="row">
+			    <div class="col-md-4">
+			    <h4> <a href="/#/article/{{filteredArticles[$index].id}}"> <i class="fa fa-file-text-o fa-2x" aria-hidden="true"></i> {{filteredArticles[$index].titlu}}</a></h4>
+			    <p> Incarcat de <a href="/#/user/{{filteredArticles[$index].owner.id}}"><i>{{filteredArticles[$index].owner.fullname}}</i></a> </p>
+			    
+			    </div>
+			    <div class="col-md-4" ng-if="filteredArticles.length > ($index + 1)">
+			    <h4><a href="/#/article/{{filteredArticles[$index+1].id}}"> <i class="fa fa-file-text-o fa-2x" aria-hidden="true"></i> {{filteredArticles[$index+1].titlu}}</a></h4>
+			    <p> Incarcat de <a href="/#/user/{{filteredArticles[$index+1].owner.id}}"><i>{{filteredArticles[$index+1].owner.fullname}}</i></a> </p>
+			 	</div>
+			 	
+			    <div class="col-md-4" ng-if="filteredArticles.length > ($index + 2)">
+			     <h4><a href="/#/article/{{filteredArticles[$index+2].id}} "><i class="fa fa-file-text-o fa-2x" aria-hidden="true"></i> {{filteredArticles[$index+2].titlu}}</a></h4>
+			     <p> Incarcat de <a href="/#/user/{{filteredArticles[$index+2].owner.id}}"> <i>{{filteredArticles[$index+2].owner.fullname}} </i> </a></p>
+			    
+			    </div>
+				</div>
+
+			</div>  
+    	</div> <!-- end of ng-switch-false -->
+     </div>       
 </div>  

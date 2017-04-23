@@ -172,3 +172,17 @@ footer .back-to-top a i:hover{
   text-align: center;
 }
 
+.pagination-results, .pagination-default, .search-form{
+	text-align: center;
+}
+
+.search-form{
+	margin-left:80px;
+}
+
+.main-content{
+	margin-top: 40px;
+}
+
+
+

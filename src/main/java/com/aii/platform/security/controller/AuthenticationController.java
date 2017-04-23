@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aii.platform.models.Response;
+import com.aii.platform.response.Response;
 import com.aii.platform.security.TokenUtils;
 import com.aii.platform.security.model.AuthenticationRequest;
 import com.aii.platform.security.model.AuthenticationResponse;

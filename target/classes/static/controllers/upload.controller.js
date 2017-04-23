@@ -10,13 +10,14 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 	$scope.coAuthors = [];
 	$scope.coAuthor = {};
 	$scope.coAuthorsWithoutAccount = [];
+	$scope.coAuthorWithoutAccountShow = false;
+	$scope.moreCoauthorsWithoutAccount = false;
 	$scope.finalizat = true;
 	$scope.tags = [];
 	$scope.abstract = [];
 	
 	$scope.allUsers = [];
 	
-	$scope.coAuthorWithouthAccount = false;
 		
 	Auth.getUser(function(result){
 		$scope.user = result;
@@ -49,7 +50,8 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 	  }
 	  
 	  $scope.addCoauthorWithoutAccount = function(){
-		$scope.coAuthorWithouthAccount = true;
+		$scope.coAuthorWithouthAccountShow = true;
+		$scope.moreCoauthorsWithoutAccount = true;
 	  }
 	  
 	  $scope.showCoauthors = function() {
@@ -61,8 +63,10 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 	  
 	  $scope.saveCoauthorWithoutAccount = function(){
 		 $scope.coAuthorsWithoutAccount.push($scope.coAuthorWithoutAccount);
-		  console.log("A fost adaugat");
-		  console.log($scope.coAuthorWithoutAccount);
+		 $scope.coAuthorWithoutAccount = null;
+		 $scope.moreCoauthorsWithoutAccount = false;
+		 console.log("A fost adaugat");
+		 console.log($scope.coAuthorWithoutAccount);
 	  }
 	  
 	  $scope.finalizare = function() {
@@ -89,6 +93,8 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 		fd.append('file', file);
 		fd.append('coauthors', angular.toJson($scope.coAuthors,true));
 		fd.append('tags', angular.toJson($scope.tags,true));
+		fd.append('abstract', angular.toJson($scope.abstract,true));
+		fd.append('coauthors-without-account', angular.toJson($scope.coAuthorsWithoutAccount,true))
 		console.log('Title '+ $scope.title);
 		$http.post(uploadUrl, fd, {
 		transformRequest : angular.identity,

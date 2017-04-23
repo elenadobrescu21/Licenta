@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,15 +35,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.aii.platform.models.AppUser;
-import com.aii.platform.models.Response;
-import com.aii.platform.models.Tag;
-import com.aii.platform.models.UploadedArticle;
 import com.aii.platform.repository.AppUserRepository;
 import com.aii.platform.repository.UploadedArticleRepository;
+import com.aii.platform.response.Response;
 import com.aii.platform.security.TokenUtils;
 import com.aii.platform.security.model.SpringSecurityUser;
 import com.aii.platform.service.AppUserService;
+import com.aii.platform.service.CoauthorService;
 import com.aii.platform.service.TagService;
 import com.aii.platform.service.UploadedArticleService;
 import com.aii.platform.services.storage.StorageService;
@@ -73,6 +72,9 @@ public class UploadedArticleController {
 	
 	@Autowired 
 	private AppUserService appUserService;
+	
+	@Autowired
+	private CoauthorService coauthorService;
 	
 		
 	@RequestMapping(value="/downloadPDF/{articleId}", method = RequestMethod.GET, produces="application/pdf")
@@ -167,6 +169,23 @@ public class UploadedArticleController {
 			appUserService.saveUser(user);
 			uploadedArticleService.saveUploadedArticle(article);
 			return new ResponseEntity<Response>(new Response("Article added to favourites"), new HttpHeaders(), HttpStatus.OK);
+		}
+		
+		@RequestMapping(value="/testCoauthorWithoutArticle", method=RequestMethod.GET)
+		public ResponseEntity<?> testCoauthorWithoutAccount() {
+			UploadedArticle article = uploadedArticleService.getArticleById(1);
+			System.out.println("article name: "+ article.getTitle());
+			Coauthor coauthor = new Coauthor("Ion Ion");
+			article.addCoauthorWithoutAccount(coauthor);
+			//coauthor.adaugaArticol(article);
+			uploadedArticleService.saveUploadedArticle(article);
+			return new ResponseEntity<Response>(new Response("Reusit"), new HttpHeaders(), HttpStatus.OK);
+		}
+		
+		@RequestMapping(value="/findByTag/{tag}", method=RequestMethod.GET)
+		public ResponseEntity<?> findByTag(@PathVariable(value="tag")String tag){
+			List<UploadedArticle> articlesByTag = uploadedArticleService.getAllArticlesByDenumireTag(tag);
+			return new ResponseEntity<List<UploadedArticle>>(articlesByTag, new HttpHeaders(), HttpStatus.OK);
 		}
 		
 		@RequestMapping(value="/addToFavourites/{articleId}", method = RequestMethod.POST) 

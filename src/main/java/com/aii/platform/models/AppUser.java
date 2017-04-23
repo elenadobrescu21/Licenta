@@ -51,6 +51,7 @@ public class AppUser {
 	@NotNull
 	private String email;
 	
+	
 	@Column(name="authorities")
 	@NotNull
 	private String authorities;
@@ -74,6 +75,10 @@ public class AppUser {
 						referencedColumnName = "uploadedArticleId")
 		})
 	private Set<UploadedArticle> favouriteArticles = new HashSet<UploadedArticle>();
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="appUser", orphanRemoval = true)
+	@JsonIgnore
+	private List<Comment> comentarii = new ArrayList<Comment>();
 	
 	public AppUser() {
 		

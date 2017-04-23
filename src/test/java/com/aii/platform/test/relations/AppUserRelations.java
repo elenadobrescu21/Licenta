@@ -27,7 +27,7 @@ public class AppUserRelations extends AbstractTest{
 	
 	@Test
 	public void testAddArticle() {
-		UploadedArticle uploadedArticle = new UploadedArticle("Articol test", "test.pdf");
+		UploadedArticle uploadedArticle = new UploadedArticle("Articol test", "test.pdf", "abstract");
 		AppUser appUser = appUserService.getAppUserById(1L);
 		appUser.addArticle(uploadedArticle);
 		uploadedArticle.setAppUser(appUser);
