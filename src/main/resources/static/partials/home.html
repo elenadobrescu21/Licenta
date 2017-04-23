@@ -31,15 +31,12 @@
        		 <p> Incarcat de <i>{{ article.owner.fullname}} </i> </p>
        		 <p> la data de <i>{{ article.uploadedOn }} </i> </p>
        		 
-       		  <button class="btn btn-default download-btn" type="button" ng-click="downloadArticle(article.id)">
-                  <span class="glyphicon glyphicon-download-alt" aria-hidden="true"> </span>
-                       Download
-                  </button>
-
-              <button type="button" class="btn btn-default favourite-btn" ng-click="addToFavourites(article.id)">
-                   <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Favourite
+       		  <a class="vizualizare" href="/#/article/{{article.id}}" > 
+       		  <button class="btn btn-primary download-btn" type="button">
+                  <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"> </span>
+                    Vizualizare
               </button>
-        	
+              </a>	
         	</div>
         </div>
         

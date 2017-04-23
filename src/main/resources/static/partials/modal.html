@@ -1,0 +1,29 @@
+<div class="container" ng-controller="ModalController">
+	<div class="row">
+	<button class="btn btn-primary" data-toggle="modal" data-target="#modal-info" ng-click="open()"> Modal</button>
+	
+	
+	</div>
+	
+    <div modal="showModalSuccess" close="cancel()">
+	    <div class="modal-dialog">
+	    	<div class="modal-content">
+	    	 	<div class="modal-header">
+	          		<h4>Success</h4>
+	      		</div>
+	      		
+	     	 	<div class="modal-body">
+	          	    <p>Articolul a fost adaugat cu success</p>
+	      		</div>
+	      		
+	      		<div class="modal-footer">
+	        		<button class="btn btn-success" ng-click="ok()">Okay</button>
+	        		<button class="btn" ng-click="cancel()">Cancel</button>
+	     		</div>
+	    	
+	    	</div> <!-- end modal-conent -->
+	    </div> <!-- end modal-dialog -->
+     
+    </div>
+
+</div>

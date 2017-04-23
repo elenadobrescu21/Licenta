@@ -1,89 +1,107 @@
 <section ng-controller="UploadController">
  
   <div class="container">
-  <form method="post"  id="uploadForm" name="uploadForm">
-  <div class="text-center"><h1>Upload a file</h1></div>
+	  <form method="post"  id="uploadForm" name="uploadForm">
+	  <div class="text-center"><h1>Adaugare articol</h1></div>
+	  
+	   <div class="form-group">
+	       <label  class="control-label" for="title">Titlu</label>
+	       <input  class="form-control" type="text" id="title" name="title" ng-model="title" required>
+	       <span  ng-show="uploadForm.title.$touched && uploadForm.title.$invalid" class="help-block">Completati titlul</span>
+	   </div>
+	   
+	    <div class="form-group">
+	       <label class="control-label" for="title">Fisier</label>
+	       <p><label class="control-label" for="pdf-only">Sunt acceptate doar fisierele in format PDF</label> </p>
+	       <input type="file" id="file" name="file" file-model="myFile" accept="application/pdf" required/>
+	        <span  ng-show="uploadForm.file.$touched" class="help-block">Incarcati fisierul</span>    
+	   </div>
+	   
+	   <div class="form-group">
+	   		<label class="control-label" for="abstract"> Abstract</label>
+	   		<textarea cols="100" class="form-control" type="text" id="abstract" name="abstract" ng-model="abstract" required>
+	   		</textarea>
+	   		<span ng-show="uploadForm.abstract.$touched && uploadForm.abstract.$invalid" class="help-block">Completati sectiunea</span> 
+	   </div>
+	 
+	 <div ng-show="coAuthorShow">
+		 <p> <b> Coautori: </b> </p>
+		  <div ng-repeat="coA in coAuthors track by $index"> {{coA.fullname}}  </div>
+		  <div ng-show="!finalizat">
+			  <select name="mySelect" id="mySelect"
+			      ng-options="user.fullname for user in users"
+			      ng-model="coAuthor">
+			  </select>
+			  <button class="btn btn-default" type="button" ng-click="addCoauthor()">Adauga coautor</button>
+			  <button class="btn btn-default" type="button" ng-click="finalizare()">Finalizare</button>
+		  </div>
+	  
+	</div> <!-- end coAuthorShow -->
+	  
   
-   <div class="form-group">
-       <label  class="control-label" for="title">Titlu</label>
-       <input  class="form-control" type="text" id="title" name="title" ng-model="title" required>
-       <span  ng-show="uploadForm.title.$touched && uploadForm.title.$invalid" class="help-block">Completati titlul</span>
-   </div>
-   
-    <div class="form-group">
-       <label class="control-label" for="title">Fisier</label>
-       <p><label class="control-label" for="pdf-only">Sunt acceptate doar fisierele in format PDF</label> </p>
-       <input type="file" id="file" name="file" file-model="myFile" accept="application/pdf" required/>
-        <span  ng-show="uploadForm.file.$touched" class="help-block">Incarcati fisierul</span>    
-   </div>
-   
-   <div class="form-group">
-   	<label class="control-label" for="abstract"> Abstract</label>
-   	<textarea cols="100" class="form-control" type="text" id="abstract" name="abstract" ng-model="abstract" required>
-   	</textarea>
-   	<span  ng-show="uploadForm.abstract.$touched && uploadForm.abstract.$invalid" class="help-block">Completati sectiunea</span>
-   
-   </div>
- 
- <div ng-show="coAuthorShow">
- <p> <b> Coautori: </b> </p>
-  <div ng-repeat="coA in coAuthors track by $index"> {{coA.fullname}}  </div>
-  <div ng-show="!finalizat">
-  <select name="mySelect" id="mySelect"
-      ng-options="user.fullname for user in users"
-      ng-model="coAuthor"></select>
-  <button class="btn btn-default" type="button" ng-click="addCoauthor()">Adauga coautor</button>
-  <button class="btn btn-default" type="button" ng-click="finalizare()">Finalizare</button>
-  </div>
-  
-  </div>
-  
-
-  
-  <button class="btn btn-default" type="button" ng-show="!coAuthorShow" ng-click="adaugaCoautori()">Addauga coautori</button> 
-   <br>
-   <br>
-     <p> Pentru a adauga un coautor ce nu are cont click <a ng-click="addCoauthorWithoutAccount()">aici</a></p>
-  
-  <div ng-show="coAuthorWithouthAccountShow">
-  <b> Coautori fara cont: </b>
-	  <div ng-repeat="coAWithoutAccount in coAuthorsWithoutAccount"> {{coAWithoutAccount}}</div>
-	  <br>
-	  <div class="form-group">
-	  	<label class="control-label" for="coAuthorWithoutAccount"> Nume coautor</label>
-	  	<input class="form-control" type="text" id="coAuthorWithoutAccount" name="coAuthorWithoutAccount" ng-model="coAuthorWithoutAccount">
-	  	<br>
-	 	<button class="btn btn-default" type="button" ng-click="saveCoauthorWithoutAccount()"> Adauga</button>
+	<button class="btn btn-default" type="button" ng-show="!coAuthorShow" ng-click="adaugaCoautori()">Addauga coautori</button> 
+	<br>
+	<br>
+	<p> Pentru a adauga un coautor ce nu are cont click <a ng-click="addCoauthorWithoutAccount()">aici</a></p>
+	  
+	<div ng-show="coAuthorWithouthAccountShow">
+	  <b> Coautori fara cont: </b>
+		  <div ng-repeat="coAWithoutAccount in coAuthorsWithoutAccount"> {{coAWithoutAccount}}</div>
+		  <br>
+		  <div class="form-group">
+		  	<label class="control-label" for="coAuthorWithoutAccount"> Nume coautor</label>
+		  	<input class="form-control" type="text" id="coAuthorWithoutAccount" name="coAuthorWithoutAccount" ng-model="coAuthorWithoutAccount">
+		  	<br>
+		 	<button class="btn btn-default" type="button" ng-click="saveCoauthorWithoutAccount()"> Adauga</button>
+		  </div>	 	   
 	  </div>
 	  
+	   <br>
+	  <div class="form-group">
+	       <label  class="control-label" for="tag">Adaugati tag-uri</label>
+	       <input  class="form-control" type="text" id="tag" name="tag" ng-model="tag"
+	        ng-maxlength="40" ng-minlength="2"/>
+	       <span  ng-show="uploadForm.tag.$touched && uploadForm.tag.$invalid" class="help-block">Un tag trebuie sa aiba cel putin 2 caractere si maxim 40</span>
+	  </div>
 	  
-   
-  </div>
-   <br>
-    <div class="form-group">
-       <label  class="control-label" for="tag">Adaugati tag-uri</label>
-       <input  class="form-control" type="text" id="tag" name="tag" ng-model="tag"
-        ng-maxlength="40" ng-minlength="2"/>
-       <span  ng-show="uploadForm.tag.$touched && uploadForm.tag.$invalid" class="help-block">Un tag trebuie sa aiba cel putin 2 caractere si maxim 40</span>
-   </div>
-   <button class="btn btn-default" type="button" ng-click="addTag()">Adauga tag</button> 
-	<br>
-	<br>
-	<p class="tags"> <b> Tags: &nbsp</b> </p>
-	<div class="tags" ng-repeat="tag in tags"> {{tag}}, &nbsp </div>
-	
-   <div class="alert alert-danger form-group center-block" ng-show="hasError">
-   <h4>{{errorMessage}}</h4>
-   </div>
-   
-   <br>
-   <div class="form-group center-block">
-      <button class="btn btn-default" name="submit" type="submit" ng-click="doUpload()">Upload</button>
-    </div>	
+	   <button class="btn btn-default" type="button" ng-click="addTag()">Adauga tag</button> 
+		<br>
+		<br>
+		<p class="tags"> <b> Tags: &nbsp</b> </p>
+		<div class="tags" ng-repeat="tag in tags"> {{tag}}, &nbsp </div>
+		
+	   <div class="alert alert-danger form-group center-block" ng-show="hasError">
+	   <h4>{{errorMessage}}</h4>
+	   </div>
+	   
+	   <br>
+	   <div class="form-group center-block upload-section">
+	      <button class="btn btn-primary btn-lg" name="submit" type="submit" ng-click="doUpload()">Upload</button>
+	   </div>	
+	  
+	  </form>
+	  
+  </div> <!-- end form -->
   
-  </form>
-  
-  </div>
+   <div modal="showModalSuccess" close="cancel()">
+	    <div class="modal-dialog">
+	    	<div class="modal-content">
+	    	 	<div class="modal-header alert alert-success">
+	          		<h4 class="text-center">Success</h4>
+	      		</div>
+	     	 	<div class="modal-body">
+	          	    <p class="text-center">Articolul a fost incarcat cu success</p>
+	      		</div>
+	      		
+	      		<div class="modal-footer">
+	        		<button class="btn btn-success" ng-click="ok()">Okay</button>
+	        		<button class="btn" ng-click="cancel()">Cancel</button>
+	     		</div>	
+	    	</div> <!-- end modal-conent -->
+	    </div> <!-- end modal-dialog -->
+     
+    </div>  <!-- end modal-show success -->
+    
   </section>
  
   

@@ -1,4 +1,4 @@
-var app = angular.module("app", ['ui.router','lr.upload', 'ngMaterial']);
+var app = angular.module("app", ['ui.router','lr.upload', 'ngMaterial', 'ui.bootstrap']);
 
 app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider) {
     //
@@ -22,8 +22,8 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $location
         templateUrl: "partials/login.html"
     })
     
-    .state('users', {
-        url: "/users",
+    .state('admin', {
+        url: "/admin",
         templateUrl: "partials/user-management.html"
     })
     
@@ -60,6 +60,11 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $location
     .state('search-tag', {
         url: "/search-tag",
         templateUrl: "partials/search-tag.html"
+    })
+    
+    .state('modal', {
+        url: "/modal",
+        templateUrl: "partials/modal.html"
     })
      
    $httpProvider.interceptors.push('AuthInterceptor');

@@ -184,5 +184,17 @@ footer .back-to-top a i:hover{
 	margin-top: 40px;
 }
 
+.vizualizare{
+	color:white;
+	text-decoration:none;
+}
 
+.vizualizare:hover{
+	text-decoration:none;
+}
+
+.upload-section{
+	text-align: center;
+	margin-bottom:50px;
+}
 

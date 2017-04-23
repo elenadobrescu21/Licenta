@@ -15,8 +15,10 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 	$scope.finalizat = true;
 	$scope.tags = [];
 	$scope.abstract = [];
-	
+
 	$scope.allUsers = [];
+	
+	$scope.showModalSuccess = false;
 	
 		
 	Auth.getUser(function(result){
@@ -80,6 +82,17 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 			  $scope.tag = null;
 		  }
 	  }
+	   	  
+	  $scope.ok = function() {
+		  $state.reload();
+		  $scope.showModal = false;
+		    
+	   };
+
+	   $scope.cancel = function() {
+		    $state.reload();
+		    $scope.showModal = false;
+	   };
 	  
 	  
 	$scope.doUpload = function() {
@@ -109,7 +122,8 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 				
 			}
 			if(status == 200) {
-				$state.go('default');
+				//$state.go('default');
+				$scope.showModalSuccess = true;
 				console.log('Data message din success: '+ data.message);
 				console.log('Status din success: ' + status);
 				console.log('success');			

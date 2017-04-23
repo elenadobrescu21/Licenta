@@ -29,7 +29,7 @@
         
         <div class="btn-group" role="group">
             <button type="button" id="following" class="btn btn-default" href="#tab3" data-toggle="tab"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                <div class="hidden-xs">Following</div>
+                <div class="hidden-xs">Detalii</div>
             </button>
         </div>
     </div>
@@ -37,58 +37,32 @@
         <div class="well">
       <div class="tab-content">
         <div class="tab-pane fade in active" id="tab1">
-          <div class="articole-incarcate" ng-repeat="article in user.articoleIncarcate">
-             <div class="row">
-                 <div class="article-container-user">
-                      <div class="col-md-6">
-                          <a href="/#/article/{{article.id}}">
-                           	<h3> <i class="fa fa-file-text-o" aria-hidden="true"></i> {{article.titlu}} </h3>
-                           </a>
-                           <p> Incarcat la data de <i> {{article.uploadedOn}}</i> </p>
-                        </div> 
-                            					
-                       <div class="col-md-6">
-                            <button class="btn btn-default download-btn" type="button" ng-click="downloadArticle(article.id)">
-                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"> </span>
-                                    Download
-                             </button>
-
-                            <button type="button" class="btn btn-default favourite-btn" ng-click="addToFavourites(article.id)">
-                                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Favourite
-                            </button>
-                       </div>
-
-				</div>
-
-             </div>  	      
+          <div class="articole-incarcate">
+         	<h2 class="text-center">Articole incarcate</h2>
+         	<br>
+         	<div class="row">
+			    <div class="col-md-4" ng-repeat="article in user.articoleIncarcate | orderBy: 'titlu' ">
+			    <h4> <a href="/#/article/{{article.id}}"> <i class="fa fa-file-text-o fa-2x" aria-hidden="true"></i> {{article.titlu}}</a></h4>
+			    <p> Incarcat pe <i>{{article.uploadedOn}}</i></p>
+			    
+			    </div>		  
+			</div> 
+				      
           </div>
           
         </div>
         <div class="tab-pane fade in" id="tab2">
-           <div class="articole-incarcate" ng-repeat="article in user.articoleFavorite">
-             <div class="row">
-                 <div class="article-container-user">
-                      <div class="col-md-6">
-                          <a href="/#/article/{{article.id}}">
-                           	<h3> <i class="fa fa-file-text-o" aria-hidden="true"></i> {{article.titlu}} </h3>
-                           </a>
-                           <p> Incarcat la data de <i> {{article.uploadedOn}}</i> </p>
-                        </div> 
-                            					
-                       <div class="col-md-6">
-                            <button class="btn btn-default download-btn" type="button" ng-click="downloadArticle(article.id)">
-                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"> </span>
-                                    Download
-                             </button>
-
-                            <button type="button" class="btn btn-default favourite-btn" ng-click="addToFavourites(article.id)">
-                                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Favourite
-                            </button>
-                       </div>
-
-				</div>
-
-             </div>  	      
+           <div class="articole-incarcate">
+           <h2 class="text-center">Articole favorite</h2>
+         	<br>
+            <div class="row">
+			    <div class="col-md-4" ng-repeat="article in user.articoleFavorite" >
+			    	<h4> <a href="/#/article/{{article.id}}"> <i class="fa fa-file-text-o fa-2x" aria-hidden="true"></i> {{article.titlu}}</a></h4>
+			    	<p> Incarcat de <i> <a href="/#/user/{{article.owner.id}}"> {{article.owner.fullname}}</i> </a> </p>
+			    
+			    </div>		  
+			</div> 	
+			      
           </div>
         </div>
         <div class="tab-pane fade in" id="tab3">
