@@ -58,11 +58,23 @@ public class UploadedArticle {
 	@Column(name="abstract")
 	@Size(min=50, max=1500)
 	private String abstractSection;
+	
+	@Column(name="WOS")
+	private String wos;
+	
+	@Column(name="DOI")
+	private String doi;
 
 	@ManyToOne
 	@JsonIgnore
 	@JoinColumn(name = "appUserId", nullable = false)
 	private AppUser appUser;
+	
+	
+	@ManyToOne
+	@JsonIgnore
+	@JoinColumn(name="id", nullable=true)
+	private TipArticol tipArticol;
 	
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(name = "article_coauthor", 
@@ -125,6 +137,12 @@ public class UploadedArticle {
 		this.filename = filename;
 		this.numberOfDownloads = 0;
 		this.abstractSection = abstractSection;
+	}
+	
+	public UploadedArticle(String title, String filename) {
+		this.title = title;
+		this.filename = filename;
+		this.numberOfDownloads = 0;
 	}
 	
 	public UploadedArticle(Long id, String title, String filename) {
@@ -231,6 +249,38 @@ public class UploadedArticle {
 	public void addCoauthorWithoutAccount(Coauthor coauthor) {
 		this.coauthorsWithoutAccount.add(coauthor);
 	}
-	
 
+	public String getAbstractSection() {
+		return abstractSection;
+	}
+
+	public void setAbstractSection(String abstractSection) {
+		this.abstractSection = abstractSection;
+	}
+
+	public TipArticol getTipArticol() {
+		return tipArticol;
+	}
+
+	public void setTipArticol(TipArticol tipArticol) {
+		this.tipArticol = tipArticol;
+	}
+
+	public List<Coauthor> getCoauthorsWithoutAccount() {
+		return coauthorsWithoutAccount;
+	}
+
+	public void setCoauthorsWithoutAccount(List<Coauthor> coauthorsWithoutAccount) {
+		this.coauthorsWithoutAccount = coauthorsWithoutAccount;
+	}
+
+	public List<Comment> getComentarii() {
+		return comentarii;
+	}
+
+	public void setComentarii(List<Comment> comentarii) {
+		this.comentarii = comentarii;
+	}
+	
+	
 }

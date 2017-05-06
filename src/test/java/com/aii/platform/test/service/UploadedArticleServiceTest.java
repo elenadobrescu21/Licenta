@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.aii.platform.models.AppUser;
+import com.aii.platform.models.TipArticol;
 import com.aii.platform.models.UploadedArticle;
 import com.aii.platform.service.AppUserService;
+import com.aii.platform.service.TipArticolService;
 import com.aii.platform.service.UploadedArticleService;
 import com.aii.platform.test.AbstractTest;
 
@@ -21,6 +23,9 @@ public class UploadedArticleServiceTest extends AbstractTest{
 	
 	@Autowired
 	private UploadedArticleService uploadedArticleService;
+	
+	@Autowired
+	private TipArticolService tipArticolService;
 	
 	
 	
@@ -50,11 +55,27 @@ public class UploadedArticleServiceTest extends AbstractTest{
 	
 	@Test
 	public void testCreateUploadedArticle() {
-		UploadedArticle newUploadedArticle = new UploadedArticle("Test", "test.pdf", "abstract");
+		UploadedArticle newUploadedArticle = new UploadedArticle("Test", "test.pdf");
 		AppUser owner = appUserService.getAppUserById(1);
 		newUploadedArticle.setAppUser(owner);
 		UploadedArticle createdUploadedArticle = uploadedArticleService.saveUploadedArticle(newUploadedArticle);
 		Assert.assertNotNull("failure-expected not null", createdUploadedArticle);
+		Assert.assertNotNull("failure-expected id attribute not null", createdUploadedArticle.getUploadedArticleId());
+		Assert.assertEquals("failure-expected name to match", "Test", createdUploadedArticle.getTitle());
+		
+	}
+	
+	@Test 
+	public void testAddArticleType() {
+		UploadedArticle newUploadedArticle = new UploadedArticle("Test", "test.pdf");
+		AppUser owner = appUserService.getAppUserById(1);
+		TipArticol tipArticol = tipArticolService.getTipArticolById(1L);
+		newUploadedArticle.setAppUser(owner);
+		newUploadedArticle.setTipArticol(tipArticol);
+		UploadedArticle createdUploadedArticle = uploadedArticleService.saveUploadedArticle(newUploadedArticle);
+		TipArticol tipArticol2 = createdUploadedArticle.getTipArticol();
+		Assert.assertNotNull("failure-expected not null", createdUploadedArticle);
+		Assert.assertNotNull("failure-expecred not null", tipArticol2);
 		Assert.assertNotNull("failure-expected id attribute not null", createdUploadedArticle.getUploadedArticleId());
 		Assert.assertEquals("failure-expected name to match", "Test", createdUploadedArticle.getTitle());
 		

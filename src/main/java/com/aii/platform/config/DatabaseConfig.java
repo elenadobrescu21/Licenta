@@ -21,9 +21,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.aii.platform.models.AppUser;
+import com.aii.platform.models.CarteCapitol;
+import com.aii.platform.models.CarteCompleta;
 import com.aii.platform.models.Coauthor;
 import com.aii.platform.models.Comment;
+import com.aii.platform.models.Conferinta;
+import com.aii.platform.models.JurnalRevista;
 import com.aii.platform.models.Tag;
+import com.aii.platform.models.TipArticol;
 import com.aii.platform.models.UploadedArticle;
 
 @Configuration
@@ -56,6 +61,11 @@ public class DatabaseConfig {
 		sessionFactory.setAnnotatedClasses(Tag.class);
 		sessionFactory.setAnnotatedClasses(Coauthor.class);
 		sessionFactory.setAnnotatedClasses(Comment.class);
+		sessionFactory.setAnnotatedClasses(TipArticol.class);
+		sessionFactory.setAnnotatedClasses(CarteCompleta.class);
+		sessionFactory.setAnnotatedClasses(Conferinta.class);
+		sessionFactory.setAnnotatedClasses(JurnalRevista.class);
+		sessionFactory.setAnnotatedClasses(CarteCapitol.class);
 		sessionFactory.setHibernateProperties(additionalProperties());
 		return sessionFactory;
 	}

@@ -28,7 +28,7 @@
        		
        		<i class="fa fa-file-text-o fa-4x" aria-hidden="true"></i>
        		<a href="/#/article/{{article.id}}" ><h3>{{article.titlu}}</h3> </a>
-       		 <p> Incarcat de <i>{{ article.owner.fullname}} </i> </p>
+       		 <p> Incarcat de <a href="/#/user/{{article.owner.id}}"><i>{{ article.owner.fullname}} </i> </a> </p>
        		 <p> la data de <i>{{ article.uploadedOn }} </i> </p>
        		 
        		  <a class="vizualizare" href="/#/article/{{article.id}}" > 
@@ -52,10 +52,10 @@
                 <div class="col-md-12">
                     <div class = "alert alert-warning">
 
-                        <h3> You can log in <a class="alert-link" ui-sref="login">here</a> </h3>
-
+                        <h2> Pentru autentificare click <a class="alert-link" ui-sref="login">aici</a> </h2>
+						<br>
                         <div>
-                            You don't have an account yet? <a class="alert-link" ui-sref="register">Register a new account</a>
+                           Nu aveti cont? <a class="alert-link" ui-sref="register">Creati un nou cont</a>
                         </div>
 
                     </div>

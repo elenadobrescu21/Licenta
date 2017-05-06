@@ -172,7 +172,7 @@ footer .back-to-top a i:hover{
   text-align: center;
 }
 
-.pagination-results, .pagination-default, .search-form{
+.pagination-results, .pagination-default, .search-form, .modal-footer{
 	text-align: center;
 }
 
@@ -196,5 +196,9 @@ footer .back-to-top a i:hover{
 .upload-section{
 	text-align: center;
 	margin-bottom:50px;
+}
+
+.revista-page{
+	margin-left:20px;
 }
 

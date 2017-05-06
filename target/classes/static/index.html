@@ -7,9 +7,7 @@
 	<!-- JQuery -->
     <script src="js/jquery-2.1.4.js"></script>
     
-    <!-- Angular Js -->
-     <!-- Angular Material requires Angular.js Libraries -->
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
@@ -52,6 +50,7 @@
     <script src="services/download.service.js"></script>
     <script src="services/article.service.js"></script>
     <script src="services/tag.service.js"></script>
+    <script src="services/tipArticol.service.js"></script>
  
 	<!-- Controllers -->
     <script src="controllers/home.controller.js"></script>
@@ -85,9 +84,9 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li ><a href="#">Rapoarte <span class="sr-only">(current)</span></a></li>
-                    <li><a ui-sref="arhiva">Arhiva</a></li>
-                    <li class="dropdown">
+                    <li ng-show="isLoggedIn"><a href="#">Rapoarte <span class="sr-only">(current)</span></a></li>
+                    <li ng-show="isLoggedIn"><a ui-sref="arhiva">Arhiva</a></li>
+                    <li ng-show="isLoggedIn" class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Cautare <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a ui-sref="search">Cautare dupa autor</a></li>
@@ -97,7 +96,7 @@
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
+                    <li ng-show="isLoggedIn" class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Profilul meu<span class="caret"></span></a>
                         <ul class="dropdown-menu">
                         	<li><a href="/#/user/{{home.user.id}}"> Pagina mea </a></li>

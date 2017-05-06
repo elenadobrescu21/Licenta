@@ -18,6 +18,53 @@
 	   </div>
 	   
 	   <div class="form-group">
+	       <label class="control-label" for="title">Tip articol</label>
+	       <select class="form-control" ng-options="a.denumire for a in tipArticole" 
+   				ng-model="articleType" ng-change="getSelectedArticleType()"></select> 
+	   </div>
+	   
+	   <div ng-show="esteConferinta">
+		   <h5> Nume conferinta: <i>{{ numeConferinta}} </i></h5>
+		   <h5> Locatie: <i> {{locatieConferinta}} </i> </h5>
+		   <h5> Data: <i> {{dataConferinta}} </i></h5>
+		  
+	   </div>
+	   
+	   <div ng-show="esteCarteTip1">
+	   		<h5> Editura: <i> {{edituraCarteCompleta }}</i></h5>
+	   		<h5> Editie: <i> {{editieCarteCompleta}} </i></h5>
+	   		<h5> An aparitie: <i> {{anAparitieCarteCompleta}}</i></h5>
+	   		<h5> ISSN: <i>{{ISSNCarteCompleta}} </i></h5>
+	   		<h5> ISBN: <i> {{ISBNCarteCompleta}} </i></h5>
+	    
+	   </div>
+	   
+	   <div ng-show="esteCarteTip2">
+	   	 <h5> Titlu carte: <i> {{titluCapitolCarte}} </i></h5>
+	   	 <h5> Titlu capitol: <i> {{numeCapitolCarte}} </i></h5>
+	   	 <h5> Autori carte: <span ng-repeat="autorCarteCapitol in autoriCarteCapitol"> <i>{{autorCarteCapitol}},  </i></span></h5>
+	   	 <h5> Editori carte: <span ng-repeat="editorCarteCapitol in editoriCarteCapitol"> <i>{{editorCarteCapitol}},  </i></span></h5>
+	   	 <h5> Editura: <i> {{edituraCarteCapitol}}</i></h5>
+	   	 <h5> Editie: <i> {{editieCarteCapitol}} </i></h5>
+	   	 <h5> ISBN: <i> {{ISBNCapitolCarte}}</i></h5>
+	   	 <h5> ISSN: <i> {{ISSNCapitolCarte}}</i></h5>
+	   	 <h5> An aparitie: <i> {{anAparitieCapitolCarte}} </i></h5>
+	   	 <h5> Pagini: {{paginaInceputCapitolCarte}} - {{paginaSfarsitCapitolCarte}}</h5>
+	   </div>
+	   
+	   <div ng-show="esteRevista">
+	   	<h5> Titlu revista: <i> {{numeRevista}}</i></h5>
+	   	<h5> Numar: <i> {{numarRevista}}</i></h5>
+	   	<h5> Volum: <i> {{volumRevista}}</i></h5>
+	   	<h5> Data aparitie: <i> {{dataAparitieRevista}} </i></h5>
+	   	<h5> ISSN: <i> {{ISSNRevista}}</i></h5>
+	   	<h5> ISBN: <i> {{ISBNRevista}}</i></h5>
+	   	<h5> Pagini: <i> {{paginaInceputRevista}} - {{paginaSfarsitRevista}} </i></h5>
+	   
+	   
+	   </div>
+	   
+	   <div class="form-group">
 	   		<label class="control-label" for="abstract"> Abstract</label>
 	   		<textarea cols="100" class="form-control" type="text" id="abstract" name="abstract" ng-model="abstract" required>
 	   		</textarea>
@@ -71,7 +118,7 @@
 		<div class="tags" ng-repeat="tag in tags"> {{tag}}, &nbsp </div>
 		
 	   <div class="alert alert-danger form-group center-block" ng-show="hasError">
-	   <h4>{{errorMessage}}</h4>
+	    	<h4>{{errorMessage}}</h4>
 	   </div>
 	   
 	   <br>
@@ -94,13 +141,273 @@
 	      		</div>
 	      		
 	      		<div class="modal-footer">
-	        		<button class="btn btn-success" ng-click="ok()">Okay</button>
-	        		<button class="btn" ng-click="cancel()">Cancel</button>
+	        		<button class="btn btn-success" ng-click="ok()">Ok</button>
+	        		
 	     		</div>	
 	    	</div> <!-- end modal-conent -->
 	    </div> <!-- end modal-dialog -->
      
     </div>  <!-- end modal-show success -->
+    
+     <div modal="showModalError" close="cancel()">
+	    <div class="modal-dialog">
+	    	<div class="modal-content">
+	    	 	<div class="modal-header alert alert-danger">
+	          		<h4 class="text-center">Eroare</h4>
+	      		</div>
+	     	 	<div class="modal-body">
+	          	    <p class="text-center">Articolul nu a putut fi incarcat, deoarece deja exista.</p>
+	      		</div>
+	      		
+	      		<div class="modal-footer">
+	        		<button class="btn btn-success" ng-click="ok()">Ok</button>
+	     		</div>	
+	    	</div> <!-- end modal-conent -->
+	    </div> <!-- end modal-dialog -->
+     
+    </div>  <!-- end modal-show error -->
+    
+    <div modal="showModalCarteTip1" close="cancel()">
+	    <div class="modal-dialog">
+	    	<div class="modal-content">
+	    	 	<div class="modal-header alert alert-warning">
+	          		<h4 class="text-center">Detalii carte - versiune completa</h4>
+	      		</div>
+	     	 	<div class="modal-body">
+	          	    <form name="carteCompletaForm" id="carteCompletaForm">
+	          	    	<div class="form-group">
+							<label class="control-label">Editura</label>
+						  	<input type="text" name="edituraCarteCompleta" class="form-control" ng-model="edituraCarteCompleta">
+						  	<span  ng-show="carteCompletaForm.edituraCarteCompleta.$touched && carteCompletaForm.edituraCarteCompleta.$invalid" class="help-block">Completati numele</span>
+					   </div>
+					   
+					   <div class="form-group">
+							<label class="control-label">Editie</label>
+						  	<input type="text"  name="editieCarteCompleta" class="form-control" ng-model="editieCarteCompleta">
+						  	<span  ng-show="carteCompletaForm.editieCarteCompleta.$touched && carteCompletaForm.editieCarteCompleta.$invalid" class="help-block">Completati numarul</span>
+					   </div>
+					   
+					   <div class="form-group">
+							<label class="control-label">An aparitie</label>
+						  	<input class="form-control"  type="text" ng-model="anAparitieCarteCompleta">
+					   </div>
+					   
+					   <div class="form-group">
+							<label class="control-label">ISSN</label>
+						  	<input class="form-control" name="ISSNCarteCompleta" type="text" ng-model="ISSNCarteCompleta" ng-minlength="9" ng-maxlength="9">
+						  	<span  ng-show="carteCompletaForm.ISSNCarteCompleta.$touched && carteCompletaForm.ISSNCarteCompleta.$invalid" class="help-block">Completati ISSN</span>
+					   </div> 
+					   
+					    <div class="form-group">
+							<label class="control-label">ISBN</label>
+						  	<input class="form-control" name="ISBNCarteCompleta" type="text" ng-model="ISBNCarteCompleta" ng-minlength="10">
+						  	<span  ng-show="carteCompletaForm.ISBNCarteCompleta.$touched && carteCompletaForm.ISBNCarteCompleta.$invalid" class="help-block">Completati ISBN</span>
+					   </div> 
+					   	    
+	          	    </form>
+	      		</div>
+	      		
+	      		<div class="modal-footer">
+	        		<button class="btn btn-success" ng-click="okCarteCompleta()">Ok</button>
+	        		<button class="btn btn-success" ng-click="cancelCarteCompleta()">Cancel</button>
+	     		</div>	
+	    	</div> <!-- end modal-conent -->
+	    </div> <!-- end modal-dialog -->
+     
+    </div>  <!-- end modal-show carte -->
+    
+    <div modal="showModalCarteTip2" close="cancel()">
+	    <div class="modal-dialog">
+	    	<div class="modal-content">
+	    	 	<div class="modal-header alert alert-warning">
+	          		<h4 class="text-center">Detalii capitol carte</h4>
+	      		</div>
+	     	 	<div class="modal-body">
+	          	      <form name="capitolCarteForm" id="capitolCarteForm">
+	          	      
+	          	    	<div class="form-group">
+							<label class="control-label">Titlu carte </label>
+						  	<input type="text" name="titluCapitolCarte" class="form-control" ng-model="titluCapitolCarte">
+						  	<span  ng-show="capitolCarteForm.titluCapitolCarte.$touched && capitolCarteForm.titluCapitolCarte.$invalid" class="help-block">Completati numele</span>
+					   </div>
+					   
+					   <div class="form-group">
+							<label class="control-label">Numele capitolului in care se regaseste articolul</label>
+						  	<input type="text" name="numeCapitolCarte" class="form-control" ng-model="numeCapitolCarte">
+						  	<span  ng-show="capitolCarteForm.numeCapitolCarte.$touched && capitolCarteForm.numeCapitolCarte.$invalid" class="help-block">Completati numarul</span>
+					   </div>
+					   
+					    <div class="form-group">
+							<label class="control-label">Autori carte - lista completa de autori</label>
+						  	<div>
+		  						<div ng-repeat="autorCarteCapitol in autoriCarteCapitol"> {{autorCarteCapitol}}</div>
+		 						 <br>
+		  						<div class="form-group">
+		  							<label class="control-label" for="autorCarteCapitol"> Nume autor</label>
+		  							<input class="form-control" type="text" id="autorCarteCapitol" name="autorCarteCapitol" ng-model="autorCarteCapitol">
+		  							<br>
+		 						<button class="btn btn-default" type="button" ng-click="saveAutorCarteCapitol()"> Adauga</button>
+		  					</div>	 	   
+	  					</div>
+					   </div>
+					   
+					   <div class="form-group">
+							<label class="control-label">Editori carte - lista completa</label>
+						  	<div>
+		  						<div ng-repeat="editorCarteCapitol in editoriCarteCapitol"> {{editorCarteCapitol}}</div>
+		 						 <br>
+		  						<div class="form-group">
+		  							<label class="control-label" for="editorCarteCapitol"> Nume editor</label>
+		  							<input class="form-control" type="text" id="editorCarteCapitol" name="editorCarteCapitol" ng-model="editorCarteCapitol">
+		  							<br>
+		 						<button class="btn btn-default" type="button" ng-click="saveEditorCarteCapitol()"> Adauga</button>
+		  						</div>	 	   
+	  						</div>
+					   </div>
+					   
+					   <div class="form-group">
+							<label class="control-label">Editura</label>
+						  	<input type="text" name="edituraCarteCapitol" class="form-control" ng-model="edituraCarteCapitol">
+						  	<span  ng-show="capitolCarteForm.edituraCarteCapitol.$touched && capitolCarteForm.edituraCarteCapitol.$invalid" class="help-block">Completati numele</span>
+					   </div>
+					   
+					   <div class="form-group">
+							<label class="control-label">Editie</label>
+						  	<input type="text" name="editieCarteCapitol" class="form-control" ng-model="editieCarteCapitol">
+						  	<span  ng-show="capitolCarteForm.editieCarteCapitol.$touched && capitolCarteForm.editieCarteCapitol.$invalid" class="help-block">Completati numarul</span>
+					   </div>
+	          	    
+	          	    
+					   <div class="form-group">
+							<label class="control-label">An aparitie</label>
+						  	<input class="form-control"  type="text" ng-model="anAparitieCapitolCarte">
+					   </div>
+					   
+					   <div class="form-group">
+							<label class="control-label">ISSN</label>
+						  	<input class="form-control" name="ISSNCapitolCarte" type="text" ng-model="ISSNCapitolCarte" ng-minlength="9" ng-maxlength="10">
+						  	<span  ng-show="capitolCarteForm.ISSNCapitolCarte.$touched && capitolCarteForm.ISSNCapitolCarte.$invalid" class="help-block">Completati ISSN</span>
+					   </div> 
+					   
+					    <div class="form-group">
+							<label class="control-label">ISBN</label>
+						  	<input class="form-control" name="ISBNCapitolCarte" type="text" ng-model="ISBNCapitolCarte" ng-minlength="10" >
+						  	<span  ng-show="capitolCarteForm.ISBNCapitolCarte.$touched && capitolCarteForm.ISBNCapitolCarte.$invalid" class="help-block">Completati ISBN</span>
+					   </div> 
+					   
+					    <div class="form-group">
+							<label class="control-label">Pagini</label>
+						  	<input class="revista-page" name="paginaInceputCapitolCarte" type="text" ng-model="paginaInceputCapitolCarte">
+						  	<input class="revista-page" name="paginaSfarsitCapitolCarte" type="text" ng-model="paginaSfarsitCapitolCarte">
+					   </div> 	    
+	          	    </form>
+	      		</div>
+	      		
+	      		<div class="modal-footer">
+	        		<button class="btn btn-success" ng-click="okCapitolCarte()">Ok</button>
+	        		<button class="btn btn-success" ng-click="cancelCapitolCarte()">Cancel</button>
+	     		</div>	
+	    	</div> <!-- end modal-conent -->
+	    </div> <!-- end modal-dialog -->
+     
+    </div>  <!-- end modal-show conferinta -->
+    
+      <div modal="showModalConferinta" close="cancel()">
+	    <div class="modal-dialog">
+	    	<div class="modal-content">
+	    	 	<div class="modal-header alert alert-warning">
+	          		<h4 class="text-center">Detalii conferinta</h4>
+	      		</div>
+	     	 	<div class="modal-body">
+	          	   <form>
+	          	   
+		          	   <div class="form-group">
+		          	   		<label class="control-label"> Nume conferinta</label>
+		          	   		<input class="form-control" type="text" ng-model="numeConferinta" />    	   
+		          	   </div>
+	          	   
+					   <div class="form-group">
+							<label class="control-label"> Locatie </label>
+						  	<input type="text" class="form-control" ng-model="locatieConferinta">
+					   </div>
+					   
+	          			<div class="form-group">
+	          	   			<label class="control-label">Data</label>
+	          	   			<input class="form-control"  id="dataConferinta" type="date" ng-model="dataConferinta"> 
+	   					</div>
+	   				
+	        		</form>
+	      		</div>
+	      		
+	      		<div class="modal-footer">
+	        		<button class="btn btn-success" ng-click="okConferinta()">Ok</button>
+	        		<button class="btn btn-success" ng-click="cancelConferinta()">Cancel</button>
+	     		</div>	
+	    	</div> <!-- end modal-conent -->
+	    </div> <!-- end modal-dialog -->
+     
+    </div>  <!-- end modal-show jurnal -->
+    
+    <div modal="showModalRevista" close="cancel()">
+	    <div class="modal-dialog">
+	    	<div class="modal-content">
+	    	 	<div class="modal-header alert alert-warning">
+	          		<h4 class="text-center">Detalii jurnal/revista</h4>
+	      		</div>
+	     	 	<div class="modal-body">
+	          	    <form name="revistaForm" id="revistaForm">
+	          	    	<div class="form-group">
+							<label class="control-label">Nume </label>
+						  	<input type="text" name="numeRevista" class="form-control" ng-model="numeRevista">
+						  	<span  ng-show="revistaForm.numeRevista.$touched && revistaForm.numeRevista.$invalid" class="help-block">Completati numele</span>
+					   </div>
+					   
+					   <div class="form-group">
+							<label class="control-label">Numar</label>
+						  	<input type="text"  name="numarRevista" class="form-control" ng-model="numarRevista">
+						  	<span  ng-show="revistaForm.numarRevista.$touched && revistaForm.numarRevista.$invalid" class="help-block">Completati numarul</span>
+					   </div>
+					   
+					    <div class="form-group">
+							<label class="control-label">Volum</label>
+						  	<input type="text" name="volumRevista" class="form-control" ng-model="volumRevista">
+						  	<span  ng-show="revistaForm.volumRevista.$touched && revistaForm.volumRevista.$invalid" class="help-block">Completati numele</span>
+					   </div>
+	          	    
+	          	    
+					   <div class="form-group">
+							<label class="control-label">Data aparitie</label>
+						  	<input class="form-control"  type="date" ng-model="dataAparitieRevista">
+					   </div>
+					   
+					   <div class="form-group">
+							<label class="control-label">ISSN</label>
+						  	<input class="form-control" name="ISSNRevista" type="text" ng-model="ISSNRevista" ng-minlength="9" ng-maxlength="10">
+						  	<span  ng-show="revistaForm.ISSNRevista.$touched && revistaForm.ISSNRevista.$invalid" class="help-block">Completati ISSN</span>
+					   </div> 
+					   
+					    <div class="form-group">
+							<label class="control-label">ISBN</label>
+						  	<input class="form-control" name="ISBNRevista" type="text" ng-model="ISBNRevista" ng-minlength="10">
+						  	<span  ng-show="revistaForm.ISBNRevista.$touched && revistaForm.ISBNRevista.$invalid" class="help-block">Completati ISBN</span>
+					   </div> 
+					   
+					    <div class="form-group">
+							<label class="control-label">Pagini</label>
+						  	<input class="revista-page" name="paginaInceputRevista" type="text" ng-model="paginaInceputRevista">
+						  	<input class="revista-page" name="paginaSfarsitRevista" type="text" ng-model="paginaSfarsitRevista">
+					   </div> 	    
+	          	    </form>
+	      		</div>
+	      		
+	      		<div class="modal-footer">
+	        		<button type="button" class="btn btn-success" ng-click="okRevista()">Ok</button>
+	        		<button type="button" class="btn btn-success" ng-click="cancelRevista()">Cancel</button>
+	     		</div>	
+	    	</div> <!-- end modal-conent -->
+	    </div> <!-- end modal-dialog -->
+     
+    </div>  <!-- end modal-show revista -->
     
   </section>
  

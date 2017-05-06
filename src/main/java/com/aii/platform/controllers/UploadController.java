@@ -42,6 +42,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.aii.platform.models.AppUser;
 import com.aii.platform.models.Tag;
+import com.aii.platform.models.TipArticol;
 import com.aii.platform.models.Coauthor;
 import com.aii.platform.models.UploadedArticle;
 import com.aii.platform.repository.AppUserRepository;
@@ -50,7 +51,11 @@ import com.aii.platform.repository.UploadedArticleRepository;
 import com.aii.platform.response.Response;
 import com.aii.platform.security.TokenUtils;
 import com.aii.platform.service.AppUserService;
+import com.aii.platform.service.CarteCapitolService;
+import com.aii.platform.service.CarteCompletaService;
 import com.aii.platform.service.CoauthorService;
+import com.aii.platform.service.ConferintaService;
+import com.aii.platform.service.JurnalRevistaService;
 import com.aii.platform.service.TagService;
 import com.aii.platform.service.UploadedArticleService;
 import com.aii.platform.utils.FileUtils;
@@ -90,6 +95,30 @@ public class UploadController {
 	
 	@Autowired
 	private CoauthorService coauthorService;
+	
+	@Autowired
+	private CarteCapitolService carteCapitolService;
+	
+	@Autowired
+	private CarteCompletaService carteCompletaService;
+	
+	@Autowired
+	private ConferintaService conferintaService;
+	
+	@Autowired
+	private JurnalRevistaService jurnalRevistaService;
+	
+	public TipArticol getTipArticol(HttpServletRequest request) {
+		String tipArticolString = request.getParameter("article-type");
+		TipArticol tipArticol = new TipArticol();
+		if(tipArticolString!=null && tipArticolString.length() > 2) {
+			tipArticol = new Gson().fromJson(tipArticolString, TipArticol.class);
+		}
+		
+		return tipArticol;
+		
+	}
+	
 	
 	public Coauthor[] getCoauthors(HttpServletRequest request) {
 		String coauthors = request.getParameter("coauthors");
@@ -173,12 +202,17 @@ public class UploadController {
     @RequestMapping(value="/upload", method =RequestMethod.POST) 
     @ResponseBody
     public ResponseEntity<?> uploadAnArticle(@RequestParam(value="title")String title,
-    		@RequestParam(value="file")MultipartFile file,HttpServletRequest request) throws IOException {
+    		@RequestParam(value="file")MultipartFile file,
+    		HttpServletRequest request) throws IOException {
     	
     	String token = request.getHeader("X-Auth-Token");
 		
 		String username = tokenUtils.getUsernameFromToken(token);
 		AppUser user = appUserService.getAppUserByUsername(username);
+		
+		TipArticol tipArticol = this.getTipArticol(request);
+		System.out.println("Tip articol: "  + tipArticol.getDenumire());
+		
 		String titleToBeCompared = title.replace("\"", "");
 		String titleToBeSaved = title.replace("\"", "");
 		
@@ -269,7 +303,7 @@ public class UploadController {
 	  		System.out.println("Dupa stergere");
 	  		LuceneReader readerAfterDeleting = new LuceneReader();
 	  		System.out.println(readerAfterDeleting.countNumberOfIndexedDocuments());
-	  		return new ResponseEntity<Response>(new Response("Documentul deja exista"), new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
+	  		return new ResponseEntity<Response>(new Response("Documentul deja exista"), new HttpHeaders(), HttpStatus.IM_USED);
 	  		
 	  	} else {
 	  			
