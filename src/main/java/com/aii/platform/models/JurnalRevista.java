@@ -36,15 +36,15 @@ public class JurnalRevista {
 	
 	@Column(name="ISSN")
 	@Size(min=9)
-	private int issn;
+	private String issn;
 	
 	@Column(name="ISBN")
 	@Size(min=13)
-	private int isbn;
+	private String isbn;
 	
 	@Column(name="data")
 	@Temporal(TemporalType.DATE)
-	private Date dataAparitie = new Date();
+	private Date dataAparitie;
 	
 	@OneToOne
 	@MapsId
@@ -54,7 +54,7 @@ public class JurnalRevista {
 		
 	}
 
-	public JurnalRevista(String titlu, int numar, int volum, int paginaStart, int paginaSfarsit, int issn, int isbn,
+	public JurnalRevista(String titlu, int numar, int volum, int paginaStart, int paginaSfarsit, String issn, String isbn,
 			Date dataAparitie) {
 		super();
 		this.titlu = titlu;
@@ -115,19 +115,19 @@ public class JurnalRevista {
 		this.paginaSfarsit = paginaSfarsit;
 	}
 
-	public int getIssn() {
+	public String getIssn() {
 		return issn;
 	}
 
-	public void setIssn(int issn) {
+	public void setIssn(String issn) {
 		this.issn = issn;
 	}
 
-	public int getIsbn() {
+	public String getIsbn() {
 		return isbn;
 	}
 
-	public void setIsbn(int isbn) {
+	public void setIsbn(String isbn) {
 		this.isbn = isbn;
 	}
 

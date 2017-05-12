@@ -26,7 +26,7 @@ public class Conferinta {
 	
 	@Column(name="data")
 	@Temporal(TemporalType.DATE)
-	private Date data = new Date();
+	private Date data;
 	
 	@OneToOne
 	@MapsId

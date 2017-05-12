@@ -202,3 +202,7 @@ footer .back-to-top a i:hover{
 	margin-left:20px;
 }
 
+.last-section, .edit-btn{
+	display:inline-block;
+}
+

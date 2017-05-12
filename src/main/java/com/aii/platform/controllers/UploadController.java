@@ -7,13 +7,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -41,9 +48,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.aii.platform.models.AppUser;
+import com.aii.platform.models.CarteCapitol;
+import com.aii.platform.models.CarteCompleta;
 import com.aii.platform.models.Tag;
 import com.aii.platform.models.TipArticol;
 import com.aii.platform.models.Coauthor;
+import com.aii.platform.models.Conferinta;
+import com.aii.platform.models.JurnalRevista;
 import com.aii.platform.models.UploadedArticle;
 import com.aii.platform.repository.AppUserRepository;
 import com.aii.platform.repository.TagRepository;
@@ -57,6 +68,7 @@ import com.aii.platform.service.CoauthorService;
 import com.aii.platform.service.ConferintaService;
 import com.aii.platform.service.JurnalRevistaService;
 import com.aii.platform.service.TagService;
+import com.aii.platform.service.TipArticolService;
 import com.aii.platform.service.UploadedArticleService;
 import com.aii.platform.utils.FileUtils;
 import com.aii.platform.utils.PDFBoxUtils;
@@ -97,6 +109,9 @@ public class UploadController {
 	private CoauthorService coauthorService;
 	
 	@Autowired
+	private TipArticolService tipArticolService;
+	
+	@Autowired
 	private CarteCapitolService carteCapitolService;
 	
 	@Autowired
@@ -117,6 +132,120 @@ public class UploadController {
 		
 		return tipArticol;
 		
+	}
+	
+	public Conferinta getConferinta(HttpServletRequest request) {
+		String numeConferinta = request.getParameter("nume-conferinta").replace("\"", "");
+		String locatieConferinta = request.getParameter("locatie-conferinta").replace("\"", "");;
+		String dataConferintaString = request.getParameter("data-conferinta").replace("\"", "");;
+		System.out.println("Nume conferinta" + numeConferinta);
+		System.out.println("Data conferinta String" + dataConferintaString);
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date dataConferinta = null;
+		try {
+			dataConferinta = format.parse(dataConferintaString);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//System.out.println("Data conferinta" + dataConferinta.toString());
+		Conferinta conferinta = new Conferinta(numeConferinta, locatieConferinta, dataConferinta);
+		return conferinta;
+	}
+	
+	public CarteCompleta getCarteCompleta(HttpServletRequest request) {
+		String editura = request.getParameter("editura-carte-completa").replace("\"", "");
+		String editie = request.getParameter("editie-carte-completa").replace("\"", "");
+		String anAparitieString = request.getParameter("an-aparitie-carte-completa").replace("\"", "");
+		String issn = request.getParameter("issn-carte-completa").replace("\"", "");
+		String isbn = request.getParameter("isbn-carte-completa").replace("\"", "");
+		int anAparitie = Integer.parseInt(anAparitieString);
+		
+		CarteCompleta carteCompleta = new CarteCompleta(editura, editie, isbn, issn, anAparitie);
+		return carteCompleta;
+		
+	}
+	
+	public CarteCapitol getCarteCapitol(HttpServletRequest request) {
+		String titluCarte = request.getParameter("titlu-carte-capitol").replace("\"", "");
+		String numeCapitol = request.getParameter("nume-capitol-carte").replace("\"", "");
+		String autoriCarte = request.getParameter("autori-capitol-carte");
+		String editoriCarte = request.getParameter("editori-capitol-carte");
+		
+		String[] autoriCarteArray = null;
+		if(autoriCarte!=null && autoriCarte.length() > 2) {
+			autoriCarteArray =  new Gson().fromJson(autoriCarte, String[].class);	
+		}
+		
+		String autoriArray2 = StringUtils.join(autoriCarteArray, ", ");
+		
+		System.out.println("Autori array 2:" + autoriArray2);
+		String joinedAutori = null;
+		for(String autor : autoriCarteArray) {
+			joinedAutori = String.join(",", autor);
+		}
+		
+		System.out.println("joinedAutori:" + joinedAutori);
+		
+		String[] editoriCarteArray = null;
+		if(editoriCarte!=null && editoriCarte.length() > 2) {
+			editoriCarteArray =  new Gson().fromJson(editoriCarte, String[].class);	
+		}
+		
+		String editoriArray2 = StringUtils.join(editoriCarteArray, ", ");
+		
+		String anAparitieString = request.getParameter("an-aparitie-capitol-carte").replace("\"", "");
+		String issn = request.getParameter("issn-capitol-carte").replace("\"", "");
+		String isbn = request.getParameter("isbn-capitol-carte").replace("\"", "");
+		String editura = request.getParameter("editura-capitol-carte").replace("\"", "");
+		String editie = request.getParameter("editie-carte-capitol").replace("\"", "");
+		String paginaInceputString = request.getParameter("pagina-inceput-carte-capitol").replace("\"", "");
+		String paginaSfarsitString = request.getParameter("pagina-sfarsit-carte-capitol").replace("\"", "");
+		
+		int anAparitie = Integer.parseInt(anAparitieString);
+		int paginaInceput = Integer.parseInt(paginaInceputString);
+		int paginaSfarsit = Integer.parseInt(paginaSfarsitString);
+		
+		System.out.println("Autori carte " + autoriCarte);
+		System.out.println("Editori carte " + editoriCarte);
+		
+		CarteCapitol carteCapitol = new CarteCapitol(titluCarte, autoriArray2,editoriArray2, numeCapitol,
+				paginaInceput, paginaSfarsit, anAparitie, editura, editie, isbn, issn);
+		
+		return carteCapitol;
+		
+		
+	}
+	
+	public JurnalRevista getJurnalRevista(HttpServletRequest request) {
+		String numeRevista = request.getParameter("nume-revista").replace("\"", "");
+		String numarRevistaString = request.getParameter("numar-revista").replace("\"", "");
+		String volumRevistaString = request.getParameter("volum-revista").replace("\"", "");
+		String dataAparitieRevistaString = request.getParameter("data-aparitie-revista").replace("\"", "");
+		String issn = request.getParameter("issn-revista").replace("\"", "");
+		String isbn = request.getParameter("isbn-revista").replace("\"", "");
+		String paginaInceput = request.getParameter("pagina-inceput-revista").replace("\"", "");
+		String paginaSfarsitString = request.getParameter("pagina-sfarsit-revista").replace("\"", "");
+		
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date dataAparitieRevista = null;
+		try {
+			dataAparitieRevista = format.parse(dataAparitieRevistaString);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		int numarRevista = Integer.parseInt(numarRevistaString);
+		int volumRevista = Integer.parseInt(volumRevistaString);
+		int paginaStart = Integer.parseInt(paginaInceput);
+		int paginaSfarsit = Integer.parseInt(paginaSfarsitString);
+		
+		JurnalRevista jurnalRevista = new JurnalRevista(numeRevista,numarRevista, volumRevista, paginaStart,
+				paginaSfarsit, issn, isbn, dataAparitieRevista);
+		
+		return jurnalRevista;
+			
 	}
 	
 	
@@ -202,7 +331,9 @@ public class UploadController {
     @RequestMapping(value="/upload", method =RequestMethod.POST) 
     @ResponseBody
     public ResponseEntity<?> uploadAnArticle(@RequestParam(value="title")String title,
-    		@RequestParam(value="file")MultipartFile file,
+    		@RequestParam(value="file")MultipartFile file, @RequestParam(value="abstract") String abstractSectionParam,
+    		@RequestParam(value="wos") String wosParam,
+    		@RequestParam(value="doi") String doiParam,
     		HttpServletRequest request) throws IOException {
     	
     	String token = request.getHeader("X-Auth-Token");
@@ -213,11 +344,16 @@ public class UploadController {
 		TipArticol tipArticol = this.getTipArticol(request);
 		System.out.println("Tip articol: "  + tipArticol.getDenumire());
 		
+		Long tipArticolId = tipArticol.getId();
+		
 		String titleToBeCompared = title.replace("\"", "");
 		String titleToBeSaved = title.replace("\"", "");
 		
 		String filename = file.getOriginalFilename();
 		String filenameWithoutExtension = filename.replaceAll(".pdf", "");
+		
+		String wos = request.getParameter("wos");
+		String doi = request.getParameter("doi");
 		
 		String abstractSection = request.getParameter("abstract");
 		System.out.println("Replaced filename: " + filenameWithoutExtension);
@@ -307,9 +443,12 @@ public class UploadController {
 	  		
 	  	} else {
 	  			
-	    UploadedArticle articleToUpload = new UploadedArticle(titleToBeSaved,filename, abstractSection);
+	    UploadedArticle articleToUpload = new UploadedArticle(titleToBeSaved,filename, abstractSection,wos,doi);
+	    TipArticol tipArticol2 = tipArticolService.getTipArticolById(tipArticolId);
 	    user.getUploadedArticles().add(articleToUpload);
-	    articleToUpload.setAppUser(user);   
+	    articleToUpload.setAppUser(user); 
+	    tipArticol2.addArticol(articleToUpload);
+	    articleToUpload.setTipArticol(tipArticol2);
 	    uploadedArticleService.saveUploadedArticle(articleToUpload); 
 	    
 	    Coauthor[] coauthorsArray = this.getCoauthors(request);
@@ -376,6 +515,34 @@ public class UploadController {
 	    
 	    if(coauthorsArray!=null || userTags!=null || coauthorsWithoutAccount!=null) {
 	    	uploadedArticleService.saveUploadedArticle(articleToUpload);
+	    }
+	    
+	    UploadedArticle recentlyUploadedArticle = uploadedArticleService.getArticleByTitle(titleToBeSaved);
+	    
+	    if(tipArticolId == 1L) {
+	    	CarteCompleta carteCompleta = this.getCarteCompleta(request);
+	    	carteCompleta.setUploadedArticle(recentlyUploadedArticle);
+	    	carteCompletaService.saveCarteCompleta(carteCompleta);
+	    }
+	    
+	    if(tipArticolId == 2L) {
+	    	CarteCapitol carteCapitol = this.getCarteCapitol(request);
+	    	carteCapitol.setUploadedArticle(articleToUpload);
+	    	carteCapitolService.saveCarteCapitol(carteCapitol);
+	    	System.out.println("Autori carte capitol" + carteCapitol.getAutoriCarte());
+	    }
+	    
+	    if(tipArticolId == 3L) {
+	    	Conferinta conferinta = this.getConferinta(request);
+	    	conferinta.setUploadedArticle(recentlyUploadedArticle);
+	    	conferintaService.saveConferinta(conferinta);
+	    }
+	    
+	    if(tipArticolId == 4L) {
+	    	JurnalRevista jurnalRevista = this.getJurnalRevista(request);
+	    	jurnalRevista.setUploadedArticle(recentlyUploadedArticle);
+	    	jurnalRevistaService.saveJurnalRevista(jurnalRevista);
+	    	
 	    }
 	    
 	    return new ResponseEntity<Response>(new Response("Article added"), new HttpHeaders(), HttpStatus.OK);

@@ -126,9 +126,21 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 		    $scope.showModal = false;
 	   };
 	   
-	   $scope.openModalCarte = function() {
-		   $scope.showModalCarte = true;
+	   $scope.openModalCarteTip1 = function() {
+		   $scope.showModalCarteTip1 = true;
 		   
+	   }
+	   
+	   $scope.openModalCarteTip2 = function() {
+		   $scope.showModalCarteTip2 = true;
+	   }
+	   
+	   $scope.openModalConferinta = function() {
+		   $scope.showModalConferinta = true;
+	   }
+	   
+	   $scope.openModalRevista = function () {
+		   $scope.showModalRevista = true;
 	   }
 	   
 	   $scope.getSelectedArticleType = function() {
@@ -149,8 +161,8 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 	   }
 	   
 	   $scope.okConferinta = function() {
-		   $scope.dataConferinta = new Date($scope.dataConferinta);
-		   $scope.dataConferinta = $filter('date')(Date.now(),'yyyy-MM-dd'); 
+		   $scope.dataConferintaAfisata = new Date($scope.dataConferinta);
+		   $scope.dataConferintaAfisata = $filter('date')($scope.dataConferintaAfisata,'yyyy-MM-dd'); 
 		   console.log("Data", $scope.dataConferinta);
 		   $scope.esteConferinta = true;
 		   $scope.showModalConferinta = false;
@@ -180,7 +192,7 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 	   
 	   $scope.okRevista = function() {
 		   $scope.dataAparitieRevista = new Date($scope.dataAparitieRevista);
-		   $scope.dataAparitieRevista = $filter('date')(Date.now(),'yyyy-MM-dd'); 
+		   $scope.dataAparitieRevista = $filter('date')($scope.dataAparitieRevista,'yyyy-MM-dd'); 
 		   $scope.esteRevista = true;   
 		   $scope.showModalRevista = false;
 	   }
@@ -203,19 +215,21 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 		fd.append('tags', angular.toJson($scope.tags,true));
 		fd.append('abstract', angular.toJson($scope.abstract,true));
 		fd.append('coauthors-without-account', angular.toJson($scope.coAuthorsWithoutAccount,true));
+		fd.append('doi', angular.toJson($scope.doi,true));
+		fd.append('wos', angular.toJson($scope.wos,true));
 		fd.append('article-type', angular.toJson($scope.articleType,true));
 		 switch ($scope.articleType.denumire) {
 		    case "Carte-versiune completa":
 		        fd.append('editura-carte-completa', angular.toJson($scope.edituraCarteCompleta,true));
 		        fd.append('editie-carte-completa', angular.toJson($scope.editieCarteCompleta, true));
-		        fd.append('an-aparitie-carte-completa', angular.toJson($scope.anAparitieCarteCompelta,true));
+		        fd.append('an-aparitie-carte-completa', angular.toJson($scope.anAparitieCarteCompleta,true));
 		        fd.append('issn-carte-completa', angular.toJson($scope.ISSNCarteCompleta, true));
 		        fd.append('isbn-carte-completa', angular.toJson($scope.ISBNCarteCompleta, true));        
 		        break;
 		    case "Conferinta":
 		    	fd.append('nume-conferinta', angular.toJson($scope.numeConferinta, true));
 		    	fd.append('locatie-conferinta', angular.toJson($scope.locatieConferinta,true));
-		    	fd.append('data-conferinta', angular.toJson($scope.dataConferinta, true));       
+		    	fd.append('data-conferinta', angular.toJson($scope.dataConferintaAfisata, true));       
 		        break;
 		    case "Jurnal/Revista":
 		        fd.append('nume-revista', angular.toJson($scope.numeRevista, true));
@@ -291,4 +305,16 @@ angular.module("app").directive('fileModel', ['$parse', function ($parse) {
 	        }
 	    };
 	}]);
+
+app.directive('enterDirective', function () {
+    return {
+        link: function (scope, element, attrs) {
+            $(element).keypress(function (e) {
+                if (e.keyCode == 13) {
+                    console.log("Enter pressed " + element.val())
+                }
+            });
+        }
+    }
+});
 

@@ -54,6 +54,7 @@ public class CarteCapitol {
 	@MapsId
 	private UploadedArticle uploadedArticle;
 	
+	
 	public CarteCapitol() {
 		
 	}

@@ -139,6 +139,15 @@ public class UploadedArticle {
 		this.abstractSection = abstractSection;
 	}
 	
+	public UploadedArticle(String title, String filename, String abstractSection, String wos, String doi) {
+		this.title = title;
+		this.filename = filename;
+		this.numberOfDownloads = 0;
+		this.abstractSection = abstractSection;
+		this.wos = wos;
+		this.doi = doi;
+	}
+	
 	public UploadedArticle(String title, String filename) {
 		this.title = title;
 		this.filename = filename;

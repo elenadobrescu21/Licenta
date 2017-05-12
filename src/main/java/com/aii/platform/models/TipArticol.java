@@ -59,6 +59,10 @@ public class TipArticol {
 		this.articole = articole;
 	}
 	
+	public void addArticol(UploadedArticle uploadedArticle) {
+		this.articole.add(uploadedArticle);
+	}
+	
 	
 	
 	
