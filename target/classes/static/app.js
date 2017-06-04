@@ -66,6 +66,11 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $location
         url: "/modal",
         templateUrl: "partials/modal.html"
     })
+    
+     .state('cautare', {
+        url: "/cautare",
+        templateUrl: "partials/queries.html"
+    })
      
    $httpProvider.interceptors.push('AuthInterceptor');
     //pentru # la rute

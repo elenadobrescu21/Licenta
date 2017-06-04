@@ -21,7 +21,27 @@ public class UploadedArticleDTO {
 	
 	private String[] tags;
 	
+	private Long idTipArticol;
+	
+	private String tipArticol;
+	
 	public UploadedArticleDTO () {
+		
+	}
+	
+	public UploadedArticleDTO(Long id, String titlu, String filepath,int numberOfDownloads, Date date, AppUserDTO owner,
+			List<AppUserDTO> coauthors, String[] tags, Long idTipArticol, String tipArticol) {
+		super();
+		this.id = id;
+		this.titlu = titlu;
+		this.filePath = filepath;
+		this.numberOfDownloads = numberOfDownloads;
+		this.uploadedOn = (Date) date;
+		this.owner = owner;
+		this.coauthors = coauthors;
+		this.tags = tags;
+		this.idTipArticol = idTipArticol;
+		this.tipArticol = tipArticol;
 		
 	}
 	
@@ -101,8 +121,22 @@ public class UploadedArticleDTO {
 	public void setTags(String[] tags) {
 		this.tags = tags;
 	}
+
+	public Long getIdTipArticol() {
+		return idTipArticol;
+	}
+
+	public void setIdTipArticol(Long idTipArticol) {
+		this.idTipArticol = idTipArticol;
+	}
+
+	public String getTipArticol() {
+		return tipArticol;
+	}
+
+	public void setTipArticol(String tipArticol) {
+		this.tipArticol = tipArticol;
+	}
 	
-	
-	
-	
+		
 }

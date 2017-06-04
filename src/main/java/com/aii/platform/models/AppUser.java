@@ -50,11 +50,13 @@ public class AppUser {
 	@Column(name="email", unique=true, nullable=false)
 	@NotNull
 	private String email;
-	
-	
+		
 	@Column(name="authorities")
 	@NotNull
 	private String authorities;
+	
+	@Column(name="pozitie")
+	private String pozitie;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy="appUser", orphanRemoval = true)
 	private List<UploadedArticle> uploadedArticles;
@@ -85,7 +87,7 @@ public class AppUser {
 	}
 	
 	public AppUser(String nume, String prenume, String username, String password, String email,
-			String authorities) {
+			String authorities, String pozitie) {
 		super();
 		this.nume = nume;
 		this.prenume = prenume;
@@ -93,6 +95,7 @@ public class AppUser {
 		this.password = password;
 		this.email = email;
 		this.authorities = authorities;
+		this.pozitie = pozitie;
 	}
 
 
@@ -197,6 +200,16 @@ public class AppUser {
 	public void addArticleInCollaboration(UploadedArticle uploadedArticle) {
 		this.coauthorArticles.add(uploadedArticle);
 	}
+
+	public String getPozitie() {
+		return pozitie;
+	}
+
+	public void setPozitie(String pozitie) {
+		this.pozitie = pozitie;
+	}
+	
+	
 	
 	
 	

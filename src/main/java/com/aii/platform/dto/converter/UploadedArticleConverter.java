@@ -11,9 +11,11 @@ import com.aii.platform.dto.AppUserDTO;
 import com.aii.platform.dto.UploadedArticleDTO;
 import com.aii.platform.models.AppUser;
 import com.aii.platform.models.Tag;
+import com.aii.platform.models.TipArticol;
 import com.aii.platform.models.UploadedArticle;
 import com.aii.platform.service.AppUserService;
 import com.aii.platform.service.TagService;
+import com.aii.platform.service.TipArticolService;
 import com.aii.platform.service.UploadedArticleService;
 
 @Component
@@ -27,6 +29,9 @@ public class UploadedArticleConverter {
 	
 	@Autowired
 	private TagService tagService;
+	
+	@Autowired
+	private TipArticolService tipArticolService;
 	
 	public List<UploadedArticleDTO> convertArticleListToDTO() {
 		List<UploadedArticle> allArticles = uploadedArticleService.getAllArticles();
@@ -52,6 +57,8 @@ public class UploadedArticleConverter {
 		List<AppUserDTO> coauthorsList = new ArrayList<AppUserDTO>();
 		String[] tags = new String[tagList.size()];
 		
+		TipArticol tipArticol = tipArticolService.getTipArticolByArticleId(articleId);
+		
 		int i = 0;
 		for(AppUser c: coauthors) {
 //			coauthorFullNames[i++] = c.getNume() + " " + c.getPrenume();
@@ -72,7 +79,9 @@ public class UploadedArticleConverter {
 				requestedUploadedArticle.getUploadedOn(),
 				ownerDTO,
 				coauthorsList,
-				tags);
+				tags,
+				tipArticol.getId(),
+				tipArticol.getDenumire());
 		
 		return uploadedArticleDTO;
 	}

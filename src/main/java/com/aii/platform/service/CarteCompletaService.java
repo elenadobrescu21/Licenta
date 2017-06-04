@@ -1,5 +1,7 @@
 package com.aii.platform.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,5 +21,11 @@ public class CarteCompletaService {
 	public CarteCompleta getCarteCompletaById(Long id) {
 		return carteCompletaRepository.findOne(id);
 	}
+	
+	public List<CarteCompleta> getCarteCompletaByYear(int year) {
+		return carteCompletaRepository.findByAnPublicare(year);
+	}
+	
+	
 
 }

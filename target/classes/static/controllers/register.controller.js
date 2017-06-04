@@ -7,7 +7,8 @@ angular.module("app").controller("RegisterController", function($scope, $http, $
 			  username: '',
 			  password: '',
 			  email: '',
-			  authorities:''
+			  authorities:'',
+			  pozitie:''
 			};
 	$scope.hasError = false;
 	$scope.errorMessage = "";
@@ -20,6 +21,7 @@ angular.module("app").controller("RegisterController", function($scope, $http, $
 	    newMember.password = $scope.fields.password;
 	    newMember.email = $scope.fields.email;
 	    newMember.authorities = "ROLE_USER";
+	    newMember.pozitie = $scope.fields.pozitie;
 	    
 	    console.log(newMember);
 	    

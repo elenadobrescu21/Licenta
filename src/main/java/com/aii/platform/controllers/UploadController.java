@@ -517,28 +517,29 @@ public class UploadController {
 	    	uploadedArticleService.saveUploadedArticle(articleToUpload);
 	    }
 	    
-	    UploadedArticle recentlyUploadedArticle = uploadedArticleService.getArticleByTitle(titleToBeSaved);
+	    List<UploadedArticle> articleByTitle = uploadedArticleService.getArticleByTitle(titleToBeSaved);
+	    UploadedArticle recentlyUploadedArticle = articleByTitle.get(0);
 	    
-	    if(tipArticolId == 1L) {
+	    if(tipArticolId == 1) {
 	    	CarteCompleta carteCompleta = this.getCarteCompleta(request);
 	    	carteCompleta.setUploadedArticle(recentlyUploadedArticle);
 	    	carteCompletaService.saveCarteCompleta(carteCompleta);
 	    }
 	    
-	    if(tipArticolId == 2L) {
+	    if(tipArticolId == 2) {
 	    	CarteCapitol carteCapitol = this.getCarteCapitol(request);
 	    	carteCapitol.setUploadedArticle(articleToUpload);
 	    	carteCapitolService.saveCarteCapitol(carteCapitol);
 	    	System.out.println("Autori carte capitol" + carteCapitol.getAutoriCarte());
 	    }
 	    
-	    if(tipArticolId == 3L) {
+	    if(tipArticolId == 3) {
 	    	Conferinta conferinta = this.getConferinta(request);
 	    	conferinta.setUploadedArticle(recentlyUploadedArticle);
 	    	conferintaService.saveConferinta(conferinta);
 	    }
 	    
-	    if(tipArticolId == 4L) {
+	    if(tipArticolId == 4) {
 	    	JurnalRevista jurnalRevista = this.getJurnalRevista(request);
 	    	jurnalRevista.setUploadedArticle(recentlyUploadedArticle);
 	    	jurnalRevistaService.saveJurnalRevista(jurnalRevista);

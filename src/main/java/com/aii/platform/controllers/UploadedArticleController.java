@@ -103,16 +103,16 @@ public class UploadedArticleController {
 	}
 	
 			
-		@RequestMapping(value="/article/{title}", method = RequestMethod.GET)
-		public ResponseEntity<?> getArticleByTitle(@PathVariable("title") String title) {
-			if(uploadedArticleService.getArticleByTitle(title)!=null) {
-				return new ResponseEntity<UploadedArticle> (uploadedArticleService.getArticleByTitle(title), new HttpHeaders(), HttpStatus.OK);
-				
-			} else{
-				return new ResponseEntity<Response>(new Response("File doesn't exist"), new HttpHeaders(), HttpStatus.NOT_FOUND);
-			}
-			
-		}
+//		@RequestMapping(value="/article/{title}", method = RequestMethod.GET)
+//		public ResponseEntity<?> getArticleByTitle(@PathVariable("title") String title) {
+//			if(uploadedArticleService.getArticleByTitle(title)!=null) {
+//				return new ResponseEntity<UploadedArticle> (uploadedArticleService.getArticleByTitle(title), new HttpHeaders(), HttpStatus.OK);
+//				
+//			} else{
+//				return new ResponseEntity<Response>(new Response("File doesn't exist"), new HttpHeaders(), HttpStatus.NOT_FOUND);
+//			}
+//			
+//		}
 		
 		@RequestMapping(value="/articleID/{id}", method = RequestMethod.GET)
 		public ResponseEntity<?> getArticleById(@PathVariable("id") Long id) {

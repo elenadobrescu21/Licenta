@@ -162,6 +162,25 @@ public class CarteCapitol {
 	public void setUploadedArticle(UploadedArticle uploadedArticle) {
 		this.uploadedArticle = uploadedArticle;
 	}
+
+	public String getEditura() {
+		return editura;
+	}
+
+	public void setEditura(String editura) {
+		this.editura = editura;
+	}
+
+	public String getEditie() {
+		return editie;
+	}
+
+	public void setEditie(String editie) {
+		this.editie = editie;
+	}
+	
+	
+	
 	
 	
 }

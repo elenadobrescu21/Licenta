@@ -1,0 +1,55 @@
+<div class="container">
+	<div class="card hovercard">
+        	<div class="card-background">
+          
+        	</div>
+        
+        	<div class="card-info"> <span class="card-title"> Cautare dupa autor</span>
+
+        	</div>
+    	</div>
+    	
+    	
+  <div ng-controller="QueryController" layout="column" ng-cloak>
+    	<h1 class="text-center"> Cautare articol </h1>
+    	
+    	<div>
+    	<form name="searchArticle">
+    	<h4>Tip articol</h4>
+    	  	
+  		<label class="checkbox-inline"><input type="radio" ng-model="checkbox.jurnal" value="">Jurnal/Revista</label>
+		
+  		<label class="checkbox-inline"><input type="radio" ng-model="checkbox.carteCapitol" value="">Carte-capitol</label>
+			
+  		<label class="checkbox-inline"><input type="radio" ng-model="checkbox.carteCompleta" value="">Carte completa</label>
+	
+  		<label class="checkbox-inline"><input type="radio" ng-model="checkbox.conferinta" value="">Conferinta</label>
+	
+   		<h4>Titlu</h4>
+   		<div class="form-group">
+	       <input style="width:300px;" type="text" id="title" name="title" ng-model="title">       
+	   </div>
+	   
+	   <h4>Autor</h4>
+	   <div class="form-group">
+	   	<input style="width:300px;" type="text" id="author" name="author" ng-model="author"> 
+	   </div>
+	   
+	   <h4>Cuvant cheie</h4>
+	   <div class="form-group">
+	   	<input style="width:300px;" type="text" id="tag" name="tag" ng-model="tag"> 
+	   </div>
+	   
+	    <h4>An</h4>
+	   <div class="form-group">
+	   	<input style="width:300px;" type="text" id="an" name="an" ng-model="an"> 
+	   </div>
+	   
+	   <button class="btn btn-default download-btn" ng-click="sendQuery()" type="button">Cautare</button>
+	   
+    	</form>
+    	</div>
+    	
+    	</div>
+
+</div>

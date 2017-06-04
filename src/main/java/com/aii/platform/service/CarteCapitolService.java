@@ -1,5 +1,7 @@
 package com.aii.platform.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,10 @@ public class CarteCapitolService {
 	
 	public CarteCapitol getCarteCapitolById(Long id) {
 		return carteCapitolRepository.findOne(id);
+	}
+	
+	public List<CarteCapitol> getCarteCapitolByYear(int year) {
+		return carteCapitolRepository.findByAnPublicare(year);
 	}
 	
 	

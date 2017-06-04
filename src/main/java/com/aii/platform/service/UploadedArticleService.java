@@ -73,9 +73,28 @@ public class UploadedArticleService {
 		return uploadedArticleRepository.findByCoauthorsId(appUserId);
 	}
 	
-	public UploadedArticle getArticleByTitle(String title) {
+	public List<UploadedArticle> getArticleByTitle(String title) {
 		return uploadedArticleRepository.findByTitle(title);
 	}
+	
+	public List<UploadedArticle> getArticlesByTipArticolId(Long id) {
+		return uploadedArticleRepository.findByTipArticolId(id);
+	}
+	
+	public List<UploadedArticle> getArticlesByAppUserNume(String nume) {
+		return uploadedArticleRepository.findByAppUserNume(nume);
+	}
+	
+	public List<UploadedArticle> getArticlesByOwnerNumePrenume(String nume, String prenume) {
+		return uploadedArticleRepository.findByOwnerNumePrenume(nume, prenume);
+	}
+	
+	public List<UploadedArticle> getArticlesByCoauthorNumePrenume(String nume, String prenume) {
+		return uploadedArticleRepository.findByCoauthorNumePrenume(nume, prenume);
+	}
+	
+	
+	
 	
 	
 }

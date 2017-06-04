@@ -22,13 +22,53 @@
 					<div class="tag" ng-repeat="tag in article.tags">{{tag}} </div>
 				</div>
 				
-					<button class="btn btn-default download-btn" ng-click="downloadArticle(article.id)" type="button"> Download</button>
+				<div ng-show="article.idTipArticol == 1">
+		    		<p> Editura:<i> {{article.editura}}</i> </p>
+		    		<p> Editie: <i> {{article.editie}}</i> </p>
+		    		<p> An aparitie: <i> {{article.anAparitie}}</i></p>
+		    		<p> ISBN: <i> {{article.isbn}}</i> </p>
+		    		<p> ISSN: <i> {{article.issn}}</i></p>
+	    		
+	    		</div>
+	    		
+	    		<div ng-show="article.idTipArticol == 2">
+	    			<p>Titlu carte: <i>{{article.titluCarte}} </i> </p>
+	    			<p>Autori: <i> {{article.autoriCarte}}</i> </p>
+	    			<p>Editori: <i> {{article.editoriCarte}}</i> </p>
+	    			<p>Nume capitol: <i> {{article.numeCapitol}}</i> </p>
+	    			<p>Pagini: <i> {{article.paginaInceput}} - {{article.paginaSfarsit}}</i> </p>
+	    			<p>Editura: <i> {{article.editura}} </i> </p>
+	    			<p>Editie: <i> {{article.editie}} </i> </p>
+	    			<p>An aparitie: <i> {{article.anPublicare}}</i> </p>
+	    			<p>ISBN: <i> {{article.isbn }}</i> </p>
+	    			<p>ISSN: <i> {{article.issn}} </i> </p>
+	    		
+	    		</div>
+	    		
+	    		<div ng-show="article.idTipArticol == 3">
+	    		<p> Acest articol a fost prezentat la urmatoarea conferinta </p>
+	    			<p>Nume: <i>{{article.nume}} </i></p>
+	    			<p>Data: <i> {{article.data}}</i> </p>
+	    			<p>Locatia: <i>{{article.locatie}}</i> </p>	
+	    		</div>
+	    		
+	    		<div ng-show="article.idTipArticol == 4">
+	    			<p>Nume jurnal/revista: <i> {{article.titluJurnal}}</i> </p>
+	    			<p>Numar: <i> {{article.numar}} </i> </p>
+	    			<p>Volum: <i> {{article.volum}} </i> </p>
+	    			<p>Data aparitie: <i> {{article.dataAparitie}}</i>
+	    			<p>Pagini: <i> {{article.paginaStart}} - {{article.paginaSfarsit}} </i> </p>
+	    			<p>ISBN: <i> {{article.isbn}}</i> </p>
+	    			<p>ISSN: <i> {{article.issn}} </i> </p>
+	    		    		
+	    		</div>
 				
-					<button type="button" class="btn btn-default favourite-btn">
+				<button class="btn btn-default download-btn" ng-click="downloadArticle(article.id)" type="button"> Download</button>
+				
+				<button type="button" class="btn btn-default favourite-btn">
   						<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Favourite
-	    			</button>
-				
-				
+	    		</button>
+	    						
 				</div>
 			
 			</div> <!-- end row -->
@@ -36,9 +76,7 @@
 			<div class="row">
 			
 			</div>
-		
-		
+			
 		</div>	
 	
-
 </section>

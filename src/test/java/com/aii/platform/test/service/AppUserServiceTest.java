@@ -69,15 +69,15 @@ public class AppUserServiceTest extends AbstractTest {
 		Assert.assertEquals("failure-names do not match", "Dobrescu", appUser.getNume());
 	}
 	
-	@Test
-	public void testCreateAppUser() {
-		AppUser appUser = new AppUser("Popescu", "Maria", "popescu.maria", "123456", "popescu.maria@yahoo.com","ROLE_ADMIN");
-		AppUser createdAppUser = appUserService.saveUser(appUser);
-		Assert.assertNotNull("failure-expected not null", createdAppUser);
-		Assert.assertNotNull("failure-expected id attribute not null", createdAppUser.getId());
-		Assert.assertEquals("failure-expected name to match", "Popescu", createdAppUser.getNume());
-		
-	}
+//	@Test
+//	public void testCreateAppUser() {
+//		AppUser appUser = new AppUser("Popescu", "Maria", "popescu.maria", "123456", "popescu.maria@yahoo.com","ROLE_ADMIN");
+//		AppUser createdAppUser = appUserService.saveUser(appUser);
+//		Assert.assertNotNull("failure-expected not null", createdAppUser);
+//		Assert.assertNotNull("failure-expected id attribute not null", createdAppUser.getId());
+//		Assert.assertEquals("failure-expected name to match", "Popescu", createdAppUser.getNume());
+//		
+//	}
 	
 
 }

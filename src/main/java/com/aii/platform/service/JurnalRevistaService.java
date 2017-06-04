@@ -1,5 +1,7 @@
 package com.aii.platform.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,10 @@ public class JurnalRevistaService {
 	
 	public JurnalRevista getJurnalRevistaById(Long id) {
 		return jurnalRevistaRepository.findOne(id);
+	}
+	
+	public List<JurnalRevista> getJurnalRevistaByYear(int year) {
+		return jurnalRevistaRepository.findByYear(year);
 	}
 	
 	

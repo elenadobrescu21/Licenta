@@ -1,5 +1,7 @@
 package com.aii.platform.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,9 @@ public class ConferintaService {
 		return conferintaRepository.findOne(id);
 	}
 	
+	public List<Conferinta> getConferintaByYear(int year) {
+		return conferintaRepository.findByYear(year);
+	}
 	
-
+	
 }

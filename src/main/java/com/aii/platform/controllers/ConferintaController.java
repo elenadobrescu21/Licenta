@@ -1,5 +1,7 @@
 package com.aii.platform.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,6 +36,12 @@ public class ConferintaController {
 		return new ResponseEntity<Response>(new Response("Conferinta has been added"), new HttpHeaders(), HttpStatus.OK);
 		
 	}
+	
+	@RequestMapping(value="/conferinta/an/{an}", method = RequestMethod.GET)
+	public ResponseEntity<List<Conferinta>> getConferintaByYear(@PathVariable("an")int year) {
+		return new ResponseEntity<List<Conferinta>>(conferintaService.getConferintaByYear(year),new HttpHeaders(), HttpStatus.OK);
+	}
+	
 	
 	@RequestMapping(value="/conferinta/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Conferinta> getConferintaById(@PathVariable("id") Long id) {

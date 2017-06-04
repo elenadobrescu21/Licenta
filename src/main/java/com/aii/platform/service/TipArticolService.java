@@ -21,4 +21,8 @@ public class TipArticolService {
 	public TipArticol getTipArticolById(Long id) {
 		return tipArticolRepository.findOne(id);
 	}
+	
+	public TipArticol getTipArticolByArticleId(Long id) {
+		return tipArticolRepository.findByArticoleUploadedArticleId(id);
+	}
 }

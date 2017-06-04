@@ -30,5 +30,10 @@ public class TipArticolController {
 		return new ResponseEntity<TipArticol>(tipArticolService.getTipArticolById(id), new HttpHeaders(), HttpStatus.OK);
 	}
 	
+	@RequestMapping(value="/tipArticol/articol/{id}", method = RequestMethod.GET)
+	public ResponseEntity<?> getAllTipArticolByArticleId(@PathVariable("id") Long id) {
+		return new ResponseEntity<TipArticol>(tipArticolService.getTipArticolByArticleId(id), new HttpHeaders(), HttpStatus.OK);
+	}
+	
 
 }
