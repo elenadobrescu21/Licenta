@@ -16,15 +16,16 @@
     	<div>
     	<form name="searchArticle">
     	<h4>Tip articol</h4>
-    	  	
-  		<label class="checkbox-inline"><input type="radio" ng-model="checkbox.jurnal" value="">Jurnal/Revista</label>
+    		  	
+  		<label class="checkbox-inline"><input type="radio" ng-model="radioInput" value="jurnal">Jurnal/Revista</label>
 		
-  		<label class="checkbox-inline"><input type="radio" ng-model="checkbox.carteCapitol" value="">Carte-capitol</label>
+  		<label class="checkbox-inline"><input type="radio" ng-model="radioInput" value="carte-capitol">Carte-capitol</label>
 			
-  		<label class="checkbox-inline"><input type="radio" ng-model="checkbox.carteCompleta" value="">Carte completa</label>
+  		<label class="checkbox-inline"><input type="radio" ng-model="radioInput" value="carte-completa">Carte completa</label>
 	
-  		<label class="checkbox-inline"><input type="radio" ng-model="checkbox.conferinta" value="">Conferinta</label>
+  		<label class="checkbox-inline"><input type="radio" ng-model="radioInput" value="conferinta">Conferinta</label>
 	
+	 	  
    		<h4>Titlu</h4>
    		<div class="form-group">
 	       <input style="width:300px;" type="text" id="title" name="title" ng-model="title">       

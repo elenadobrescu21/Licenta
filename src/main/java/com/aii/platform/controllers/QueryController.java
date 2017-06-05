@@ -18,6 +18,7 @@ import com.aii.platform.models.CarteCompleta;
 import com.aii.platform.models.Conferinta;
 import com.aii.platform.models.JurnalRevista;
 import com.aii.platform.models.UploadedArticle;
+import com.aii.platform.repository.UploadedArticleRepository;
 import com.aii.platform.response.Response;
 import com.aii.platform.service.AppUserService;
 import com.aii.platform.service.CarteCapitolService;
@@ -55,112 +56,372 @@ public class QueryController {
 	@Autowired
 	private UploadedArticleService uploadedArticleService;
 	
+	@Autowired
+	private UploadedArticleRepository uploadedArticleRepository;
 	
-	public List<UploadedArticle> getArticoleCarteCompleta() {
-		return uploadedArticleService.getArticlesByTipArticolId(1L);
-	}
-	
-	public List<UploadedArticle> getArticoleCarteCapitol() {
-		return uploadedArticleService.getArticlesByTipArticolId(2L);
-	}
-	
-	public List<UploadedArticle> getArticoleConferinta() {
-		return uploadedArticleService.getArticlesByTipArticolId(3L);
-	}
-	
-	public List<UploadedArticle> getArticoleJurnalRevista() {
-		return uploadedArticleService.getArticlesByTipArticolId(4L);
-	}
-	
-	public List<UploadedArticle> getArticoleByTitlu(String title) {
-		return uploadedArticleService.getArticleByTitle(title);
-	}
-	
-	public List<UploadedArticle> getArticoleByTag(String tag) {
-		return uploadedArticleService.getAllArticlesByDenumireTag(tag);
-	}
-	
-	public List<Conferinta> getConferintaByYear(int year) {
-		return conferintaService.getConferintaByYear(year);
-	}
-	
-	public List<JurnalRevista> getJurnalRevistaByYear(int year) {
-		return jurnalRevistaService.getJurnalRevistaByYear(year);
-	}
-	
-	public List<CarteCapitol> getCarteCapitolByYear(int year) {
-		return carteCapitolService.getCarteCapitolByYear(year);
-	}
-	
-	public List<CarteCompleta> getCarteCompletaByYear(int year) {
-		return carteCompletaService.getCarteCompletaByYear(year);
-	}
-	
-	public List<UploadedArticle> getArticlesByOwnerFullname(String nume, String prenume) {
-		return uploadedArticleService.getArticlesByOwnerNumePrenume(nume, prenume);
-	}
-	
-	public List<UploadedArticle> getArticlesByCoauthorFullname(String nume, String prenume) {
-		return uploadedArticleService.getArticlesByCoauthorNumePrenume(nume, prenume);
-	}
 	
  	 @RequestMapping(value="/query", method =RequestMethod.POST)
 	 public ResponseEntity<?> searchArticle(HttpServletRequest request) {
 		 
-		 String jurnal = request.getParameter("checkbox-jurnal");
-		 String carteCapitol = request.getParameter("checkbox-carte-capitol");
-		 String carteCompleta = request.getParameter("checkbox-carte-completa");
-		 String conferinta = request.getParameter("checkbox-conferinta");
+		 String articleType = request.getParameter("article-type").replace("\"", "");
 		 
-		 String title = request.getParameter("title").replace("\"", "");;
+		 String title = request.getParameter("title").replace("\"", "");
 		 String author = request.getParameter("author").replace("\"", "");;
 		 String tag = request.getParameter("tag").replace("\"", "");;
 		 String an = request.getParameter("an").replace("\"", "");
 		 
-		 if(jurnal.equals("true")) {
-			 List<UploadedArticle> jurnale = this.getArticoleJurnalRevista();
-			 List<Long> jurnaleIds = new ArrayList<Long>();
-			 for(UploadedArticle j : jurnale) {
-				 jurnaleIds.add(j.getUploadedArticleId());
-			 }
+		 System.out.println("Article type: "+ articleType);
+		 
+		 System.out.println("title: " + title);
+		 System.out.println("author:" + author);
+		 System.out.println("tag: " + tag);
+		 System.out.println("an: " + an);
+		 
+		 String nume = "";
+		 String prenume = "";
+		 
+		 if(!author.equals("undefined")) {
+			 String[] splited = author.split(" ");
+			 nume = splited[0];
+			 prenume = splited[0];
+		 }
+		 
+		 int year = 0;
+		 if(!an.equals("undefined")) {
+			 year = Integer.parseInt(an);
+		 }
+		 
+		 //cautare dupa tip de articol
+		 
+		 if(articleType.equals("carte-completa") && title.equals("undefined") && 
+				 tag.equals("undefined") && author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleService.getArticlesByTipArticolId(1L), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("carte-capitol") && title.equals("undefined") && 
+				 tag.equals("undefined") && author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleService.getArticlesByTipArticolId(2L), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("conferinta") && title.equals("undefined") && 
+				 tag.equals("undefined") && author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleService.getArticlesByTipArticolId(3L), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("jurnal") && title.equals("undefined") && 
+				 tag.equals("undefined") && author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleService.getArticlesByTipArticolId(4L), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 //cautare dupa tip si titlu
+		 if(articleType.equals("carte-completa") && !title.equals("undefined") && 
+				 tag.equals("undefined") && author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByArticleTypeAndTitle(1L, title), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("carte-capitol") && !title.equals("undefined") && 
+				 tag.equals("undefined") && author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByArticleTypeAndTitle(2L, title), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("conferinta") && !title.equals("undefined") && 
+				 tag.equals("undefined") && author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByArticleTypeAndTitle(3L, title), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("jurnal") && !title.equals("undefined") && 
+				 tag.equals("undefined") && author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByArticleTypeAndTitle(4L, title), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 //cautare dupa tip si tag
+		 if(articleType.equals("carte-completa") && title.equals("undefined") && 
+				 !tag.equals("undefined") && author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByTipArticolAndTag(1L, tag), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("carte-capitol") && title.equals("undefined") && 
+				 !tag.equals("undefined") && author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByTipArticolAndTag(2L, tag), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("conferinta") && title.equals("undefined") && 
+				!tag.equals("undefined") && author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByTipArticolAndTag(3L, tag), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("jurnal") && title.equals("undefined") && 
+				 !tag.equals("undefined") && author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByTipArticolAndTag(4L, tag), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 //cautare dupa tip+autor
+		 
+		 if(articleType.equals("carte-completa") && title.equals("undefined") && 
+				 tag.equals("undefined") && !author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByTipArticolOwnerAutor(1L, nume, prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("carte-capitol") && title.equals("undefined") && 
+				 tag.equals("undefined") && !author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByTipArticolOwnerAutor(2L, nume, prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("conferinta") && title.equals("undefined") && 
+				tag.equals("undefined") && !author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByTipArticolOwnerAutor(3L, nume, prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("jurnal") && title.equals("undefined") && 
+				 tag.equals("undefined") && !author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByTipArticolOwnerAutor(4L, nume, prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 //cautare dupa tip si an
+		 
+		 if(articleType.equals("carte-completa") && title.equals("undefined") && 
+				 tag.equals("undefined") && author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findCarteCompletaByYear(year), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("carte-capitol") && title.equals("undefined") && 
+				 tag.equals("undefined") && author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findCarteCapitolByYear(year), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("conferinta") && title.equals("undefined") && 
+				tag.equals("undefined") && author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findConferintaByYear(year), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("jurnal") && title.equals("undefined") && 
+				 tag.equals("undefined") && author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findJurnalRevistaByYear(year), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 //cautare dupa tip, titlu si tag
+		 
+		 if(articleType.equals("carte-completa") && !title.equals("undefined") && 
+				 !tag.equals("undefined") && author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByTagAndTitle(1L, title, tag), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("carte-capitol") && !title.equals("undefined") && 
+				 !tag.equals("undefined") && author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByTagAndTitle(2L, title, tag), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("conferinta") && !title.equals("undefined") && 
+				!tag.equals("undefined") && author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByTagAndTitle(3L, title, tag), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("jurnal") && !title.equals("undefined") && 
+				 !tag.equals("undefined") && author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByTagAndTitle(4L, title, tag), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 //cautare dupa titlu si an
+		 
+		 if(articleType.equals("carte-completa") && !title.equals("undefined") && 
+				 tag.equals("undefined") && author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findCarteCompletaByTitleAndYear(year, title), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("carte-capitol") && !title.equals("undefined") && 
+				 tag.equals("undefined") && author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findCarteCapitolByTitleAndYear(year,title), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("conferinta") && !title.equals("undefined") && 
+				tag.equals("undefined") && author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findConferintaByTitleAndYear(year,title), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("jurnal") && !title.equals("undefined") && 
+				 tag.equals("undefined") && author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findJurnalRevistaByTitleAndYear(year, title), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 //cautare dupa titlu si autor
+		 
+		 if(articleType.equals("carte-completa") && !title.equals("undefined") && 
+				 tag.equals("undefined") && author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByTitleAndAuthor(1L, title, nume, prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("carte-capitol") && !title.equals("undefined") && 
+				 tag.equals("undefined") && !author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByTitleAndAuthor(2L, title, nume, prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("conferinta") && !title.equals("undefined") && 
+				tag.equals("undefined") && !author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByTitleAndAuthor(3L, title, nume, prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("jurnal") && !title.equals("undefined") && 
+				 tag.equals("undefined") && !author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByTitleAndAuthor(4L, title, nume, prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 //cautare dupa  tag si autor
+		 
+		 if(articleType.equals("carte-completa") && title.equals("undefined") && 
+				 !tag.equals("undefined") && !author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByTipArticolAndTagAndAuthor(1L, tag, nume, prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("carte-capitol") && title.equals("undefined") && 
+				 !tag.equals("undefined") && !author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByTipArticolAndTagAndAuthor(2L, tag, nume, prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("conferinta") && title.equals("undefined") && 
+				!tag.equals("undefined") && !author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByTipArticolAndTagAndAuthor(3L, tag, nume, prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("jurnal") && title.equals("undefined") && 
+				 !tag.equals("undefined") && !author.equals("undefined") && an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findByTipArticolAndTagAndAuthor(4L, tag, nume, prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 //cautare dupa tag + an
+		 
+		 if(articleType.equals("carte-completa") && title.equals("undefined") && 
+				 !tag.equals("undefined") && author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findCarteCompletaByYearAndTag(year, tag), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("carte-capitol") && title.equals("undefined") && 
+				 !tag.equals("undefined") && author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findCarteCapitolByYearAndTag(year,tag), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("conferinta") && title.equals("undefined") && 
+				!tag.equals("undefined") && author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findConferintaByYearAndTag(year,tag), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("jurnal") && title.equals("undefined") && 
+				 !tag.equals("undefined") && author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findJurnalRevistaByYearAndTag(year, tag), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 //cautare dupa autor si an
+		 
+		 if(articleType.equals("carte-completa") && title.equals("undefined") && 
+				 tag.equals("undefined") && !author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findCarteCompletaByYearAndAutorOwner(year, nume, prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("carte-capitol") && title.equals("undefined") && 
+				 tag.equals("undefined") && !author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findCarteCapitolByYearAndAutorOwner(year, nume,prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("conferinta") && title.equals("undefined") && 
+				!tag.equals("undefined") && !author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findConferintaByYearAndAutorOwner(year,nume,prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("jurnal") && title.equals("undefined") && 
+				 !tag.equals("undefined") && !author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findJurnalRevistaByYearAndAutorOwner(year,nume,prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 //cautare dupa titlu + tag + an
+		 
+		 if(articleType.equals("carte-completa") && !title.equals("undefined") && 
+				 !tag.equals("undefined") && author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findCarteCompletaByTitleTagAndYear(year, 1L, tag, title), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("carte-capitol") && !title.equals("undefined") && 
+				 !tag.equals("undefined") && author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findCarteCapitolByTitleTagAndYear(year,2L, tag, title), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("conferinta") && !title.equals("undefined") && 
+				!tag.equals("undefined") && author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findConferintaByTitleTagAndYear(year,3L, tag, title), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("jurnal") && !title.equals("undefined") && 
+				 !tag.equals("undefined") && author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findJurnalRevistaByTitleTagAndYear(year, 4L, tag, title), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 //cautare dupa titlu, an, autor
+		 
+		 if(articleType.equals("carte-completa") && !title.equals("undefined") && 
+				 tag.equals("undefined") && !author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findCarteCompletaByTitleYearAndAuthor(year, 1L, title, nume, prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("carte-capitol") && !title.equals("undefined") && 
+				 tag.equals("undefined") && !author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findCarteCapitolByTitleYearAndAuthor(year, 2L, title, nume, prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("conferinta") && !title.equals("undefined") && 
+				tag.equals("undefined") && !author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findConferintaByTitleYearAndAuthor(year,3L, title, nume, prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("jurnal") && !title.equals("undefined") && 
+				 tag.equals("undefined") && !author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findJurnalRevistaByTitleYearAndAuthor(year, 4L, title, nume,prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 //cautare dupa tag, an, autor
+		 
+		 if(articleType.equals("carte-completa") && title.equals("undefined") && 
+				 !tag.equals("undefined") && !author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findCarteCompletaByTagYearAuthor(year, 1L, tag, nume, prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("carte-capitol") && title.equals("undefined") && 
+				 !tag.equals("undefined") && !author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findCarteCapitolByTagYearAuthor(year,2L, tag, nume,prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("conferinta") && title.equals("undefined") && 
+				!tag.equals("undefined") && !author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findConferintaTagYearAuthor(year, 3L, tag, nume, prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("jurnal") && title.equals("undefined") && 
+				 !tag.equals("undefined") && !author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findJurnalRevistaByTagYearAuthor(year, 4L, tag,nume,prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+	
+		 //cautare dupa toate criteriile
+		 
+		 if(articleType.equals("carte-completa") && !title.equals("undefined") && 
+				 !tag.equals("undefined") && !author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findCarteCompletaByAllCriteria(year, 1L, tag, title, nume, prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("carte-capitol") && !title.equals("undefined") && 
+				 !tag.equals("undefined") && !author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findCarteCapitolByAllCriteria(year, 2L, tag, title, nume, prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("conferinta") && !title.equals("undefined") && 
+				!tag.equals("undefined") && !author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findCarteCapitolByAllCriteria(year, 3L, tag, title, nume, prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
+		 if(articleType.equals("jurnal") && title.equals("undefined") && 
+				 !tag.equals("undefined") && !author.equals("undefined") && !an.equals("undefined")) {
+			 return new ResponseEntity<List<UploadedArticle>>(uploadedArticleRepository.findJurnalRevistaByAllCriteria(year, 4l, tag, title, nume, prenume), new HttpHeaders(), HttpStatus.OK);
+		 }
+		 
 			 
-		 }
-		 
-		 if(carteCapitol.equals("true")) {
-			 List<UploadedArticle> carteCapitolList = this.getArticoleCarteCapitol();
-			 List<Long> carteCapitolIds = new ArrayList<Long>();
-			 for(UploadedArticle ca : carteCapitolList) {
-				 carteCapitolIds.add(ca.getUploadedArticleId());
-			 }
-		 }
-		 
-		 if(carteCompleta.equals("true")) {
-			 List<UploadedArticle> carteCompletaList = this.getArticoleCarteCompleta();
-			 List<Long> carteCompletaIds = new ArrayList<Long>();
-			 for(UploadedArticle c: carteCompletaList ) {
-				 carteCompletaIds.add(c.getUploadedArticleId());
-			 }
-		 }
-		 
-		 if(conferinta.equals("true")) {
-			 List<UploadedArticle> confs = this.getArticoleConferinta();
-			 List<Long> confsIds = new ArrayList<Long>();
-			 for(UploadedArticle cc: confs) {
-				 confsIds.add(cc.getUploadedArticleId());
-			 }
-		 }
-		 
-//		 System.out.println("Jurnal: " + jurnal);
-//		 System.out.println("Carte capitol: " + carteCapitol);
-//		 System.out.println("Carte completa: " + carteCompleta);
-//		 System.out.println("Conferinta: " + conferinta);
-//		 System.out.println("title: " + title);
-//		 System.out.println("author:" + author);
-//		 System.out.println("tag: " + tag);
-//		 System.out.println("an: " + an);
-		 
-		 
-		 return new ResponseEntity<Response>(new Response("Succes response"), new HttpHeaders(), HttpStatus.OK);
+		 return new ResponseEntity<Response>(new Response("Nu au fost gasite articole"), new HttpHeaders(), HttpStatus.NOT_FOUND);
 		 
 	 }
 
