@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.aii.platform.models.UploadedArticle;
+import com.aii.platform.repository.AppUserRepository;
 import com.aii.platform.repository.UploadedArticleRepository;
 import com.aii.platform.response.Response;
 
@@ -19,6 +20,9 @@ public class UploadedArticleTestController {
 	
 	@Autowired
 	private UploadedArticleRepository uploadedArticleRepository;
+	
+	@Autowired
+	private AppUserRepository appUserRepository;
 	
 	@RequestMapping(value="/test/findByArticleTypeAndTitle", method=RequestMethod.GET)
 	public ResponseEntity<?> testOne() {
@@ -39,8 +43,15 @@ public class UploadedArticleTestController {
 		
 	}
 	
+	@RequestMapping(value="/test/selectNumePrenume", method=RequestMethod.GET)
+	public ResponseEntity<?> testThree() {
 	
-//	@RequestMapping(value="/test/findConferintaByYear", method=RequestMethod.GET)
+		return new ResponseEntity<List<?>>(appUserRepository.findAllByNumePrenume(), new HttpHeaders(), HttpStatus.OK);
+		
+	}
+	
+	
+//	@RequestMapping(value="/test/findConferintaB", method=RequestMethod.GET)
 //	public ResponseEntity<?> testThree() {		
 //		int year = 2017;
 //		List<UploadedArticle> result = uploadedArticleRepository.findConferintaByYear(2017);

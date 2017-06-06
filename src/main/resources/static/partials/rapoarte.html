@@ -1,0 +1,158 @@
+<div class="container" ng-controller="RapoarteController">
+<div class="col-md-12">
+    <div class="card hovercard">
+        <div class="card-background">
+           <!--  <img class="card-bkimg" alt="" src="pictures/constellation.png"> -->
+            <!-- http://lorempixel.com/850/280/people/9/ -->
+        </div>
+        <div class="useravatar">
+           <!--  <img alt="" src="http://lorempixel.com/100/100/people/9/"> -->
+        </div>
+        <div class="card-info"> <span class="card-title"> Rapoarte</span>
+
+        </div>
+    </div>
+    <div class="btn-pref btn-group btn-group-justified btn-group-lg" role="group" aria-label="...">
+        
+        <div class="btn-group" role="group">
+            <button type="button" id="stars" class="btn btn-primary" href="#tab1" data-toggle="tab"><span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+                <div class="hidden-xs">Rapoarte per utilizator</div>
+            </button>
+        </div>
+        
+        <div class="btn-group" role="group">
+            <button type="button" id="favorites" class="btn btn-default" href="#tab2" data-toggle="tab"><span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                <div class="hidden-xs">Rapoarte per grup de utilizatori</div>
+            </button>
+        </div>
+        
+    </div>
+
+   <div class="well">
+      <div class="tab-content">
+        <div class="tab-pane fade in active" id="tab1">
+          <div class="articole-incarcate">
+         	<h2 class="text-center">Rapoarte per utilizator</h2>
+         	<br>
+         	<div class="row">
+			     <h3 class="text-center"> 1.Utilizatorul cu cele mai multe articole incarcate</h3> 
+			     <i> <h4 class="text-center"> {{userWithMostArticles.fullname}}-{{userWithMostArticles.numberOfUploadedArticles}} articole </h4> </i>
+			     
+			     <h3 class="text-center"> 2.Utilizatorul cu cele mai multe articole descarcate </h3>
+			     <i> <h4 class="text-center"> {{userWithMostArticles.fullname}}-{{userWithMostArticles.totalNumberOfDownloads}} articole descarcate </h4> </i>
+			     
+			     <form class="form-inline">
+			     <h3 class="text-center">3.Utilizatorul cu cele mai multe articole de un anumit tip </h3>
+			     
+			     <select class="selectpicker" ng-options="a.denumire for a in tipArticole" 
+   					ng-model="articleType" ng-change="getSelectedArticleType()" required></select> 
+   					<i> <h4 class="text-center"> {{topUserByArticleType.nume}} {{topUserByArticleType.prenume}} </h4></i>
+   				</form>
+   				
+   				<form class="form-inline">
+   					<h3 class="text-center">4. Utilizatorul cu cele mai multe articole incarcate intr-un an</h3>
+   					<input type="text" id="an" name="an" ng-model="an">
+   					<button type="button" ng-click="getTopUserByYear()">Cauta</button>
+	
+   				</form>
+   				<i> <h4 class="text-center"> {{topUserByYear.nume}} {{topUserByYear.prenume}} </h4></i>
+			</div> 
+				      
+          </div>
+          
+        </div>
+        <div class="tab-pane fade in" id="tab2">
+           <div class="articole-incarcate">
+           <h2 class="text-center">Rapoarte per grup de utilizatori</h2>
+         	<br>
+     <div class="row">
+            
+          <h3 class="text-center"> Sortare utilizatori in functie de: </h3>
+            <select name="singleSelect" ng-model="data.singleSelect" ng-change="sortUsersBy()">
+     		 	<option value="1">Sortare in functie de articolele incarcate</option>
+      		 	<option value="2">Sortate in functie de articolele descarcate</option>
+   			 
+   			 </select><br>
+   			 
+   	<div class="table-result-articles" ng-show="showTableWithResultsArticles">
+   			 
+   		<table class="table table-bordered">
+	  				<tr class="info">
+        				<th class="text-center">Nr </th>
+        				<th class="text-center">Nume</th>
+       					<th class="text-center">Total articole incarcate</th>
+     				</tr>
+ 
+	  		 <tr ng-repeat="item in topUsersByNumberOfArticles">
+        			<td>{{ topUsersByNumberOfArticles.indexOf(item) + 1}}</td>
+        			<td>{{ item.fullname}}</td>		
+					<td>{{item.numberOfUploadedArticles}}</td>
+      		</tr>
+	 	  
+	 	</table>
+ 		 
+   	 </div>
+   	<div class="table-result-articles" ng-show="showTableWithResultsDownloads">
+   			 
+   		<table class="table table-bordered">
+	  				<tr class="info">
+        				<th class="text-center">Nr </th>
+        				<th class="text-center">Nume</th>
+       					<th class="text-center">Total articole descarcate</th>
+     				</tr>
+ 
+	  		 <tr ng-repeat="item in topUsersByNumberOfDownloads">
+        			<td>{{ topUsersByNumberOfDownloads.indexOf(item) +1}} </td>
+        			<td>{{ item.fullname}}</td>		
+					<td>{{item.totalNumberOfDownloads}}</td>
+      		</tr>
+	 	  
+	 	</table>
+ 		 
+   	 </div>
+   	 
+   	 <div>
+	   	 <h3 class="text-center">Vizualizare utilizatori ce au incarcat articole de tip:</h3>
+	   	 <select name="selectArticleType" ng-model="selectArticleType" ng-change="sortUsersByArticleType()">
+	     	<option value="1">Carte completa</option>
+	      	<option value="2">Carte-capitol</option>
+	      	<option value="3">Conferinta </option>
+	      	<option value="4">Jurnal/Revista </option>
+	   			 
+	   	</select><br>
+	   	
+	  <div class="table-result-articles" ng-show="showTableWithUsersByArticleType">
+   			 
+   		<table class="table table-bordered">
+	  				<tr class="info">
+        				<th class="text-center">Nr </th>
+        				<th class="text-center">Nume</th>
+  
+     				</tr>
+ 
+	  		 <tr ng-repeat="item in usersByArticleType">
+        			<td>{{ topUsersByNumberOfDownloads.indexOf(item) +1}} </td>
+        			<td>{{ item.nume}}  {{item.prenume}}</td>		
+      		</tr>
+	 	  
+	 	</table>
+ 		 
+   	 </div>
+	   	
+	   	
+   	 
+   	 
+   	 </div>
+   			
+		  
+			</div> 	
+			      
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    
+    </div>
+            
+  </div>  

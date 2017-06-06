@@ -24,7 +24,25 @@ public interface AppUserRepository extends JpaRepository<AppUser,Long>{
 	@Query("select a from appUser a join a.uploadedArticles u where (u.uploadedArticleId=:articleId)")
 	public AppUser findByArticleId(@Param("articleId") Long articleId);
 	
+	@Query("select a from appUser a join a.uploadedArticles u where u.tipArticol.id=1")
+	public List<AppUser> findByCarteCompleta();
+	
+	@Query("select a from appUser a join a.uploadedArticles u where u.tipArticol.id=2")
+	public List<AppUser> findByCarteCapitol();
+		
+	@Query("select a from appUser a join a.uploadedArticles u where u.tipArticol.id=3")
+	public List<AppUser> findByConferinta();
+	
+	@Query("select a from appUser a join a.uploadedArticles u where u.tipArticol=4")
+	public List<AppUser> findByJurnalRevista();
+	
+	@Query("select a from appUser a join a.uploadedArticles u where u.tipArticol.id=:id")
+	public List<AppUser> findByTipArticol(@Param("id")Long id);
+	
+	@Query("select a.nume, a.prenume from appUser a")
+	public List<?> findAllByNumePrenume();
 	
 	
+
 
 }

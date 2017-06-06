@@ -1,5 +1,9 @@
-angular.module("app").controller("QueryController", function($scope, $http) {
+angular.module("app").controller("QueryController", function($scope, $http, $state) {
 	
+	
+	$scope.articles = [];
+	$scope.showResults = false;
+	//$scope.hasResults = true;
 	
 	$scope.sendQuery = function () {
 		console.log("selected value: " + $scope.radioInput);
@@ -8,6 +12,17 @@ angular.module("app").controller("QueryController", function($scope, $http) {
 		console.log("author" + $scope.author);
 		console.log("tag" + $scope.tag);
 		console.log("an" + $scope.an);
+		
+		 $scope.ok = function() {
+			  $state.reload();
+			  $scope.showResults = false;
+			    
+		   };
+
+		   $scope.cancel = function() {
+			    //$state.reload();
+			    $scope.showResults = false;
+		   };
 		
 		var uploadUrl = "http://localhost:8080/query";
 		var fd = new FormData();
@@ -24,6 +39,13 @@ angular.module("app").controller("QueryController", function($scope, $http) {
 			}
 			}).then(function successCallback(response) {
 			    console.log(response.data);
+			    $scope.showResults = true;
+			    $scope.articles = response.data;
+			    if(response.status == 200) {
+			    	$scope.hasResults = true;
+			    } else {
+			    	$scope.hasResults = false;
+			    }
 			    console.log(response.status);
 			  }, function errorCallback(response) {
 			    // called asynchronously if an error occurs

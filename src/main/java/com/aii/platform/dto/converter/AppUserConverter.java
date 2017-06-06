@@ -40,7 +40,7 @@ public class AppUserConverter {
 	public AppUserDTO convertToDTOByAppUserId(Long appUserId) {
 		AppUser appUser = appUserService.getAppUserById(appUserId);
 		String fullName = appUser.getNume() + " " + appUser.getPrenume();
-		AppUserDTO appUserDTO = new AppUserDTO(appUser.getId(),fullName, appUser.getUsername());
+		AppUserDTO appUserDTO = new AppUserDTO(appUser.getId(),fullName, appUser.getUsername(), appUser.getUploadedArticles());
 		return appUserDTO;
 		
 	}

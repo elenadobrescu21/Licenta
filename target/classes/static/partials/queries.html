@@ -4,18 +4,18 @@
           
         	</div>
         
-        	<div class="card-info"> <span class="card-title"> Cautare dupa autor</span>
+        	<div class="card-info"> <span class="card-title"> Cautare </span>
 
         	</div>
     	</div>
     	
     	
-  <div ng-controller="QueryController" layout="column" ng-cloak>
+  <div ng-controller="QueryController" class="query-div">
     	<h1 class="text-center"> Cautare articol </h1>
-    	
-    	<div>
+    	<div class="row query-section">
+    	<div class="col-md-6">
     	<form name="searchArticle">
-    	<h4>Tip articol</h4>
+    	<h5>Tip articol</h5>
     		  	
   		<label class="checkbox-inline"><input type="radio" ng-model="radioInput" value="jurnal">Jurnal/Revista</label>
 		
@@ -26,31 +26,82 @@
   		<label class="checkbox-inline"><input type="radio" ng-model="radioInput" value="conferinta">Conferinta</label>
 	
 	 	  
-   		<h4>Titlu</h4>
+   		<h5>Titlu</h5>
    		<div class="form-group">
 	       <input style="width:300px;" type="text" id="title" name="title" ng-model="title">       
 	   </div>
 	   
-	   <h4>Autor</h4>
+	   <h5>Autor(se va completa numele, apoi prenumele)</h4>
 	   <div class="form-group">
-	   	<input style="width:300px;" type="text" id="author" name="author" ng-model="author"> 
+	   	<input style="width:300px;" class="query-input" type="text" id="author" name="author" ng-model="author"> 
 	   </div>
 	   
-	   <h4>Cuvant cheie</h4>
+	   <h5>Cuvant cheie</h5>
 	   <div class="form-group">
-	   	<input style="width:300px;" type="text" id="tag" name="tag" ng-model="tag"> 
+	   	<input style="width:300px;" class="query-input" type="text" id="tag" name="tag" ng-model="tag"> 
 	   </div>
 	   
-	    <h4>An</h4>
+	    <h5>An</h5>
 	   <div class="form-group">
-	   	<input style="width:300px;" type="text" id="an" name="an" ng-model="an"> 
+	   	<input style="width:300px;" class="query-input" type="text" id="an" name="an" ng-model="an"> 
 	   </div>
 	   
-	   <button class="btn btn-default download-btn" ng-click="sendQuery()" type="button">Cautare</button>
+	   <button class="btn btn-default" ng-click="sendQuery()" type="button">Cautare</button>
 	   
     	</form>
     	</div>
     	
+    	<div class="col-md-6">
+    	
+    	<h5 class="text-center"> Instructiuni de cautare </h5>
+    	<div class="instructions">
+	    	<p><i>Trebuie selectat un singur tip de articol</i> </p>
+	    	<p><i>In cazul necompletarii unui camp acesta nu va fi luat in considerare </i></p>
+	    	<p><i>Pentru autor se vor lua in considerare doar combinatiile de forma nume+prenume </i></p>
+	    	<p><i>In cazul in care se face cautare dupa titlu, in caseta trebuie sa fie introdus un titlu complet </i></p>
+	    	<p><i>Cautarea se va face dupa toate criteriile ce au fost completate </i> </p>
+    	
+      	</div>
     	</div>
+    	
+    	</div>
+    	
+
+		
+	<div modal="showResults" close="cancel()">
+	    <div class="modal-dialog">
+	    	<div class="modal-content">
+	    	 	<div class="modal-header alert alert-warning">
+	          		<h4 class="text-center">Rezultate cautare</h4>
+	      		</div>
+	     	 	<div class="modal-body">
+	     	 	<div ng-switch="hasResults">
+	     	 	<div ng-switch-when="true">
+					<div ng-repeat="article in articles | orderBy : 'title' " >
+					<h4> <a href="/#/article/{{article.uploadedArticleId}}"> <i class="fa fa-file-text-o fa-2x" aria-hidden="true"></i> {{article.title}}</a></h4>
+					    			    
+		   			 </div>
+		   		</div>
+		   		
+		   		<div ng-switch-when="false">
+		   		 <h3> Cautarea nu a returnat niciun rezultat</h3>
+		   		
+		   		</div>
+		   			 
+	          	 </div>
+	      		</div>
+	      		
+	      		<div class="modal-footer">
+	        		<button class="btn btn-success" ng-click="ok()">Ok</button>
+	        		<button class="btn btn-success" ng-click="cancel()">Cancel</button>
+	     		</div>	
+	    	</div> <!-- end modal-conent -->
+	    </div> <!-- end modal-dialog -->
+     
+    </div>  <!-- end modal-show conferinta -->
+    
+    	</div>
+    	
+    
 
 </div>

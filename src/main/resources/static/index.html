@@ -65,6 +65,7 @@
     <script src="controllers/search-tag.controller.js"></script>
     <script src="controllers/modal.controller.js"></script>
     <script src="controllers/query.controller.js"></script>
+    <script src="controllers/rapoarte.controller.js"></script>
    
 </head>
 <body>
@@ -85,7 +86,7 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li ng-show="isLoggedIn"><a href="#">Rapoarte <span class="sr-only">(current)</span></a></li>
+                    <li ng-show="isLoggedIn"><a ui-sref="rapoarte">Rapoarte <span class="sr-only">(current)</span></a></li>
                     <li ng-show="isLoggedIn"><a ui-sref="arhiva">Arhiva</a></li>
                     <li ng-show="isLoggedIn" class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Cautare <span class="caret"></span></a>

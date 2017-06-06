@@ -1,7 +1,10 @@
 package com.aii.platform.controllers;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,6 +57,144 @@ public class AppUserController {
 		}
 		  
 	}
+	
+	@RequestMapping(value="/allByTipArticol/{id}", method=RequestMethod.GET)	
+	 public ResponseEntity<?> getAllUsersByTipArticol(@PathVariable("id")int id) {
+		
+		Long newId = 0L;
+		
+		if(id == 1){
+			newId = 1L;
+		}
+		
+		if(id == 2) {
+			newId = 2L;
+		}
+		
+		if(id == 3) {
+			newId = 3L;
+		}
+		
+		if(id == 4){
+			newId = 4L;
+		}
+		
+		if(appUserService.getAllUsersByTipArticol(newId) != null) {
+			return new ResponseEntity<List<AppUser>>(appUserService.getAllUsersByTipArticol(newId), new HttpHeaders(), HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<Response>(new Response("No users"), new HttpHeaders(), HttpStatus.NO_CONTENT);
+		}	  
+	}
+	
+	@RequestMapping(value="/countArticles/{userId}", method = RequestMethod.GET)
+	public ResponseEntity<?> countArticlesForUser(@PathVariable("userId")Long userId) {
+		AppUser user = appUserService.getAppUserById(userId);
+		int numberOfArticles = user.getUploadedArticles().size();
+		
+		return new ResponseEntity<Integer>(numberOfArticles, new HttpHeaders(), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/countArticlesByType/{usedId}/{articleTypeId}", method = RequestMethod.GET)
+	public ResponseEntity<?> countArticlesForUserByArticleType(@PathVariable("userId")Long userId, @PathVariable("articleTypeId")Long articleTypeId) {
+		AppUser user = appUserService.getAppUserById(userId);
+		int numberOfArticles = 0;
+		for(UploadedArticle u : user.getUploadedArticles()) {
+			if(u.getTipArticol().getId() == articleTypeId) {
+				numberOfArticles ++;
+			}
+		}
+		
+		return new ResponseEntity<Integer>(numberOfArticles, new HttpHeaders(), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/countArticlesByYear/{userId}/{year}", method = RequestMethod.GET)
+	public ResponseEntity<?> countArticlesForUserByYear(@PathVariable("userId")Long userId, @PathVariable("year")int year) {
+		AppUser user = appUserService.getAppUserById(userId);
+		int numberOfArticles = 0;
+		for(UploadedArticle u : user.getUploadedArticles()) {
+			if(u.getUploadedOn().getYear() == year)  {
+				numberOfArticles ++;
+			}
+		}
+		return new ResponseEntity<Integer>(numberOfArticles, new HttpHeaders(), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/topUserByArticleType/{articleTypeId}", method = RequestMethod.GET)
+	public ResponseEntity<?> topUserByArticleType(@PathVariable("articleTypeId") Long articleTypeId) {
+		Map<Long, Integer> correspondenceMap = new HashMap<>();
+		
+		List<AppUser> allUsers = appUserService.getAllUsers();
+		for(AppUser a: allUsers) {
+			int numberOfArticles = 0;
+			for(UploadedArticle u : a.getUploadedArticles()) {
+				if(u.getTipArticol().getId() == articleTypeId) {
+					numberOfArticles++;
+				}
+			}
+			correspondenceMap.put(a.getId(), numberOfArticles);
+		}
+		
+		Iterator it = correspondenceMap.entrySet().iterator();
+		int max = -1;
+		Long key = 0L;
+	    while (it.hasNext()) {
+	        Map.Entry pair = (Map.Entry)it.next();
+	        if((int) pair.getValue() > max) {
+	        	max = (int) pair.getValue();
+	        	key = (Long) pair.getKey();
+	        }
+	        System.out.println(pair.getKey() + " = " + pair.getValue());
+	        it.remove(); // avoids a ConcurrentModificationException
+	    }
+	    
+	    return new ResponseEntity<AppUser>(appUserService.getAppUserById(key), new HttpHeaders(), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/topUserByYear/{year}", method = RequestMethod.GET)
+	public ResponseEntity<?> topUserByYear(@PathVariable("year") Long year) {
+		Map<Long, Integer> correspondenceMap = new HashMap<>();
+		
+		List<AppUser> allUsers = appUserService.getAllUsers();
+		for(AppUser a: allUsers) {
+			int numberOfArticles = 0;
+			for(UploadedArticle u : a.getUploadedArticles()) {
+				if(u.getUploadedOn().getYear() == year) {
+					numberOfArticles++;
+				}
+			}
+			correspondenceMap.put(a.getId(), numberOfArticles);
+		}
+		
+		Iterator it = correspondenceMap.entrySet().iterator();
+		int max = -1;
+		Long key = 0L;
+	    while (it.hasNext()) {
+	        Map.Entry pair = (Map.Entry)it.next();
+	        if((int) pair.getValue() > max) {
+	        	max = (int) pair.getValue();
+	        	key = (Long) pair.getKey();
+	        }
+	        System.out.println(pair.getKey() + " = " + pair.getValue());
+	        it.remove(); // avoids a ConcurrentModificationException
+	    }
+	    
+	    return new ResponseEntity<AppUser>(appUserService.getAppUserById(key), new HttpHeaders(), HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value="/allConferinta", method=RequestMethod.GET)	
+	 public ResponseEntity<?> getAllUsersForConferinta() {
+		
+		if(appUserService.getAllUsersForConferinta() != null) {
+			return new ResponseEntity<List<AppUser>>(appUserService.getAllUsersForConferinta(), new HttpHeaders(), HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<Response>(new Response("No users"), new HttpHeaders(), HttpStatus.NO_CONTENT);
+		}
+		  
+	}
+	
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public ResponseEntity<?> getUserById(@PathVariable("id") Long id){

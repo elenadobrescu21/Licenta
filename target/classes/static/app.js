@@ -71,6 +71,13 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $location
         url: "/cautare",
         templateUrl: "partials/queries.html"
     })
+    
+     .state('rapoarte', {
+        url: "/rapoarte",
+        templateUrl: "partials/rapoarte.html"
+    })
+    
+    
      
    $httpProvider.interceptors.push('AuthInterceptor');
     //pentru # la rute

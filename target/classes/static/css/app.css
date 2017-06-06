@@ -207,7 +207,16 @@ footer .back-to-top a i:hover{
 }
 
 .search-form{
-	margin-top: 60px;
-	
+	margin-top: 60px;	
 }
+
+.query-section , .instructions, .table-result-articles{
+	margin-top: 60px;
+}
+
+.query-div{
+	padding-bottom:100px;
+}
+
+
 

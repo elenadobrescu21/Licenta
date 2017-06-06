@@ -1,5 +1,7 @@
 package com.aii.platform.dto.controller;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,45 @@ public class AppUserDTOController {
 		return new ResponseEntity<List<AppUserDTO>>(allUsersDTO, new HttpHeaders(), HttpStatus.OK);
 		
 	}
+	
+	@RequestMapping(value="appUserDTO/top", method = RequestMethod.GET)
+	public ResponseEntity<?> getAllUsersDTOTop() {
+		List<AppUserDTO> allUsersDTO = appUserConverter.convertAllAppUsersToDTO();
+		Collections.sort(allUsersDTO);
+		return new ResponseEntity<List<AppUserDTO>>(allUsersDTO, new HttpHeaders(), HttpStatus.OK);	
+	}
+	
+	@RequestMapping(value="appUserDTO/first", method = RequestMethod.GET)
+	public ResponseEntity<?> getAllUsersDTOFirst() {
+		List<AppUserDTO> allUsersDTO = appUserConverter.convertAllAppUsersToDTO();
+		Collections.sort(allUsersDTO);
+		return new ResponseEntity<AppUserDTO>(allUsersDTO.get(0), new HttpHeaders(), HttpStatus.OK);	
+	}
+	
+	@RequestMapping(value="appUserDTO/topDownloads", method = RequestMethod.GET)
+	public ResponseEntity<?> getAllUsersDTOTopDownloads() {
+		List<AppUserDTO> allUsersDTO = appUserConverter.convertAllAppUsersToDTO();
+		Collections.sort(allUsersDTO, new Comparator<AppUserDTO>() {
+			public int compare(AppUserDTO a1, AppUserDTO a2) {
+				return a2.getTotalNumberOfDownloads() - a1.getTotalNumberOfDownloads();
+			}
+		});
+		
+		return new ResponseEntity<List<AppUserDTO>>(allUsersDTO, new HttpHeaders(), HttpStatus.OK);	
+	}
+	
+	@RequestMapping(value="appUserDTO/topDownloadsFirst", method = RequestMethod.GET)
+	public ResponseEntity<?> getAllUsersDTOTopDownloadsFirst() {
+		List<AppUserDTO> allUsersDTO = appUserConverter.convertAllAppUsersToDTO();
+		Collections.sort(allUsersDTO, new Comparator<AppUserDTO>() {
+			public int compare(AppUserDTO a1, AppUserDTO a2) {
+				return a2.getTotalNumberOfDownloads() - a1.getTotalNumberOfDownloads();
+			}
+		});
+		
+		return new ResponseEntity<AppUserDTO>(allUsersDTO.get(0), new HttpHeaders(), HttpStatus.OK);	
+	}
+	
 	
 	@RequestMapping(value="/userDTO/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getArticleDTOById(@PathVariable(value="id")Long appUserId){

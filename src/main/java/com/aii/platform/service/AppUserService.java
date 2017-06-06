@@ -49,6 +49,14 @@ public class AppUserService {
 		return appUserRepository.findByCoauthorArticlesUploadedArticleId(articleId);
 	}
 	
+	public List<AppUser> getAllUsersForConferinta() {
+		return appUserRepository.findByConferinta();
+	}
+	
+	public List<AppUser> getAllUsersByTipArticol(Long id) {
+		return appUserRepository.findByTipArticol(id);
+	}
+	
 	public long countAllUsers(){
 		return appUserRepository.count();
 	}
