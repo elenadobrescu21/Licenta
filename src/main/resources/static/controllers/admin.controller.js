@@ -1,12 +1,21 @@
 angular.module("app").controller("AdminController", function($scope, $http, $state, User,Auth){
 	
 	
-	  var vm = this;
-	  vm.isLoggedIn = Auth.isLoggedIn();
-	  vm.isAdmin = false;
-	  if(vm.isLoggedIn == true) {
+	 $scope.userStatistics = {};
+	 $scope.showStatisticsModal = false;
+	 
+	 $scope.numeCurent = {};
+	 $scope.prenumeCurent = {};
+	  
+	 // var vm = this;
+	  $scope.isLoggedIn = Auth.isLoggedIn();
+	  $scope.isAdmin = false;
+	  $scope.showStatistics = false;
+	  $scope.userStatistics = {};
+	  
+	  if($scope.isLoggedIn == true) {
 		  Auth.isAdmin(function(result){
-				vm.isAdmin = result;
+				$scope.isAdmin = result;
 		})
 	  }
 	  
@@ -18,6 +27,27 @@ angular.module("app").controller("AdminController", function($scope, $http, $sta
 	      console.error(err);
 	  });
 	  
+	  $scope.showStatistics = function(id,nume,prenume) {
+		  $scope.showStatisticsModal = true;
+		  $scope.numeCurent = nume;
+		  $scope.prenumeCurent = prenume;
+		  User.getUserStatistics(id).then(function(result){
+			  console.log(result);
+				$scope.userStatistics = result;
+				console.log($scope.userStatistics);
+			})
+	  }
 	  
-	
+	  $scope.ok = function() {
+		 // $state.reload();
+		  $scope.showStatisticsModal = false;
+		    
+	   };
+
+	   $scope.cancel = function() {
+		    //$state.reload();
+		    $scope.showStatisticsModal = false;
+	   };
+	  
+	  	
 })

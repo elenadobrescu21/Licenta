@@ -86,7 +86,14 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li ng-show="isLoggedIn"><a ui-sref="rapoarte">Rapoarte <span class="sr-only">(current)</span></a></li>
+                    <li ng-show="home.isAdmin" class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a ui-sref="admin">Lista utilizatori</a></li>
+                            <li><a ui-sref="rapoarte">Rapoarte</a></li>
+                       
+                        </ul>
+                    </li>
                     <li ng-show="isLoggedIn"><a ui-sref="arhiva">Arhiva</a></li>
                     <li ng-show="isLoggedIn" class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Cautare <span class="caret"></span></a>
@@ -115,6 +122,7 @@
         </div><!-- /.container-fluid -->
     </nav>
     </header>
+    
  <div ui-view></div>
  
 <!--  <footer>

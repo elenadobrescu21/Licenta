@@ -194,6 +194,11 @@ public class UploadController {
 		
 		String editoriArray2 = StringUtils.join(editoriCarteArray, ", ");
 		
+		String joinedEditori = null;
+		for(String editor : editoriCarteArray) {
+			joinedEditori = String.join(",", editor);
+		}
+		
 		String anAparitieString = request.getParameter("an-aparitie-capitol-carte").replace("\"", "");
 		String issn = request.getParameter("issn-capitol-carte").replace("\"", "");
 		String isbn = request.getParameter("isbn-capitol-carte").replace("\"", "");

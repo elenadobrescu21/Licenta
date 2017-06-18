@@ -59,22 +59,17 @@ public class AppUserController {
 	}
 	
 	@RequestMapping(value="/allByTipArticol/{id}", method=RequestMethod.GET)	
-	 public ResponseEntity<?> getAllUsersByTipArticol(@PathVariable("id")int id) {
-		
-		Long newId = 0L;
-		
+	 public ResponseEntity<?> getAllUsersByTipArticol(@PathVariable("id")int id) {	
+		Long newId = 0L;	
 		if(id == 1){
 			newId = 1L;
-		}
-		
+		}	
 		if(id == 2) {
 			newId = 2L;
-		}
-		
+		}	
 		if(id == 3) {
 			newId = 3L;
-		}
-		
+		}	
 		if(id == 4){
 			newId = 4L;
 		}
@@ -193,6 +188,12 @@ public class AppUserController {
 			return new ResponseEntity<Response>(new Response("No users"), new HttpHeaders(), HttpStatus.NO_CONTENT);
 		}
 		  
+	}
+	
+	@RequestMapping(value="/favouriteArticles/{id}", method=RequestMethod.GET)
+	public ResponseEntity<?> getUserFavouriteArticles(@PathVariable("id") Long id) {
+		AppUser appUser = appUserService.getAppUserById(id);
+		return new ResponseEntity<Set<UploadedArticle>>(appUser.getFavouriteArticles(), new HttpHeaders(), HttpStatus.OK);
 	}
 	
 	

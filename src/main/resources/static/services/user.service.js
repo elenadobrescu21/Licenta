@@ -49,6 +49,12 @@ angular.module("app").factory('User', function($http) {
 	userFactory.getUsersByTipArticol = function(id) {
 		return $http.get('http://localhost:8080/user/allByTipArticol/'+id);
 	}
+	
+	userFactory.getUserStatistics = function(id) {
+		return $http.get('http://localhost:8080/statistics/'+id).then(function(result){
+			return result.data;
+		});
+	}
 		
 	return userFactory;
 	

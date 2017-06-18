@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.aii.platform.dto.AppUserDTO;
 import com.aii.platform.dto.UploadedArticleDTO;
 import com.aii.platform.dto.converter.AppUserConverter;
+import com.aii.platform.models.AppUser;
+import com.aii.platform.models.UploadedArticle;
+import com.aii.platform.models.UserStatistics;
+import com.aii.platform.repository.AppUserRepository;
 
 @Controller
 public class AppUserDTOController {
@@ -23,11 +27,42 @@ public class AppUserDTOController {
 	@Autowired
 	private AppUserConverter appUserConverter;
 	
+	@Autowired 
+	private AppUserRepository appUserRepository;
+	
 	@RequestMapping(value="appUserDTO/all", method = RequestMethod.GET)
 	public ResponseEntity<?> getAllUsersDTO() {
 		List<AppUserDTO> allUsersDTO = appUserConverter.convertAllAppUsersToDTO();
 		
 		return new ResponseEntity<List<AppUserDTO>>(allUsersDTO, new HttpHeaders(), HttpStatus.OK);
+		
+	}
+	
+	public int countArticlesByType(Long userId, Long articleTypeId){
+		AppUser originalAppUser = appUserRepository.findOne(userId);
+		int numberOfArticles = 0;
+		for(UploadedArticle u : originalAppUser.getUploadedArticles()) {
+			if(u.getTipArticol().getId() == articleTypeId) {
+				numberOfArticles ++;
+			}
+		}
+		return numberOfArticles;
+	}
+	
+	@RequestMapping(value="/statistics/{userId}", method = RequestMethod.GET)
+	public ResponseEntity<?> getStatistics(@PathVariable("userId")Long userId) {
+		AppUserDTO appUser = appUserConverter.convertToDTOByAppUserId(userId);
+		int numberOfUploadedArticles = appUser.getNumberOfUploadedArticles();
+		int numberOfDownloadedArticles = appUser.getTotalNumberOfDownloads();
+		int articoleCarteCompleta = this.countArticlesByType(userId, 1L);
+		int articoleCarteCapitol = this.countArticlesByType(userId, 2L);
+		int articoleConferinta = this.countArticlesByType(userId, 3L);
+		int articoleJurnalRevista = this.countArticlesByType(userId, 4L);
+	
+		UserStatistics statistics = new UserStatistics(numberOfUploadedArticles, numberOfDownloadedArticles,
+				articoleCarteCompleta, articoleCarteCapitol, articoleConferinta, articoleJurnalRevista);
+		
+		return new ResponseEntity<UserStatistics>(statistics, new HttpHeaders(), HttpStatus.OK);
 		
 	}
 	

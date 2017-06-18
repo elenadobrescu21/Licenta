@@ -25,6 +25,8 @@ angular.module("app").controller("ArticleController", function($scope,$statePara
             a.download = $scope.fileName;
             a.click();
         });
+        
+        $scope.article.numberOfDownloads++;
 		
 	}
 	

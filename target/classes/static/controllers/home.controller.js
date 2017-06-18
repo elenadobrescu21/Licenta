@@ -43,17 +43,20 @@ angular.module("app").controller("HomeController",function($scope, $rootScope, $
 			Auth.getUser(function(result){
 				vm.user = result;		
 			});
-			if(typeof data !== "undefined") {
+			if(typeof data != "undefined") {
 				if(data.token) {
 					$state.go('default');
 					$window.location.reload();		
 				} else {
 					console.log("Bad credentials din HomeController");
 					vm.badCredentials = true;
-					vm.badCredentialsMessage = "Username sau parola incorecte";
+					vm.badCredentialsMessage = "Combinatia de username si parola este incorecta";
 				}	
 			}
 		})
+		
+		//$window.location.reload();	
+		
 				
 	}
 	

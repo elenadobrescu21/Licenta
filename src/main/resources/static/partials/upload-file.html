@@ -1,6 +1,9 @@
 <section ng-controller="UploadController">
  
   <div class="container">
+  <div class="row">
+  	  <div class="col-md-2"></div>
+  	  <div class="col-md-8">
 	  <form method="post"  id="uploadForm" name="uploadForm">
 	  <div class="text-center"><h1>Adaugare articol</h1></div>
 	  
@@ -142,8 +145,8 @@
 	   <button class="btn btn-default" type="button" ng-click="addTag()">Adauga tag</button> 
 		<br>
 		<br>
-		<p class="tags"> <b> Tags: &nbsp</b> </p>
-		<div class="tags" ng-repeat="tag in tags"> {{tag}}, &nbsp </div>
+		<p class="tags"> <b> Taguri: &nbsp</b> </p>
+		<div class="tag" ng-repeat="tag in tags"> {{tag}} </div>
 		
 	   <div class="alert alert-danger form-group center-block" ng-show="hasError">
 	    	<h4>{{errorMessage}}</h4>
@@ -152,10 +155,15 @@
 	   <br>
 	   <div class="form-group center-block upload-section">
 	      <button class="btn btn-primary btn-lg" name="submit" type="submit" ng-disabled="uploadForm.$invalid"
-	       ng-click="doUpload()">Upload</button>
+	       ng-click="doUpload()">Incarca articol</button>
 	   </div>	
 	  
 	  </form>
+	  </div> <!-- end col-md-8 -->
+	  
+	  <div class="col-md-2"></div>
+	  
+	  </div>
 	  
   </div> <!-- end form -->
   

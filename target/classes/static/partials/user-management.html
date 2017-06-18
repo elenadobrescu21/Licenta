@@ -1,9 +1,19 @@
-<section class="admin-section" ng-controller="AdminController as admin">
-<div ng-switch = "admin.isAdmin">
+<section class="admin-section" ng-controller="AdminController ">
+<div ng-switch = "isAdmin">
 <div ng-switch-when="true">
     <div class="container">
-    <h1 class="text-center"> Users list</h1>
+    <h1 class="text-center"> Lista utilizatori </h1>
     <br>
+    <br>
+   <div class="row">
+   		<div class="col-md-3">
+   		<input type="text" ng-model="search" class="form-control" placeholder="Cautare utilizator dupa nume">
+   		</div>
+   		
+   </div>
+   
+   <br> 
+
  <table class="table table-bordered">
 	  <tr class="info">
         <th>Id</th>
@@ -11,15 +21,17 @@
         <th>Prenume</th>
 		<th>Email </th>
 		<th> Username</th>
+		<th> Statistici </th>
  
       </tr>
  
-	  <tr ng-repeat="item in members">
+	  <tr ng-repeat="item in members | filter:search">
         <td>{{ item.id}}</td>
         <td>{{ item.nume }}</td>
 		<td> {{item.prenume}} </td>
 		<td> {{item.email}} </td>
 		<td> {{item.username}}</td>
+		<td>  <button class="btn btn-primary" ng-click="showStatistics(item.id,item.nume, item.prenume)">Vizualizare</button></td>
         
       </tr>
 	 	  
@@ -33,6 +45,37 @@
   <h1>You do not have acces to this page</h1>
   
   </div>
+  
+  <div modal="showStatisticsModal" close="cancel()">
+	    <div class="modal-dialog">
+	    	<div class="modal-content">
+	    	 	<div class="modal-header alert alert-warning">
+	          		<h4 class="text-center">Statistici utilizator {{numeCurent}} {{prenumeCurent}}</h4>
+	      		</div>
+	     	 	<div class="modal-body">
+	     	 	Utilizatorul a incarcat in total {{userStatistics.numberOfUploadedArticles}} articole dintre care:
+	     	 		<ul>
+	     	 		<li> {{userStatistics.articoleCarteCompleta}} articole de tip carte completa</li>
+	     	 		<li> {{userStatistics.articoleCarteCapitol}} articole de tip capitol </li>
+	     	 		<li> {{userStatistics.articoleConferinta}} articole de tip conferinta </li>
+	     	 		<li> {{userStatistics.articoleJurnalRevista}} articole publicate in jurnal/revista </li>
+	          	 		
+	     	 		</ul>
+	     	 		
+	     	 	Utilizatorul are {{userStatistics.numberOfDownloadedArticles}} descarcari pentru articole
+	     
+	      		</div>
+	      		
+	      		<div class="modal-footer">
+	        		<button class="btn btn-success" ng-click="ok()">Ok</button>
+	        		<button class="btn btn-success" ng-click="cancel()">Cancel</button>
+	     		</div>	
+	    	</div> <!-- end modal-conent -->
+	    </div> <!-- end modal-dialog -->
+     
+    </div>
+  
+  
     </div>
     
 </section>
