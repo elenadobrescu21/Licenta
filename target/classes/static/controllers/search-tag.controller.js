@@ -4,7 +4,9 @@ angular.module("app").controller("SearchTagController", function($scope, Article
 	$scope.allTags = {};
 	
 	Tag.getAllTags().then(function(result){
-		$scope.allTags = result;
+		$scope.allTags = result.data;
+		console.log("taguri");
+		console.log($scope.allTags);
 	})
 	
 	$scope.filterArticles = function() {	

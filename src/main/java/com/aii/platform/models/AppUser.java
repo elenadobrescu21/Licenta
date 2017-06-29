@@ -208,9 +208,5 @@ public class AppUser {
 	public void setPozitie(String pozitie) {
 		this.pozitie = pozitie;
 	}
-	
-	
-	
-	
-	
+		
 }

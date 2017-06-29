@@ -9,7 +9,23 @@ angular.module("app").controller("HomeController",function($scope, $rootScope, $
 	$scope.articlesWithAuthors = [];
 	$scope.users = [];
 	$scope.articleFavourite = [];
+	vm.showModalRegulament = false;
+	
+	
+	vm.incarcare = function() {
+		vm.showModalRegulament = true;
+	}
 		
+	vm.redirectRegulament = function() {
+		vm.showModalRegulament = false;
+		$state.go('regulament');
+	}
+	
+	vm.redirectUpload = function() {
+		vm.showModalRegulament = false;
+		$state.go('upload');
+	}
+	
 	vm.isAuthenticated = Auth.isLoggedIn();
 	console.log("Userul este autentificat: " +  Auth.isLoggedIn());
 

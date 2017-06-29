@@ -19,6 +19,31 @@ public class CarteCapitolService {
 		return carteCapitolRepository.save(carteCapitol);
 	}
 	
+	public void updateCarteCapitol(Long id, String titluCarte, String autoriCarte, String editoriCarte,
+			String numeCapitol, int paginaInceput, int paginaSfarsit, String editura, String editie, String ISBN,
+			String ISSN, String abstractSection, String articleTitle, String wos, String doi) {
+		CarteCapitol carteCapitol = carteCapitolRepository.findOne(id);
+		carteCapitol.setTitlu(titluCarte);
+		carteCapitol.setAutoriCarte(autoriCarte);
+		carteCapitol.setEditoriCarte(editoriCarte);
+		carteCapitol.setNumeCapitol(numeCapitol);
+		carteCapitol.setPaginaInceput(paginaInceput);
+		carteCapitol.setPaginaSfarsit(paginaSfarsit);
+		carteCapitol.setEditura(editura);
+		carteCapitol.setEditie(editie);
+		carteCapitol.setIsbn(ISBN);
+		carteCapitol.setIssn(ISSN);
+		carteCapitol.getUploadedArticle().setAbstractSection(abstractSection);
+		carteCapitol.getUploadedArticle().setTitle(articleTitle);
+		carteCapitol.getUploadedArticle().setWos(wos);
+		carteCapitol.getUploadedArticle().setDoi(doi);
+		carteCapitolRepository.save(carteCapitol);
+	}
+	
+	public void deleteCarteCapitol(Long id) {
+		carteCapitolRepository.delete(id);
+	}
+	
 	public CarteCapitol getCarteCapitolById(Long id) {
 		return carteCapitolRepository.findOne(id);
 	}

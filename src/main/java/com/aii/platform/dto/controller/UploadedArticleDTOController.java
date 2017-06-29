@@ -60,8 +60,10 @@ public class UploadedArticleDTOController {
 	public ResponseEntity<?> getArticleDTOById(@PathVariable(value="id")Long articleId){
 		
 		UploadedArticleDTO uploadedArticleDTO = uploadedArticleConverter.convertUploadedArticleToDTO(articleId);
-		
+		//System.out.println("din articleDTO/id" + uploadedArticleDTO.getWos());
 
+		UploadedArticle uploadedArticle = uploadedArticleService.getArticleById(articleId);
+		System.out.println("din articleDTO/id " + uploadedArticle.getWos());
 		if(uploadedArticleDTO.getIdTipArticol() == 1) {
 			System.out.println("Este carte completa");
 			CarteCompleta carteCompleta = carteCompletaService.getCarteCompletaById(articleId);
@@ -72,6 +74,9 @@ public class UploadedArticleDTOController {
 					uploadedArticleDTO.getOwner(),
 					uploadedArticleDTO.getCoauthors(), uploadedArticleDTO.getTags(), 
 					uploadedArticleDTO.getIdTipArticol(), uploadedArticleDTO.getTipArticol(),
+					uploadedArticleDTO.getAbstractSection(),
+					uploadedArticleDTO.getWos(),
+					uploadedArticle.getDoi(),
 					carteCompleta.getEditura(),
 					carteCompleta.getEditie(), 
 					carteCompleta.getIsbn(),
@@ -90,6 +95,9 @@ public class UploadedArticleDTOController {
 					uploadedArticleDTO.getOwner(),
 					uploadedArticleDTO.getCoauthors(), uploadedArticleDTO.getTags(), 
 					uploadedArticleDTO.getIdTipArticol(), uploadedArticleDTO.getTipArticol(),
+					uploadedArticleDTO.getAbstractSection(),
+					uploadedArticle.getWos(),
+					uploadedArticle.getDoi(),
 					carteCapitol.getTitlu(), carteCapitol.getAutoriCarte(), carteCapitol.getEditoriCarte(), 
 					carteCapitol.getNumeCapitol(),
 					carteCapitol.getPaginaInceput(),carteCapitol.getPaginaSfarsit(), carteCapitol.getAnPublicare(), 
@@ -110,6 +118,9 @@ public class UploadedArticleDTOController {
 					uploadedArticleDTO.getOwner(),
 					uploadedArticleDTO.getCoauthors(), uploadedArticleDTO.getTags(), 
 					uploadedArticleDTO.getIdTipArticol(), uploadedArticleDTO.getTipArticol(),
+					uploadedArticleDTO.getAbstractSection(),
+					uploadedArticle.getWos(),
+					uploadedArticle.getDoi(),
 					conferinta.getNume(),
 					conferinta.getLocatie(),
 					conferinta.getData());
@@ -126,6 +137,9 @@ public class UploadedArticleDTOController {
 					uploadedArticleDTO.getOwner(),
 					uploadedArticleDTO.getCoauthors(), uploadedArticleDTO.getTags(), 
 					uploadedArticleDTO.getIdTipArticol(), uploadedArticleDTO.getTipArticol(),
+					uploadedArticleDTO.getAbstractSection(),
+					uploadedArticle.getWos(),
+					uploadedArticle.getDoi(),
 					jurnalRevista.getTitlu(),
 					jurnalRevista.getNumar(),
 					jurnalRevista.getVolum(),

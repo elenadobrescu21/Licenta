@@ -5,7 +5,7 @@
           
         	</div>
         
-        	<div class="card-info"> <span class="card-title"> Arhiva articole</span>
+        	<div class="card-info"> <span class="card-title"> <h2> Arhiva articole </h2> </span>
 
         	</div>
     	</div>
@@ -47,17 +47,14 @@
 </nav>
 </div>
 	<div ng-switch="isDefault">
-	<div class="row" >
-		<div class="col-md-8">
-		 <form class="form-inline">
-        	<div class="form-group search-form">
-            	
-            	<input type="text" ng-model="search" class="form-control" placeholder="Search">
+	<div class="row search-box" >
+		<div class="col-md-4 input-search">
+        	<div class="form-group search-form">	
+            	<input type="text" ng-model="search" class="form-control " placeholder="Search">
         	</div>
-    	</form>
 		</div>
 		
-		<div class="col-md-4">
+		<div class="col-md-8">
 	
 		</div>
 	
@@ -66,7 +63,7 @@
 		<div ng-switch-when="true" class="pagination-default">
 		
 			<div class="row">
-			    <div class="col-md-4" ng-repeat="article in allArticles | orderBy : 'titlu' | filter:search" >
+			    <div class="col-md-4 articles-arhive" ng-repeat="article in allArticles | orderBy : 'titlu' | filter:search" >
 			    <h4> <a href="/#/article/{{article.id}}"> <i class="fa fa-file-text-o fa-2x" aria-hidden="true"></i> {{article.titlu}}</a></h4>
 			    <p> Incarcat de <i> <a href="/#/user/{{article.owner.id}}"> {{article.owner.fullname}}</i> </a> </p>
 			    

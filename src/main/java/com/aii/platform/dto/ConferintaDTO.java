@@ -3,8 +3,6 @@ package com.aii.platform.dto;
 import java.util.Date;
 import java.util.List;
 
-
-
 public class ConferintaDTO extends UploadedArticleDTO {
 	
 	
@@ -27,8 +25,10 @@ public class ConferintaDTO extends UploadedArticleDTO {
 	}
 
 	public ConferintaDTO(Long id, String titlu, String filepath, int numberOfDownloads, Date date, AppUserDTO owner,
-			List<AppUserDTO> coauthors, String[] tags, Long idTipArticol, String tipArticol,String nume, String locatie, Date data) {
-		super(id, titlu, filepath, numberOfDownloads, date, owner, coauthors, tags, idTipArticol, tipArticol);
+			List<AppUserDTO> coauthors, String[] tags, Long idTipArticol, String tipArticol, String abstractSection,
+			String wos, String doi,
+			String nume, String locatie, Date data) {
+		super(id, titlu, filepath, numberOfDownloads, date, owner, coauthors, tags, idTipArticol, tipArticol, abstractSection,wos,doi);
 		this.nume = nume;
 		this.locatie = locatie;
 		this.data = data;

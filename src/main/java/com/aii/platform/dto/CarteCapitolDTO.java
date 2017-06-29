@@ -31,11 +31,12 @@ public class CarteCapitolDTO extends UploadedArticleDTO{
 	private String issn;
 
 	public CarteCapitolDTO(Long id, String titlu, String filepath, int numberOfDownloads, Date date, AppUserDTO owner,
-			List<AppUserDTO> coauthors, String[] tags, Long idTipArticol, String tipArticol,
+			List<AppUserDTO> coauthors, String[] tags, Long idTipArticol, String tipArticol,String abstractSection, 
+			String wos, String doi,
 			String titluCarte, String autoriCarte, String editoriCarte, String numeCapitol,
 			int paginaInceput, int paginaSfarsit, int anPublicare, String editura, String editie, String isbn,
 			String issn) {
-		super(id, titlu, filepath, numberOfDownloads, date, owner, coauthors, tags, idTipArticol, tipArticol);
+		super(id, titlu, filepath, numberOfDownloads, date, owner, coauthors, tags, idTipArticol, tipArticol,abstractSection,wos,doi);
 		this.titluCarte = titluCarte;
 		this.autoriCarte = autoriCarte;
 		this.editoriCarte = editoriCarte;
@@ -47,6 +48,7 @@ public class CarteCapitolDTO extends UploadedArticleDTO{
 		this.editie = editie;
 		this.isbn = isbn;
 		this.issn = issn;
+		
 	}
 
 	public CarteCapitolDTO(String titluCarte, String autoriCarte, String editoriCarte, String numeCapitol,

@@ -4,71 +4,92 @@
 	
 			<div class="col-md-12 article-page">
 				<h1> {{ article.titlu}}</h1>
-				<h4> Incarcat de <i> {{article.owner.fullname}}</i> la data de <i>{{article.uploadedOn}} </i></h4>
-				<div ng-show="hasCoauthors" > <h3>Coautori: </h3>
+				<hr>
+				<h4> Incarcat de <a href="/#/user/{{article.owner.id}}" ><i> {{article.owner.fullname}}</i> </a> la data de <i>{{article.uploadedOn}} </i></h4>
 				
+				
+				<div ng-show="hasCoauthors" > <h4>Coautori </h4>
 				<div class="coauthor" ng-repeat="coauth in article.coauthors">
 				<i class="fa fa-user-circle fa-2x" aria-hidden="true"></i>
-					<h4 class="coauthor-name"> {{coauth.fullname}}</h4>
+					<h5 class="coauthor-name"> {{coauth.fullname}}</h5>
 				
 				</div>
 		
 				</div>
+				<h4> Abstract</h4>
+				<p>
+				{{article.abstractSection}}
+				</p>
+				<div class="favourite-btn btn-container"  ng-switch="articleIsFavourited">
+				<button class="btn btn-default download-btn" ng-click="downloadArticle(article.id)" type="button"> Download</button>
+				
+				
+		
+				<button type="button" ng-switch-when="false" class="btn btn-default favourite-btn" ng-click="addToFavourites()">
+  						<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Favourite
+	    		</button>
+	    		
+	    		<button type="button" ng-switch-when="true" class="btn btn-default favourite-btn" ng-disabled="true"
+	    		ng-click="addToFavourites()">
+  					<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Favorit
+	    		</button>
+	    		
+	    		</div>
+	    		<a href="{{viewUrl}}" target="_blank"> <button class="btn btn-default view-btn"> Vizualizare </button>
+	    		
+	    		</a> 
 				<div>
-					<h4> Numar descarcari: {{article.numberOfDownloads}} </h4>
+					<p> <b> Numar descarcari: </b> {{article.numberOfDownloads}} </p>
 				</div>
 				
-				<div ng-show="hasTags" > <h4> Taguri:</h4>
+				<div ng-show="hasTags" > <p class="tag-title"> <b>Taguri </b> </p>
 					<div class="tag" ng-repeat="tag in article.tags">{{tag}} </div>
 				</div>
 				
+				<p> <b> WOS:</b> <i> {{article.wos}}</i> </p>
+				<p> <b> DOI: </b> <i> {{article.doi}} </i> </p>
+				
 				<div ng-show="article.idTipArticol == 1">
-		    		<p> Editura:<i> {{article.editura}}</i> </p>
-		    		<p> Editie: <i> {{article.editie}}</i> </p>
-		    		<p> An aparitie: <i> {{article.anPublicare}}</i></p>
-		    		<p> ISBN: <i> {{article.isbn}}</i> </p>
-		    		<p> ISSN: <i> {{article.issn}}</i></p>
+		    		<p> <b> Editura: </b> <i> {{article.editura}}</i> </p>
+		    		<p> <b> Editie: </b> <i> {{article.editie}}</i> </p>
+		    		<p> <b> An aparitie:</b> <i> {{article.anPublicare}}</i></p>
+		    		<p> <b> ISBN: </b> <i> {{article.isbn}}</i> </p>
+		    		<p> <b> ISSN: </b> <i> {{article.issn}}</i></p>
 	    		
 	    		</div>
 	    		
 	    		<div ng-show="article.idTipArticol == 2">
-	    			<p>Titlu carte: <i>{{article.titluCarte}} </i> </p>
-	    			<p>Autori: <i> {{article.autoriCarte}}</i> </p>
-	    			<p>Editori: <i> {{article.editoriCarte}}</i> </p>
-	    			<p>Nume capitol: <i> {{article.numeCapitol}}</i> </p>
-	    			<p>Pagini: <i> {{article.paginaInceput}} - {{article.paginaSfarsit}}</i> </p>
-	    			<p>Editura: <i> {{article.editura}} </i> </p>
-	    			<p>Editie: <i> {{article.editie}} </i> </p>
-	    			<p>An aparitie: <i> {{article.anPublicare}}</i> </p>
-	    			<p>ISBN: <i> {{article.isbn }}</i> </p>
-	    			<p>ISSN: <i> {{article.issn}} </i> </p>
+	    			<p> <b> Titlu carte: </b> <i>{{article.titluCarte}} </i> </p>
+	    			<p> <b> Autori: </b> <i> {{article.autoriCarte}}</i> </p>
+	    			<p> <b> Editori: </b> <i> {{article.editoriCarte}}</i> </p>
+	    			<p> <b> Nume capitol:</b> <i> {{article.numeCapitol}}</i> </p>
+	    			<p> <b> Pagini: </b> <i> {{article.paginaInceput}} - {{article.paginaSfarsit}}</i> </p>
+	    			<p> <b> Editura: </b> <i> {{article.editura}} </i> </p>
+	    			<p> <b> Editie: </b> <i> {{article.editie}} </i> </p>
+	    			<p> <b> An aparitie: </b> <i> {{article.anPublicare}}</i> </p>
+	    			<p> <b> ISBN:</b> <i> {{article.isbn }}</i> </p>
+	    			<p> <b> ISSN:</b> <i> {{article.issn}} </i> </p>
 	    		
 	    		</div>
 	    		
 	    		<div ng-show="article.idTipArticol == 3">
 	    		<p> Acest articol a fost prezentat la urmatoarea conferinta </p>
-	    			<p>Nume: <i>{{article.nume}} </i></p>
-	    			<p>Data: <i> {{article.data}}</i> </p>
-	    			<p>Locatia: <i>{{article.locatie}}</i> </p>	
+	    			<p> <b> Nume: </b> <i>{{article.nume}} </i></p>
+	    			<p> <b> Data: </b> <i> {{article.data}}</i> </p>
+	    			<p> <b>Locatia: </b> <i>{{article.locatie}}</i> </p>	
 	    		</div>
 	    		
 	    		<div ng-show="article.idTipArticol == 4">
-	    			<p>Nume jurnal/revista: <i> {{article.titluJurnal}}</i> </p>
-	    			<p>Numar: <i> {{article.numar}} </i> </p>
-	    			<p>Volum: <i> {{article.volum}} </i> </p>
-	    			<p>Data aparitie: <i> {{article.dataAparitie}}</i>
-	    			<p>Pagini: <i> {{article.paginaStart}} - {{article.paginaSfarsit}} </i> </p>
-	    			<p>ISBN: <i> {{article.isbn}}</i> </p>
-	    			<p>ISSN: <i> {{article.issn}} </i> </p>
+	    			<p> <b> Nume jurnal/revista: </b> <i> {{article.titluJurnal}}</i> </p>
+	    			<p> <b> Numar: </b> <i> {{article.numar}} </i> </p>
+	    			<p> <b> Volum:  </b> <i> {{article.volum}} </i> </p>
+	    			<p> <b> Data aparitie: </b> <i> {{article.dataAparitie}}</i>
+	    			<p> <b> Pagini: </b> <i> {{article.paginaStart}} - {{article.paginaSfarsit}} </i> </p>
+	    			<p> <b> ISBN:  </b> <i> {{article.isbn}}</i> </p>
+	    			<p> <b> ISSN: </b> <i> {{article.issn}} </i> </p>
 	    		    		
 	    		</div>
-				
-				<button class="btn btn-default download-btn" ng-click="downloadArticle(article.id)" type="button"> Download</button>
-				
-				<button type="button" class="btn btn-default favourite-btn">
-  						<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Favourite
-	    		</button>
-	    						
+								
 				</div>
 			
 			</div> <!-- end row -->
@@ -78,5 +99,23 @@
 			</div>
 			
 		</div>	
+	  <div modal="showModalFavourite" close="cancel()">
+	    <div class="modal-dialog">
+	    	<div class="modal-content">
+	    	 	<div class="modal-header alert alert-success">
+	          		<h4 class="text-center"></h4>
+	      		</div>
+	     	 	<div class="modal-body">
+	          	    <p class="text-center">Articolul a fost adaugat la favorite</p>
+	      		</div>
+	      		
+	      		<div class="modal-footer">
+	        		<button class="btn btn-success" ng-click="ok()">Ok</button>
+	        		
+	     		</div>	
+	    	</div> <!-- end modal-conent -->
+	    </div> <!-- end modal-dialog -->
+     
+    </div>  <!-- end modal-show success -->
 	
 </section>

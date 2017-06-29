@@ -31,9 +31,10 @@ public class CarteCompletaDTO extends UploadedArticleDTO {
 
 
 	public CarteCompletaDTO(Long id, String titlu, String filepath, int numberOfDownloads, Date date, AppUserDTO owner,
-			List<AppUserDTO> coauthors, String[] tags, Long idTipArticol, String tipArticol,
+			List<AppUserDTO> coauthors, String[] tags, Long idTipArticol, String tipArticol, String abstractSection,
+			String wos, String doi,
 			String editura, String editie, String isbn, String issn, int anPublicare) {
-		super(id, titlu, filepath, numberOfDownloads, date, owner, coauthors, tags, idTipArticol, tipArticol);
+		super(id, titlu, filepath, numberOfDownloads, date, owner, coauthors, tags, idTipArticol, tipArticol, abstractSection, wos, doi);
 		this.editura = editura;
 		this.editie = editie;
 		this.isbn = isbn;

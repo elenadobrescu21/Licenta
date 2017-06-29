@@ -8,20 +8,20 @@
 	  <div class="text-center"><h1>Adaugare articol</h1></div>
 	  
 	   <div class="form-group">
-	       <label  class="control-label" for="title">Titlu</label>
+	       <label  class="control-label" for="title">Titlu*</label>
 	       <input  class="form-control" type="text" id="title" name="title" ng-model="title" enter-directive required>
 	       <span  ng-show="uploadForm.title.$touched && uploadForm.title.$invalid" class="help-block">Completati titlul</span>
 	   </div>
 	   
 	    <div class="form-group">
-	       <label class="control-label" for="title">Fisier</label>
+	       <label class="control-label" for="title">Fisier*</label>
 	       <p><label class="control-label" for="pdf-only">Sunt acceptate doar fisierele in format PDF </label> </p>
 	       	<input type="file" id="file" name="file" file-model="myFile" accept="application/pdf"  enter-directive required/>
 	        <span  ng-show="uploadForm.file.$touched" class="help-block">Incarcati fisierul</span>    
 	   </div>
 	   
 	   <div class="form-group">
-	       <label class="control-label" for="title">Tip articol</label>
+	       <label class="control-label" for="title">Tip articol*</label>
 	       <select class="form-control" ng-options="a.denumire for a in tipArticole" 
    				ng-model="articleType" ng-change="getSelectedArticleType()" required></select> 
 	   </div>
@@ -81,50 +81,51 @@
 	   
 	    <div class="form-group">
 	       <label  class="control-label" for="wos">WOS</label>
-	       <input  class="form-control" type="text" id="wos" name="title" ng-model="wos" enter-directive required>
-	       <span  ng-show="uploadForm.wos.$touched && uploadForm.wos.$invalid" class="help-block">Completati sectiunea</span>
+	       <input  class="form-control" type="text" id="wos" name="title" ng-model="wos" enter-directive>
+	       
 	   </div>
 	   
 	    <div class="form-group">
 	       <label  class="control-label" for="title">DOI</label>
-	       <input  class="form-control" type="text" id="doi" name="doi" ng-model="doi" enter-directive  required>
-	       <span  ng-show="uploadForm.doi.$touched && uploadForm.doi.$invalid" class="help-block">Completati sectiunea</span>
+	       <input  class="form-control" type="text" id="doi" name="doi" ng-model="doi" enter-directive>
+	    
 	   </div>
 	   
 	   <div class="form-group">
-	   		<label class="control-label" for="abstract"> Abstract</label>
-	   		<textarea cols="100" class="form-control" type="text" id="abstract" name="abstract"  ng-minlength="50" ng-maxlength="1500"
+	   		<label class="control-label" for="abstract">Abstract*</label>
+	   		<p><i> Trebuie sa contina cel putin 100 de caractere</i> </p>
+	   		<textarea cols="100" class="form-control" type="text" id="abstract" name="abstract"  ng-minlength="100" 
 	   		ng-model="abstract" enter-directive required>
 	   		</textarea>
 	   		<span ng-show="uploadForm.abstract.$touched && uploadForm.abstract.$invalid" class="help-block">Completati sectiunea</span> 
 	   		<span ng-show="uploadForm.abstract.$error.minlength" class="help-block">Abstractul este prea scurt</span>
-            <span ng-show="uploadForm.abstract.$error.maxlength" class="help-block">Abstractul este prea lung.</span>
+            
         </div>
 	  
 	 
 	 <div ng-show="coAuthorShow">
-		 <p> <b> Coautori: </b> </p>
-		  <div ng-repeat="coA in coAuthors track by $index"> {{coA.fullname}}  </div>
+		 <p> <b> Coautori ce au cont </b> </p>
+		  <div ng-repeat="coA in coAuthors track by $index"> {{coA.fullname}}  <span class="glyphicon glyphicon-remove" ng-click="removeCoauthor(coA)" aria-hidden="true"></span> </div>
+		  <br>
 		  <div ng-show="!finalizat">
 			  <select name="mySelect" id="mySelect"
 			      ng-options="user.fullname for user in users"
 			      ng-model="coAuthor">
 			  </select>
 			  <button class="btn btn-default" type="button" ng-click="addCoauthor()">Adauga coautor</button>
-			  <button class="btn btn-default" type="button" ng-click="finalizare()">Finalizare</button>
 		  </div>
-	  
+	  <br>
 	</div> <!-- end coAuthorShow -->
 	  
   
-	<button class="btn btn-default" type="button" ng-show="!coAuthorShow" ng-click="adaugaCoautori()">Addauga coautori</button> 
+	<button class="btn btn-default" type="button" ng-show="!coAuthorShow" ng-click="adaugaCoautori()">Adauga coautori</button> 
 	<br>
-	<br>
+	<!--  
 	<p> Pentru a adauga un coautor ce nu are cont click <a ng-click="addCoauthorWithoutAccount()">aici</a></p>
-	  
+	  -->
 	<div ng-show="coAuthorWithouthAccountShow">
 	  <b> Coautori fara cont: </b>
-		  <div ng-repeat="coAWithoutAccount in coAuthorsWithoutAccount"> {{coAWithoutAccount}}</div>
+		  <div ng-repeat="coAWithoutAccount in coAuthorsWithoutAccount"> {{coAWithoutAccount}} <span class="glyphicon glyphicon-remove" ng-click="removeCoauthorWithoutAccount(coAWithoutAccount)" aria-hidden="true"></span></div>
 		  <br>
 		  <div class="form-group">
 		  	<label class="control-label" for="coAuthorWithoutAccount"> Nume coautor</label>
@@ -135,18 +136,59 @@
 	  </div>
 	  
 	   <br>
+	   <!--  
 	  <div class="form-group">
-	       <label  class="control-label" for="tag">Adaugati tag-uri</label>
+	       <label  class="control-label" for="tag">Cuvinte cheie</label>
+	       <p><i> Un cuvant cheie poate contine intre 3 si 20 de caractere </i> </p>
 	       <input  class="form-control" type="text" id="tag" name="tag" ng-model="tag"
-	        ng-maxlength="40" ng-minlength="2" enter-directive />
-	       <span  ng-show="uploadForm.tag.$touched && uploadForm.tag.$invalid" class="help-block">Un tag trebuie sa aiba cel putin 2 caractere si maxim 40</span>
+	        ng-maxlength="20" ng-minlength="3" enter-directive />
+	       <span  ng-show="uploadForm.tag.$touched && uploadForm.tag.$invalid" class="help-block">Un cuvant cheie trebuie sa aiba cel putin 2 caractere si maxim 40</span>
 	  </div>
 	  
-	   <button class="btn btn-default" type="button" ng-click="addTag()">Adauga tag</button> 
+	   <button class="btn btn-default" type="button" ng-click="addTag()">Adauga</button> 
 		<br>
 		<br>
-		<p class="tags"> <b> Taguri: &nbsp</b> </p>
-		<div class="tag" ng-repeat="tag in tags"> {{tag}} </div>
+	-->
+	<label  class="control-label" for="tag">Cuvinte cheie</label>
+	<p>
+	<i> Cuvintele cheie se vor alege doar din lista predefinita</i>
+	</p>
+	<br>
+
+	<md-content>
+    <form ng-submit="$event.preventDefault()">
+      
+      <md-autocomplete 
+          ng-disabled="isDisabled"
+          md-no-cache="noCache"
+          md-selected-item="selectedItem"
+          md-search-text-change="searchTextChange(searchText)"
+          md-search-text="searchText"
+          md-selected-item-change="selectedItemChange(item)"
+          md-items="item in querySearch(searchText)"
+          md-item-text="item.denumire"
+          md-min-length="0"
+          placeholder="cuvant cheie">
+        <md-item-template>
+          <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.denumire}}</span>
+        </md-item-template>
+        <md-not-found>
+          No states matching "{{ctrl.searchText}}" were found.
+          <a ng-click="newState(searchText)">Create a new one!</a>
+        </md-not-found>
+        <br>
+        
+      </md-autocomplete>
+ 
+  		<!-- 
+      <button class="btn btn-default" type="button" ng-disabled="!searchText" ng-click="sendSelectedItem(item)"> Adauga</button>
+      -->
+      <br>
+   
+    </form>
+  </md-content>
+	
+		<div ng-repeat="tag in userTags"> {{tag}} <span class="glyphicon glyphicon-remove" ng-click="removeUserTag(tag)" aria-hidden="true"></span> </div>
 		
 	   <div class="alert alert-danger form-group center-block" ng-show="hasError">
 	    	<h4>{{errorMessage}}</h4>
@@ -231,7 +273,7 @@
 					   
 					   <div class="form-group">
 							<label class="control-label">ISSN</label>
-						  	<input class="form-control" name="ISSNCarteCompleta" type="text" ng-model="ISSNCarteCompleta" ng-minlength="9" ng-maxlength="9">
+						  	<input class="form-control" name="ISSNCarteCompleta" type="text" ng-model="ISSNCarteCompleta" ng-minlength="9">
 						  	<span  ng-show="carteCompletaForm.ISSNCarteCompleta.$touched && carteCompletaForm.ISSNCarteCompleta.$invalid" class="help-block">Completati ISSN</span>
 					   </div> 
 					   
@@ -322,7 +364,7 @@
 					   
 					   <div class="form-group">
 							<label class="control-label">ISSN</label>
-						  	<input class="form-control" name="ISSNCapitolCarte" type="text" ng-model="ISSNCapitolCarte" ng-minlength="9" ng-maxlength="10">
+						  	<input class="form-control" name="ISSNCapitolCarte" type="text" ng-model="ISSNCapitolCarte" ng-minlength="9">
 						  	<span  ng-show="capitolCarteForm.ISSNCapitolCarte.$touched && capitolCarteForm.ISSNCapitolCarte.$invalid" class="help-block">Completati ISSN</span>
 					   </div> 
 					   

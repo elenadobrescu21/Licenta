@@ -21,6 +21,11 @@ public class UploadedArticleService {
 		return (List<UploadedArticle>) uploadedArticleRepository.findAll();		
 	}
 	
+	public void deleteArticleById(Long id) {
+		uploadedArticleRepository.delete(id);
+	}
+	
+	
 	public UploadedArticle getArticleById(int i) {
 		return uploadedArticleRepository.findOne((long)i);
 	}

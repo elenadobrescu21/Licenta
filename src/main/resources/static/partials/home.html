@@ -8,7 +8,7 @@
     				<h3 class="welcome-header text-center"> Bine ati venit, {{home.user.nume}} {{home.user.prenume}}! </h3>
     				<div class="header-buttons">
     					<a ui-sref="arhiva" class="header-button"> Arhiva articole</a>
-    					<a ui-sref="upload" class="header-button"> Incarcati articol</a>
+    					<a class="header-button" ng-click="home.incarcare()"> Incarcati articol</a>
     				
     				</div>
     			</div>
@@ -69,6 +69,29 @@
 
 
 </div>
+
+  <div modal="home.showModalRegulament">
+	    <div class="modal-dialog">
+	    	<div class="modal-content">
+	    	 	<div class="modal-header alert alert-warning">
+	          		<h4 class="text-center">Regulament aplicatie</h4>
+	      		</div>
+	     	 	<div class="modal-body">
+	          	    <p class="text-center">Doriti ca inainte de incarcarea unui articol sa cititi 
+	          	    instructiunile de incarcare?</p>
+	      		</div>
+	      		
+	      		<div class="modal-footer">
+	      			
+	        		<button class="btn btn-success"  ng-click="home.redirectRegulament()">Ok</button>
+	        	
+	        		<button class="btn btn-success" ng-click="home.redirectUpload()"> Nu</button>
+	        	
+	     		</div>	
+	    	</div> <!-- end modal-conent -->
+	    </div> <!-- end modal-dialog -->
+     
+    </div>  <!-- end modal-show success -->
 
 
 </div>

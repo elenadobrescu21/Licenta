@@ -30,5 +30,9 @@ public class CoauthorService {
 		return coauthorRepository.save(coauthor);
 	}
 	
+	public List<Coauthor> getCoauthorByUploadedArticleId(Long id) {
+		return coauthorRepository.findByArticoleUploadedArticleId(id);
+	}
+	
 
 }

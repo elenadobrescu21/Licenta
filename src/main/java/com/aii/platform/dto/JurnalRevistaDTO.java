@@ -41,10 +41,11 @@ public class JurnalRevistaDTO extends UploadedArticleDTO{
 	}
 
 	public JurnalRevistaDTO(Long id, String titlu, String filepath, int numberOfDownloads, Date date, AppUserDTO owner,
-			List<AppUserDTO> coauthors, String[] tags, Long idTipArticol, String tipArticol,
+			List<AppUserDTO> coauthors, String[] tags, Long idTipArticol, String tipArticol,String abstractSection,
+			String wos, String doi,
 			String titluJurnal, int numar, int volum, int paginaStart, int paginaSfarsit, String issn,
 			String isbn, Date dataAparitie) {
-		super(id, titlu, filepath, numberOfDownloads, date, owner, coauthors, tags, idTipArticol, tipArticol);
+		super(id, titlu, filepath, numberOfDownloads, date, owner, coauthors, tags, idTipArticol, tipArticol, abstractSection,wos,doi);
 		this.titluJurnal = titluJurnal;
 		this.numar = numar;
 		this.volum = volum;

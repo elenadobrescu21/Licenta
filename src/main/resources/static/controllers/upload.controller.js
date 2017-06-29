@@ -1,5 +1,5 @@
 angular.module("app").controller("UploadController", function($scope,$http,$state,$window, $filter,
-		upload, User, Auth, TipArticol) {
+		upload, User, Auth, TipArticol, Tag, $timeout, $q, $log) {
 	
 	$scope.hasError = false;
 	$scope.errorMessage = "";
@@ -18,6 +18,8 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 	$scope.abstract = [];
 
 	$scope.allUsers = [];
+	$scope.tagsFromDB = [];
+	$scope.userTags = [];
 	
 	$scope.tipArticole = [];
 	
@@ -38,10 +40,92 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 	$scope.autoriCarteCapitol = [];
 	$scope.editoriCarteCapitol = [];
 	
+	//partea de la autocomplete
+	$scope.simulateQuery = false;
+    $scope.isDisabled    = false;
+    $scope.searchDisabled = true;
+
+    // list of `state` value/display objects
+    $scope.userTags = [];
+    $scope.querySearch   = querySearch;
+    $scope.selectedItemChange = selectedItemChange;
+    $scope.searchTextChange   = searchTextChange;
+    $scope.visibleTable = false;
+    
+    function querySearch (query) {
+        var results = query ? $scope.tagsFromDB.filter( createFilterFor(query) ) : $scope.tagsFromDB,
+            deferred;
+        if (self.simulateQuery) {
+          deferred = $q.defer();
+          $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+          return deferred.promise;
+        } else {
+          return results;
+        }
+      }
+
+    
+    function searchTextChange(text) {
+        $log.info('Text changed to ' + text);
+        return true;
+      }
+
+      function selectedItemChange(item) {
+        $log.info('Item changed to ' + JSON.stringify(item.denumire));
+        console.log("Selected item: ");
+        console.log(item);
+       // console.log(item);
+        $scope.userTags.push(item.denumire);
+        var id = item.tagId;
+    	  console.log("Item id:");
+    	  console.log(id);
+        
+      }
+    
+    $scope.sendSelectedItem = function(item) {
+	    console.log("am apelat functia send selected item");
+    	//var id = item.tagId;
+    	console.log("Item id:");
+    	//console.log(id);
+    	$scope.userTags.push(item.denumire);
+    }
+    
+    function createFilterFor(query) {
+        var lowercaseQuery = angular.lowercase(query);
+
+        return function filterFn(state) {
+          return (state.value.indexOf(lowercaseQuery) === 0);
+        };
+
+      }
+    
+    $scope.removeCoauthor = function(item) { 
+    	  var index = $scope.coAuthors.indexOf(item);
+    	  $scope.coAuthors.splice(index, 1);     
+    }
+    
+    $scope.removeUserTag = function(item) {
+    	var index = $scope.userTags.indexOf(item);
+  	  	$scope.userTags.splice(index, 1); 
+    }
+    
+    $scope.removeCoauthorWithoutAccount = function(item) {
+    	var index = $scope.coAuthorsWithoutAccount.indexOf(item);
+    	$scope.coAuthorsWithoutAccount.splice(index,1);
+    }
+    
+    
 	TipArticol.getAllTipArticole().then(function(result){
 		$scope.tipArticole = result;
 	})
 	
+	Tag.getAllTags().then(function(result) {
+	      console.log("Members", result.data);
+	      $scope.tagsFromDB = result.data; 
+	      console.log($scope.tagsFromDB);  
+	  }, function(err) {
+	      console.error(err);
+	  })
 		
 	Auth.getUser(function(result){
 		$scope.user = result;
@@ -70,6 +154,8 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 	  
 	  $scope.adaugaCoautori = function() {
 		  $scope.coAuthorShow = !$scope.coAuthorShow;
+		  $scope.coAuthorWithouthAccountShow = true;
+		  $scope.moreCoauthorsWithoutAccount = true;
 		  $scope.finalizat = false;
 	  }
 	  
@@ -212,7 +298,7 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 		fd.append('title',angular.toJson($scope.title,true));
 		fd.append('file', file);
 		fd.append('coauthors', angular.toJson($scope.coAuthors,true));
-		fd.append('tags', angular.toJson($scope.tags,true));
+		fd.append('tags', angular.toJson($scope.userTags,true));
 		fd.append('abstract', angular.toJson($scope.abstract,true));
 		fd.append('coauthors-without-account', angular.toJson($scope.coAuthorsWithoutAccount,true));
 		fd.append('doi', angular.toJson($scope.doi,true));
@@ -286,6 +372,7 @@ angular.module("app").controller("UploadController", function($scope,$http,$stat
 			console.log('Data message din error: '+ data.message);
 			console.log('Status din error:'+ status);
 		});
+		
 		}
 
 })

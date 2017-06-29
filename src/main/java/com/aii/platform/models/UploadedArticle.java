@@ -56,7 +56,7 @@ public class UploadedArticle {
 	private int numberOfDownloads;
 	
 	@Column(name="abstract")
-	@Size(min=50, max=1500)
+	@Size(max=3000)
 	private String abstractSection;
 	
 	@Column(name="WOS")
@@ -72,7 +72,7 @@ public class UploadedArticle {
 	
 	
 	@ManyToOne
-	@JsonIgnore
+	//@JsonIgnore
 	@JoinColumn(name="id", nullable=true)
 	private TipArticol tipArticol;
 	
@@ -290,6 +290,24 @@ public class UploadedArticle {
 	public void setComentarii(List<Comment> comentarii) {
 		this.comentarii = comentarii;
 	}
+
+	public String getWos() {
+		return wos;
+	}
+
+	public void setWos(String wos) {
+		this.wos = wos;
+	}
+
+	public String getDoi() {
+		return doi;
+	}
+
+	public void setDoi(String doi) {
+		this.doi = doi;
+	}
+	
+	
 	
 	
 }

@@ -1,0 +1,49 @@
+<div class="container">
+	<div class="card hovercard">
+        	<div class="card-background">
+          
+        	</div>
+        
+        	<div class="card-info"> <span class="card-title"> Cautare dupa autor</span>
+
+        	</div>
+    	</div>
+<div ng-controller="SearchTagCtrl as ctrl" layout="column" ng-cloak>
+<h1 class="text-center"> Cautati articole dupa autor </h1>
+  <md-content class="form-control">
+    <form ng-submit="$event.preventDefault()">
+      
+      <md-autocomplete 
+          ng-disabled="ctrl.isDisabled"
+          md-no-cache="ctrl.noCache"
+          md-selected-item="ctrl.selectedItem"
+          md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
+          md-search-text="ctrl.searchText"
+          md-selected-item-change="ctrl.selectedItemChange(item)"
+          md-items="item in ctrl.querySearch(ctrl.searchText)"
+          md-item-text="item.denumire"
+          md-min-length="0"
+          placeholder="tag">
+        <md-item-template>
+          <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.denumire}}</span>
+        </md-item-template>
+        <md-not-found>
+          No states matching "{{ctrl.searchText}}" were found.
+          <a ng-click="ctrl.newState(ctrl.searchText)">Create a new one!</a>
+        </md-not-found>
+        <br>
+        
+      </md-autocomplete>
+      <br>
+  
+      <button class="btn btn-default" type="button" ng-disabled="!ctrl.searchText" ng-click="ctrl.sendSelectedItem(item)"> Adauga</button>
+      <br/>
+   
+    </form>
+  </md-content>
+  
+  <p class="tags"> <b> Cuvinte cheie: &nbsp</b> </p>
+<div ng-repeat="tag in ctrl.userTags"> {{tag.denumire}} </div>
+  
+</div>
+</div>

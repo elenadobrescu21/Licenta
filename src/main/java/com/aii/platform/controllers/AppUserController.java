@@ -206,6 +206,17 @@ public class AppUserController {
 		}	
 	}
 	
+	@RequestMapping(value="/authenticated", method = RequestMethod.GET)
+	public ResponseEntity<?> getAuthenticatedUser(HttpServletRequest request) {
+		String token = request.getHeader("X-Auth-Token");
+		String username = tokenUtils.getUsernameFromToken(token);
+		if(appUserService.getAppUserByUsername(username)!=null) {
+			return new ResponseEntity<AppUser>(appUserService.getAppUserByUsername(username), new HttpHeaders(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Response>(new Response("User details couldn't be retrieved"), new HttpHeaders(), HttpStatus.NOT_FOUND);
+		}
+	}
+	
 	@RequestMapping(value="/coauthorsByArticleId/{articleId}", method=RequestMethod.GET)
 	public ResponseEntity<?> getCoauthorsByArticleId(@PathVariable(value="articleId")Long articleId) {
 		List<AppUser> coauthorsForArticle = appUserService.getCoauthorsByArticleId(articleId);

@@ -10,6 +10,7 @@
     self.simulateQuery = false;
     self.isDisabled    = false;
     self.searchDisabled = true;
+    self.hasResults = true;
 
     // list of `state` value/display objects
     self.users  = [];
@@ -98,13 +99,20 @@
     	.success(function(data, status, headers, config){
 			self.articles = data;
 			console.log("Din functia sendSelectedItem");
-			console.log(data);
+			console.log(self.articles);
+			console.log("lungime " + self.articles.length);
+			if(self.articles.length == 0) {
+				self.hasResults = false;
+			} 
+			console.log("self hasresults" + self.hasResults);
 		})	
 		.error(function(error){
 				console.log("Bad credentials din AuthFactory");
 				errorMessage = "Bad Credentials";
 				callback(errorMessage);
 		})
+		
+		console.log("lungime " + self.articles.length);
     	
     }
 

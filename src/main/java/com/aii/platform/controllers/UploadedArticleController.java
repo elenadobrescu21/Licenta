@@ -46,14 +46,22 @@ import com.aii.platform.service.TagService;
 import com.aii.platform.service.UploadedArticleService;
 import com.aii.platform.services.storage.StorageService;
 import com.aii.platform.utils.DiacriticsUtils;
-
+import com.aii.platform.utils.FileUtils;
+import com.aii.platform.utils.lucene.Indexer;
 import com.aii.platform.models.*;
 
 @Controller
 public class UploadedArticleController {
 	
 	private static final String UPLOAD_DIR = "src/main/resources/static/file-storage/recents";
+	private static final String INDEX_DIR_PATH = "src/main/resources/static/file-storage/index-dir";
+	private static final String TEMP_DIR = "src/main/resources/static/file-storage/recents";
 	
+	@Autowired
+	private FileUtils fileUtils;
+	
+	@Autowired
+	private Indexer indexer;
 	
 	@Autowired
 	private TokenUtils tokenUtils;
@@ -113,6 +121,19 @@ public class UploadedArticleController {
 //			}
 //			
 //		}
+	
+	  @RequestMapping(value="/article/{id}", method = RequestMethod.DELETE)
+	  public ResponseEntity<?> remove(@PathVariable("id") Long id) throws IOException {
+	     uploadedArticleService.deleteArticleById(id);
+	     Indexer indexerForDeleting = new Indexer(INDEX_DIR_PATH);
+	     String idString = Long.toString(id);
+	     UploadedArticle article = uploadedArticleService.getArticleById(id);
+	     String filename = article.getFilename();
+	     String filepath = Paths.get(TEMP_DIR, filename).toString();
+	  	 indexerForDeleting.deleteDocumentById(idString);
+	  	  fileUtils.deleteFileFromDirectory(filepath);
+	     return new ResponseEntity<Response>(new Response("Articolul a fost sters"), new HttpHeaders(), HttpStatus.OK);
+	  }
 		
 		@RequestMapping(value="/articleID/{id}", method = RequestMethod.GET)
 		public ResponseEntity<?> getArticleById(@PathVariable("id") Long id) {

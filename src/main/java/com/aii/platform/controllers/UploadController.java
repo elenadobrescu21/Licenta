@@ -353,12 +353,13 @@ public class UploadController {
 		
 		String titleToBeCompared = title.replace("\"", "");
 		String titleToBeSaved = title.replace("\"", "");
+		abstractSectionParam = abstractSectionParam.replace("\"", "");
 		
 		String filename = file.getOriginalFilename();
 		String filenameWithoutExtension = filename.replaceAll(".pdf", "");
 		
-		String wos = request.getParameter("wos");
-		String doi = request.getParameter("doi");
+		String wos = request.getParameter("wos").replace("\"", "");
+		String doi = request.getParameter("doi").replace("\"", "");
 		
 		String abstractSection = request.getParameter("abstract");
 		System.out.println("Replaced filename: " + filenameWithoutExtension);
@@ -448,7 +449,7 @@ public class UploadController {
 	  		
 	  	} else {
 	  			
-	    UploadedArticle articleToUpload = new UploadedArticle(titleToBeSaved,filename, abstractSection,wos,doi);
+	    UploadedArticle articleToUpload = new UploadedArticle(titleToBeSaved,filename, abstractSectionParam,wos,doi);
 	    TipArticol tipArticol2 = tipArticolService.getTipArticolById(tipArticolId);
 	    user.getUploadedArticles().add(articleToUpload);
 	    articleToUpload.setAppUser(user); 

@@ -10,10 +10,12 @@ import org.springframework.stereotype.Component;
 import com.aii.platform.dto.AppUserDTO;
 import com.aii.platform.dto.UploadedArticleDTO;
 import com.aii.platform.models.AppUser;
+import com.aii.platform.models.Coauthor;
 import com.aii.platform.models.Tag;
 import com.aii.platform.models.TipArticol;
 import com.aii.platform.models.UploadedArticle;
 import com.aii.platform.service.AppUserService;
+import com.aii.platform.service.CoauthorService;
 import com.aii.platform.service.TagService;
 import com.aii.platform.service.TipArticolService;
 import com.aii.platform.service.UploadedArticleService;
@@ -33,6 +35,9 @@ public class UploadedArticleConverter {
 	@Autowired
 	private TipArticolService tipArticolService;
 	
+	@Autowired
+	private CoauthorService coauthorService;
+	
 	public List<UploadedArticleDTO> convertArticleListToDTO() {
 		List<UploadedArticle> allArticles = uploadedArticleService.getAllArticles();
 		return this.convertListToDTO(allArticles);
@@ -49,16 +54,20 @@ public class UploadedArticleConverter {
 		AppUser owner = appUserService.getAppUserByUploadedArticleId(requestedUploadedArticle.getUploadedArticleId());
 		List<AppUser> coauthors = appUserService.getCoauthorsByArticleId(requestedUploadedArticle.getUploadedArticleId());
 		List<Tag> tagList = tagService.getAllTagsByArticleId(requestedUploadedArticle.getUploadedArticleId());
-		
+		List<Coauthor> coauthorsWithoutAccount = coauthorService.getCoauthorByUploadedArticleId(articleId);
 		String ownerFullName = owner.getNume() + " " + owner.getPrenume();
+		String abstractSection = requestedUploadedArticle.getAbstractSection();
 		Long ownerId = owner.getId();
 		String username = owner.getUsername();
 		AppUserDTO ownerDTO = new AppUserDTO(ownerId, ownerFullName, username);
 		List<AppUserDTO> coauthorsList = new ArrayList<AppUserDTO>();
 		String[] tags = new String[tagList.size()];
-		
+		List<String> allCoauthors = new ArrayList<String>();
 		TipArticol tipArticol = tipArticolService.getTipArticolByArticleId(articleId);
-		
+		String wos = requestedUploadedArticle.getWos();
+		String doi = requestedUploadedArticle.getDoi();
+		System.out.println("WOS din convertUploadedArticleTODTO" + wos);
+	
 		int i = 0;
 		for(AppUser c: coauthors) {
 //			coauthorFullNames[i++] = c.getNume() + " " + c.getPrenume();
@@ -66,7 +75,15 @@ public class UploadedArticleConverter {
 			Long id = c.getId();
 			String userName = c.getUsername();
 			coauthorsList.add(new AppUserDTO(id, fullName, username));
+			allCoauthors.add(fullName);
 		}
+		
+		for(Coauthor coauth: coauthorsWithoutAccount) {
+			coauthorsList.add(new AppUserDTO(coauth.getId(), coauth.getFullname(), null));
+			
+		}
+		
+	
 		i = 0;
 		for(Tag t:tagList){
 			tags[i++] = t.getDenumire();
@@ -81,7 +98,11 @@ public class UploadedArticleConverter {
 				coauthorsList,
 				tags,
 				tipArticol.getId(),
-				tipArticol.getDenumire());
+				tipArticol.getDenumire(),
+				abstractSection,
+				requestedUploadedArticle.getWos(),
+				requestedUploadedArticle.getDoi()
+				);
 		
 		return uploadedArticleDTO;
 	}

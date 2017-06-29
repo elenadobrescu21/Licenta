@@ -7,21 +7,23 @@
 	<!-- JQuery -->
     <script src="js/jquery-2.1.4.js"></script>
     
-   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
-   
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-animate.min.js"></script>
+    <script src="js/angular-aria.min.js"></script>
+    <script src="js/angular-messages.min.js"></script>
+    
+
    <!-- Angular UI-Router -->
    
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.1/angular-ui-router.js"> </script>
-    
+   <script src="js/angular-ui-router.js"></script>
+   
     <!-- Angular Material Library -->
-  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+    <script src="js/angular-material.min.js"></script>
+
   
-  <script src="http://angular-ui.github.com/bootstrap/ui-bootstrap-tpls-0.2.0.js"></script>
-  
-    <script src="app.js"> </script>
+  <script src="js/ui-bootstrap-tpls-0.2.0.js"></script>
+ 
+  <script src="app.js"> </script>
 
 	<!-- Bootstrap CSS -->
  	<link rel="stylesheet" type="text/css" href="assets/bootstrap/css/bootstrap.css">
@@ -29,7 +31,8 @@
     <script src="assets/bootstrap/js/bootstrap.js"></script>
     
     <!-- Angular Material -->
-     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+   
+     <link rel="stylesheet" href="js/angular-material.min.css">
      
      <script src="js/angular-ui-bootstrap-modal.js"></script>
 
@@ -66,11 +69,13 @@
     <script src="controllers/modal.controller.js"></script>
     <script src="controllers/query.controller.js"></script>
     <script src="controllers/rapoarte.controller.js"></script>
+    <script src="controllers/tag-autocomplete.controller.js"></script>
+    <script src="controllers/my-profile.controller.js"></script>
    
 </head>
 <body>
 <header>
-        <nav class="navbar navbar-default" ng-controller="HomeController as home">
+    <nav id="top" class="navbar navbar-default" ng-controller="HomeController as home">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -109,13 +114,14 @@
                     <li ng-show="isLoggedIn" class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Profilul meu<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                        	<li><a href="/#/user/{{home.user.id}}"> Pagina mea </a></li>
-                            <li><a href="#">Setari</a></li>
+                        	<li><a href="/#/my-profile"> Pagina mea </a></li>
+                        	 <li><a href="/#/upload">Incarcati articol</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="/#/upload">Incarcati articol</a></li>
+                            <li ng-show="isLoggedIn"><a ng-click="home.doLogout()" href="#">Deconectare</a></li>
+                           
                         </ul>
                     </li>
-                    <li ng-show="isLoggedIn"><a ng-click="home.doLogout()" href="#">Logout</a></li>
+                    <li><a ui-sref="regulament">Regulament</a></li>
 
                 </ul>
             </div><!-- /.navbar-collapse -->
@@ -125,18 +131,16 @@
     
  <div ui-view></div>
  
-<!--  <footer>
+ <footer>
  <div class="copyright-container">
  	<h5> Copyright <i class="fa fa-copyright" aria-hidden="true"></i> 2017 Platforma AII</h5>
  
  </div>
  
- <div class="back-to-top">
- 	<a href="#top"> <i class="fa fa-arrow-circle-o-up fa-2x"></i></a>
- </div>
  
  </footer>
-  -->
+ 
+
  
 </body>
 

@@ -25,12 +25,19 @@ public class UploadedArticleDTO {
 	
 	private String tipArticol;
 	
+	private String abstractSection;
+	
+	private String wos;
+	
+	private String doi;
+	
 	public UploadedArticleDTO () {
 		
 	}
 	
 	public UploadedArticleDTO(Long id, String titlu, String filepath,int numberOfDownloads, Date date, AppUserDTO owner,
-			List<AppUserDTO> coauthors, String[] tags, Long idTipArticol, String tipArticol) {
+			List<AppUserDTO> coauthors, String[] tags, Long idTipArticol, String tipArticol, String abstractSection,
+			String wos, String doi) {
 		super();
 		this.id = id;
 		this.titlu = titlu;
@@ -42,6 +49,9 @@ public class UploadedArticleDTO {
 		this.tags = tags;
 		this.idTipArticol = idTipArticol;
 		this.tipArticol = tipArticol;
+		this.abstractSection = abstractSection;
+		this.wos = wos;
+		this.doi = doi;
 		
 	}
 	
@@ -57,6 +67,7 @@ public class UploadedArticleDTO {
 		this.coauthors = coauthors;
 		this.tags = tags;
 	}
+	
 
 	public Long getId() {
 		return id;
@@ -136,6 +147,30 @@ public class UploadedArticleDTO {
 
 	public void setTipArticol(String tipArticol) {
 		this.tipArticol = tipArticol;
+	}
+
+	public String getAbstractSection() {
+		return abstractSection;
+	}
+
+	public void setAbstractSection(String abstractSection) {
+		this.abstractSection = abstractSection;
+	}
+
+	public String getWos() {
+		return wos;
+	}
+
+	public void setWos(String wos) {
+		this.wos = wos;
+	}
+
+	public String getDoi() {
+		return doi;
+	}
+
+	public void setDoi(String doi) {
+		this.doi = doi;
 	}
 	
 		

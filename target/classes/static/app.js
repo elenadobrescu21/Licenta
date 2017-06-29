@@ -77,6 +77,22 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $location
         templateUrl: "partials/rapoarte.html"
     })
     
+     .state('tag-autocomplete', {
+        url: "/tag-autocomplete",
+        templateUrl: "partials/tag-autocomplete.html"
+    })
+    
+     .state('my-profile', {
+        url: "/my-profile",
+        templateUrl: "partials/my-profile.html"
+    })
+    
+     .state('regulament', {
+        url: "/regulament",
+        templateUrl: "partials/regulament.html"
+    })
+    
+    
     
      
    $httpProvider.interceptors.push('AuthInterceptor');

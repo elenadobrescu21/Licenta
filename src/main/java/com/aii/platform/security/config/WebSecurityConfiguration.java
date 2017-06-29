@@ -57,7 +57,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	        AuthenticationTokenFilter authenticationTokenFilter = new AuthenticationTokenFilter();
 	        authenticationTokenFilter.setAuthenticationManager(super.authenticationManagerBean());
 	        return authenticationTokenFilter;
-	    }
+	   }
 
 
 	    @Override
@@ -73,9 +73,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	                .and()
 	                .authorizeRequests()
 	                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+	                .antMatchers(HttpMethod.POST, "/testUpdateCarteCompleta/**").permitAll()
 	                .antMatchers("/auth/**").permitAll()
-	                .antMatchers("/user").permitAll()
-	                .antMatchers("/user/all").access("hasRole('ROLE_ADMIN')")
+	                .antMatchers("/user/**").permitAll()
+	                .antMatchers(HttpMethod.DELETE, "/article/**").permitAll()
 	                .antMatchers(
 	                        HttpMethod.GET,
 	                        "/",

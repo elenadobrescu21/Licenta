@@ -50,6 +50,10 @@ angular.module("app").factory('User', function($http) {
 		return $http.get('http://localhost:8080/user/allByTipArticol/'+id);
 	}
 	
+	userFactory.getAuthenticatedUser = function() {
+		return $http.get('http://localhost:8080/user/authenticated');
+	}
+	
 	userFactory.getUserStatistics = function(id) {
 		return $http.get('http://localhost:8080/statistics/'+id).then(function(result){
 			return result.data;
